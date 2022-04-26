@@ -1,10 +1,10 @@
-export const PRIMARY_COLOR = '#40BF6A';
-export const SECONDARY_COLOR = '#c3e6cc';
-export const BACKGROUND_COLOR = '#131316';
+export const PRIMARY_COLOR = '#60CDE5';
+export const SECONDARY_COLOR = '#4C9FDB';
+export const BACKGROUND_COLOR = '#EEEEEE';
 export const SECONDARY_BG_COLOR = '#1C1C21';
-export const THIRD_BG_COLOR = '#292930';
-export const GREEN_COLOR = '#40BF6A';
-export const RED_COLOR = '#DF2040';
-export const YELLOW_COLOR = '#FFC22E';
+export const TEXT_COLOR = '#303030';
+export const GREEN_COLOR = '#6EE57A';
+export const RED_COLOR = '#E86363';
+export const YELLOW_COLOR = '#F4EE5F';
 export const BLUE_COLOR = '#3C6EEA';
 export const WHITE_COLOR = '#FFFFFF';
