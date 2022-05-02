@@ -6,6 +6,7 @@ import {WHITE_COLOR} from '../constants/Colors';
 import LoadingModal from '../components/LoadingModal';
 import RedirectScreen from '../screens/RedirectScreen';
 import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function AppRoute() {
             animation: 'slide_from_right',
           }}>
           <Stack.Screen name="Root" component={RedirectScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
