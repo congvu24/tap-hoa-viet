@@ -4,8 +4,8 @@ import React from 'react';
 export default function RedirectScreen({navigation}) {
   return (
     <ScrollView>
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text>Go to Register page</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text>Go to Login page</Text>
       </TouchableOpacity>
     </ScrollView>
   );
