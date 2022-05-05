@@ -7,6 +7,7 @@ import LoadingModal from '../components/LoadingModal';
 import RedirectScreen from '../screens/RedirectScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import AddProductScreen from '../screens/AddProductScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function AppRoute() {
           <Stack.Screen name="Root" component={RedirectScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="AddProduct" component={AddProductScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       <LoadingModal />

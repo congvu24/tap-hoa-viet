@@ -8,3 +8,4 @@ export const RED_COLOR = '#E86363';
 export const YELLOW_COLOR = '#F4EE5F';
 export const BLUE_COLOR = '#3C6EEA';
 export const WHITE_COLOR = '#FFFFFF';
+export const GRAY_COLOR = '#9e9e9e'
