@@ -2,7 +2,7 @@ import {Text, StyleSheet, View} from 'react-native';
 import React, {Component} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { GRAY_COLOR } from '../constants/Colors';
+import {GRAY_COLOR} from '../constants/Colors';
 
 const HorizontalInputField = ({title = '', hint = ''}) => {
   const [text, onChangeText] = React.useState(hint);
@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     fontSize: 16,
     marginStart: 30,
-    color: 'black'
+    color: 'black',
   },
   input: {
     flex: 2,
     fontSize: 16,
-    color:GRAY_COLOR
+    color: GRAY_COLOR,
   },
 });

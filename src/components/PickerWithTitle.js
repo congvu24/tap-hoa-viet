@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     flex: 2,
     fontSize: 16,
     color: GRAY_COLOR,
-    width:30
+    width: 30,
   },
 });

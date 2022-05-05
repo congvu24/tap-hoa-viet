@@ -1,10 +1,19 @@
-import {Text, StyleSheet, View, Image, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
 import React, {Component} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import HorizontalInputField from '../components/HorizontalInputField';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { Picker } from '@react-native-picker/picker';
+import {Picker} from '@react-native-picker/picker';
 import PickerWithTitle from '../components/PickerWithTitle';
+import {FAB} from 'react-native-elements';
+import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
 
 export default class AddProductScreen extends Component {
   render() {
@@ -38,17 +47,13 @@ export default class AddProductScreen extends Component {
               hint="Tên Hàng"></HorizontalInputField>
           </SafeAreaView>
 
+          <PickerWithTitle title="Nhóm Hàng" hint="Rau non"></PickerWithTitle>
+
           <PickerWithTitle
-            title="Nhóm Hàng"
-            hint='Rau non'>
-            </PickerWithTitle>
-
-            <PickerWithTitle
             title="Thương Hiệu"
-            hint='Liên Xô chấm Mỹ'>
-            </PickerWithTitle>
-
+            hint="Liên Xô chấm Mỹ"></PickerWithTitle>
         </View>
+        <FAB style={styles.FAB} />
       </KeyboardAvoidingView>
     );
   }
@@ -57,16 +62,18 @@ export default class AddProductScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: BACKGROUND_COLOR,
   },
   topContainer: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: BACKGROUND_COLOR,
     flex: 1,
   },
   bottomContainer: {
     flex: 4,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    backgroundColor: '#fffff',
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    elevation: 5,
+    backgroundColor: WHITE_COLOR,
   },
   uploadLogo: {
     width: 100,
@@ -78,5 +85,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginStart: 20,
     marginTop: 30,
+  },
+  FAB: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    icon: 'add',
   },
 });
