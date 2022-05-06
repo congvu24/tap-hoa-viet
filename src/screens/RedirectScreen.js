@@ -4,7 +4,7 @@ import React from 'react';
 export default function RedirectScreen({navigation}) {
   return (
     <ScrollView>
-      <TouchableOpacity onPress={() => navigation.navigate('AddProduct')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Text>Go to Add Product Screen</Text>
       </TouchableOpacity>
     </ScrollView>

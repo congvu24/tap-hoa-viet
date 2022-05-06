@@ -8,7 +8,7 @@ export const RED_COLOR = '#E86363';
 export const YELLOW_COLOR = '#F4EE5F';
 export const BLUE_COLOR = '#3C6EEA';
 export const WHITE_COLOR = '#FFFFFF';
-export const GRAY_COLOR = '#9e9e9e'
+export const GRAY_COLOR = '#9e9e9e';
 export const MATERIAL_RED_COLOR = '#F44336';
 export const MATERIAL_BLUE_COLOR = '#2196F3';
 export const MATERIAL_GREEN_COLOR = '#4CAF50';
@@ -16,4 +16,3 @@ export const MATERIAL_LIGHT_GREEN_COLOR = '#8BC34A';
 export const MATERIAL_ORANGE_COLOR = '#FF9800';
 export const MATERIAL_YELLOW_COLOR = '#FFEB3B';
 export const MATERIAL_GREY_COLOR = '#9e9e9e';
-

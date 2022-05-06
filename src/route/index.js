@@ -8,6 +8,7 @@ import RedirectScreen from '../screens/RedirectScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AddProductScreen from '../screens/AddProductScreen';
+import HomeScreen from '../screens/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function AppRoute() {
             animation: 'slide_from_right',
           }}>
           <Stack.Screen name="Root" component={RedirectScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="AddProduct" component={AddProductScreen} />
