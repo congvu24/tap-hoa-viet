@@ -8,7 +8,6 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {Overlay} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
 import Logo from '../components/Logo';
@@ -28,15 +27,21 @@ export default function LoginScreen({navigation}) {
 
   const login = () => {
     if (isValidForm()) {
-      signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-          // Signed in
-          const user = userCredential.user;
-          // ...
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('User signed in!');
         })
         .catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          if (error.code === 'auth/user-not-found') {
+            Alert.alert('Tài khoản này không tồn tại!');
+          }
+
+          if (error.code === 'auth/wrong-password') {
+            Alert.alert('Mật khẩu chưa chính xác!');
+          }
+
+          console.error(error);
         });
     }
   };
@@ -58,6 +63,11 @@ export default function LoginScreen({navigation}) {
   }, []);
 
   if (initializing) return null;
+  const signOut = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
 
   if (!user) {
     return (
@@ -96,13 +106,6 @@ export default function LoginScreen({navigation}) {
             </TouchableOpacity>
           </View>
         </View>
-        <Overlay isVisible={error}>
-          <PopUp
-            errorBtn={() => setError(false)}
-            text={errorText}
-            error={popUpErr}
-          />
-        </Overlay>
       </View>
     );
   }
@@ -110,7 +113,7 @@ export default function LoginScreen({navigation}) {
   return (
     <View>
       <Text>Welcome {user.email}</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => signOut()}>
         <Text>Đăng xuất</Text>
       </TouchableOpacity>
     </View>
