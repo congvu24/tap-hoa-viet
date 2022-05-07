@@ -5,18 +5,46 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
-import React, {Component} from 'react';
-import {TextInput} from 'react-native-gesture-handler';
+import React, {Component, useState} from 'react';
 import HorizontalInputField from '../components/HorizontalInputField';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Picker} from '@react-native-picker/picker';
 import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';
 import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+const AddProductScreen = () => {
+  const [filePath, setFilePath] = useState('../images/ic_upload.png');
 
-export default class AddProductScreen extends Component {
-  render() {
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 400,
+      maxHeight: 400,
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }
+      setFilePath(String(response.assets.map(item => item.uri)));
+    });
+  };
+
+  {
     return (
       <KeyboardAvoidingView
         style={[
@@ -25,11 +53,10 @@ export default class AddProductScreen extends Component {
             flexDirection: 'column',
           },
         ]}>
-        <TouchableOpacity style={styles.topContainer}>
-          <Image
-            style={styles.uploadLogo}
-            source={require('../images/ic_upload.png')}
-          />
+        <TouchableOpacity
+          style={styles.topContainer}
+          onPress={() => chooseFile('photo')}>
+          <Image style={styles.uploadLogo} source={{uri: filePath}} />
         </TouchableOpacity>
 
         <View style={styles.bottomContainer}>
@@ -57,7 +84,9 @@ export default class AddProductScreen extends Component {
       </KeyboardAvoidingView>
     );
   }
-}
+};
+
+export default AddProductScreen;
 
 const styles = StyleSheet.create({
   container: {
