@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView } from "react-n
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {Avatar,Title,Caption,TouchableRipple} from 'react-native-paper';
 
-const ProductsFile = () => {
+const ProfileScreen = () => {
   return (
     return (
         <SafeAreaView style={styles.container}>
