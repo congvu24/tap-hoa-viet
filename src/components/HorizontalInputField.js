@@ -5,7 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {GRAY_COLOR} from '../constants/Colors';
 
 const HorizontalInputField = ({title = '', hint = ''}) => {
-  const [text, onChangeText] = React.useState(hint);
   return (
     <SafeAreaView
       style={[
@@ -17,8 +16,7 @@ const HorizontalInputField = ({title = '', hint = ''}) => {
       <Text style={styles.title}>{title}</Text>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeText}
-        placeholder={text}
+        placeholder={hint}
         underlineColorAndroid="grey"
         multiline={false}
       />

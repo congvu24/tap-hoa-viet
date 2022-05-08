@@ -15,8 +15,9 @@ import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';
 import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import DefaultImage from '../images/ic_upload.png';
 const AddProductScreen = () => {
-  const [filePath, setFilePath] = useState('../images/ic_upload.png');
+  const [filePath, setFilePath] = useState(Image.resolveAssetSource(DefaultImage).uri);
 
   const chooseFile = type => {
     let options = {
@@ -26,21 +27,22 @@ const AddProductScreen = () => {
       quality: 1,
     };
     launchImageLibrary(options, response => {
-      console.log('Response = ', response);
+      console.log('Response = ', response)
       if (response.didCancel) {
-        alert('User cancelled camera picker');
+        alert('Đã huỷ thao tác')
         return;
       } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
+        alert('Camera không khả dụng')
         return;
       } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
+        alert('Không có quyền truy cập')
         return;
       } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
+        alert('Fuck cậu Hoàn')
         return;
       }
-      setFilePath(String(response.assets.map(item => item.uri)));
+      console.log(response.assets.map(item => item.uri))
+      setFilePath(String(response.assets.map(item => item.uri)))
     });
   };
 
@@ -53,11 +55,12 @@ const AddProductScreen = () => {
             flexDirection: 'column',
           },
         ]}>
-        <TouchableOpacity
-          style={styles.topContainer}
-          onPress={() => chooseFile('photo')}>
-          <Image style={styles.uploadLogo} source={{uri: filePath}} />
-        </TouchableOpacity>
+        <View
+          style={styles.topContainer}>
+          <TouchableOpacity style={styles.uploadButton}onPress={() => chooseFile('photo')}>
+            <Image style={styles.uploadLogo} source={{uri: filePath}} />
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.bottomContainer}>
           <SafeAreaView>
@@ -80,7 +83,8 @@ const AddProductScreen = () => {
             title="Thương Hiệu"
             hint="Liên Xô chấm Mỹ"></PickerWithTitle>
         </View>
-        <FAB style={styles.FAB} />
+        <FAB 
+        style={styles.FAB} />
       </KeyboardAvoidingView>
     );
   }
@@ -105,9 +109,13 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
   },
   uploadLogo: {
-    width: 100,
-    height: 100,
-    margin: 30,
+    width: 120,
+    height: 120,
+  },
+  uploadButton:{
+    width: 150,
+    height: 150,
+    margin:10
   },
   title: {
     justifyContent: 'flex-start',
