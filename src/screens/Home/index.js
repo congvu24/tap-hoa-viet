@@ -22,10 +22,12 @@ const HomeScreen = () => {
             <SliderShortcut />
           </View>
 
-          <View style={styles.monthlyIncomeContainer}>
+          <View style={styles.weeklyIncomeContainer}>
             <Text style={[styles.text]}>Doanh thu tháng này</Text>
 
-            <WeeklyIncomeChart />
+            <View style={styles.monthlyIncomeChart}>
+              <WeeklyIncomeChart />
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -54,7 +56,10 @@ const styles = StyleSheet.create({
   shortcutButtonsContainer: {
     marginTop: 20,
   },
-  monthlyIncomeContainer: {
+  weeklyIncomeContainer: {
     marginTop: 20,
+  },
+  monthlyIncomeChart: {
+    marginTop: 10,
   },
 });

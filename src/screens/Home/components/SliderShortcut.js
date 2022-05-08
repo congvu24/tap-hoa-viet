@@ -26,22 +26,25 @@ export function SliderShortcut() {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={styles.shortcutContainer}>
+      style={styles.shortcutContainer}
+    >
       {SLIDER_ITEMS.map((item, idx) => (
         <Shortcut
           key={item.text}
           item={item}
-          isLastShortcut={idx === SLIDER_ITEMS.length - 1}
+          style={idx === SLIDER_ITEMS.length - 1 && styles.lastShortcut}
         />
       ))}
     </ScrollView>
   );
 }
 
-const Shortcut = ({item, isLastShortcut}) => (
+const Shortcut = ({item, style, ...rest}) => (
   <TouchableOpacity
     key={item.text}
-    style={[styles.shortcut, isLastShortcut && styles.lastShortcut]}>
+    style={[styles.shortcut, {...style}]}
+    {...rest}
+  >
     <Icon name={item.icon} size={25} style={styles.shortcutIcon} />
     <Text style={styles.shortcutText}>{item.text}</Text>
   </TouchableOpacity>
