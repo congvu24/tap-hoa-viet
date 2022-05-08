@@ -8,6 +8,7 @@ import RedirectScreen from '../screens/RedirectScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AddProductScreen from '../screens/AddProductScreen';
+import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ export default function AppRoute() {
     <SafeAreaView style={styles.wrap}>
       <StatusBar backgroundColor={WHITE_COLOR} hidden={false} />
       <NavigationContainer>
-        <Stack.Navigator
+        {/* <Stack.Navigator
           initialRouteName="Root"
           screenOptions={{
             headerShown: false,
@@ -26,7 +27,8 @@ export default function AppRoute() {
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="AddProduct" component={AddProductScreen} />
-        </Stack.Navigator>
+        </Stack.Navigator> */}
+        <BottomNavigationBar />
       </NavigationContainer>
       <LoadingModal />
     </SafeAreaView>
