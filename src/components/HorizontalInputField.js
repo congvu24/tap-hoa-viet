@@ -1,10 +1,14 @@
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, Image} from 'react-native';
 import React, {Component} from 'react';
-import {TextInput} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {GRAY_COLOR} from '../constants/Colors';
+import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
 
-const HorizontalInputField = ({title = '', hint = ''}) => {
+const HorizontalInputField = ({
+  title = '',
+  hint = '',
+  showBarcodeIcon = false,
+}) => {
   return (
     <SafeAreaView
       style={[
@@ -14,12 +18,9 @@ const HorizontalInputField = ({title = '', hint = ''}) => {
         },
       ]}>
       <Text style={styles.title}>{title}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder={hint}
-        underlineColorAndroid="grey"
-        multiline={false}
-      />
+      <View style={styles.textInput}>
+        <TextInput placeholder={hint} multiline={false} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -38,11 +39,26 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     fontSize: 16,
     marginStart: 30,
+    marginTop: 10,
     color: 'black',
   },
   input: {
     flex: 2,
     fontSize: 16,
     color: GRAY_COLOR,
+  },
+  textInput: {
+    flex: 2,
+    color: MATERIAL_GREY_COLOR,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingLeft: 10,
+    marginTop: 10,
+    marginEnd: 20,
+  },
+  barcodeButton: {
+    width: 16,
+    height: 16,
   },
 });
