@@ -9,6 +9,10 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AddProductScreen from '../screens/AddProductScreen';
 import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
+import HomeScreen from '../screens/Home';
+import ProductsScreen from '../screens/ProductsScreen';
+import ProductDetailsScreen from '../screens/ProductDetailsScreen';
+import EditProductScreen from '../screens/EditProductScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,11 +28,19 @@ export default function AppRoute() {
             animation: 'slide_from_right',
           }}>
           <Stack.Screen name="Root" component={RedirectScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="AddProduct" component={AddProductScreen} />
         </Stack.Navigator> */}
         <BottomNavigationBar />
+          <Stack.Screen name="Products" component={ProductsScreen} />
+          <Stack.Screen
+            name="ProductDetails"
+            component={ProductDetailsScreen}
+          />
+          <Stack.Screen name="EditProduct" component={EditProductScreen} />
+        </Stack.Navigator>
       </NavigationContainer>
       <LoadingModal />
     </SafeAreaView>
