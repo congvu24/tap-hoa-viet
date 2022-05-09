@@ -12,7 +12,7 @@ import auth from '@react-native-firebase/auth';
 import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
 import Logo from '../components/Logo';
 
-export default function LoginScreen({navigation}) {
+export function LoginScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -99,7 +99,8 @@ export default function LoginScreen({navigation}) {
               flexDirection: 'row',
               justifyContent: 'center',
               marginTop: 40,
-            }}>
+            }}
+          >
             <Text>Bạn chưa có tài khoản? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={{fontWeight: 'bold'}}>Đăng ký ngay!</Text>
