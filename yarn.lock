@@ -6052,12 +6052,19 @@
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz"
   "version" "0.0.6"
 
+<<<<<<< HEAD
+"react-native-image-picker@^4.8.2":
+  "integrity" "sha512-4Hiwkw1hAxQn+5O/zPFkY+NrRPB2EMQ6CeX8fV0AKd2VtPsgCycF6NOUoO9MAt2mv2ums374pZkuG9zp8l7mfA=="
+  "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-4.8.2.tgz"
+  "version" "4.8.2"
+=======
 "react-native-image-slider-box@^1.1.22":
   "integrity" "sha512-NbFwPc3w5ZgtSBb0mo0cJmLlgeBd+BaQo1qCnH6/JNldGW1bO5iErmyojUFajW/yS9TvFLGXMhWzTIvkRgxYAg=="
   "resolved" "https://registry.npmjs.org/react-native-image-slider-box/-/react-native-image-slider-box-1.1.22.tgz"
   "version" "1.1.22"
   dependencies:
     "react-native-snap-carousel" "latest"
+>>>>>>> master
 
 "react-native-ratings@8.0.4":
   "integrity" "sha512-Xczu5lskIIRD6BEdz9A0jDRpEck/SFxRqiglkXi0u67yAtI1/pcJC76P4MukCbT8K4BPVl+42w83YqXBoBRl7A=="
