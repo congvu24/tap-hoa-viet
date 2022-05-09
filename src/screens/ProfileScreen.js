@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView,Alert  } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {Avatar,Title,Caption,TouchableRipple} from 'react-native-paper';
-
 const ProfileScreen = () => {
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -19,12 +18,12 @@ const ProfileScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
           <View style={styles.titleBar}>
-                <Ionicons style={styles.iconButton} name="ios-arrow-back" size={24} ></Ionicons>
+                <Ionicons style={styles.iconButton} name="ios-arrow-back" ></Ionicons>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ alignSelf: "center" }}>
                     <View style={styles.profileImage}>
-                        <Image  style={styles.profileImage, styles.image} source={}></    Image>
+                        <Image  style={styles.profileImage, styles.image} source={require()}></    Image>
                     </View>
                 </View>
 
@@ -50,15 +49,15 @@ const ProfileScreen = () => {
 
                 <View style={styles.userInfoSection}>
                     <View style={styles.row}>
-                        <Ionicons name="navigate-outline" size={20} style={styles.iconInfo}/>
+                        <Ionicons name="navigate-outline" style={styles.iconInfo}/>
                         <Text style={styles.text,styles.marginTtem}>Ho Chi Minh city, Vietnam</Text>
                     </View>
                     <View style={styles.row}>
-                        <Ionicons name="call-outline"  size={20} style={styles.iconInfo}/>
+                        <Ionicons name="call-outline"  style={styles.iconInfo}/>
                         <Text style={styles.text,styles.marginTtem}>+(84) 945447290</Text>
                     </View>
                     <View style={styles.row}>
-                        <Ionicons name="mail-outline" size={20} style={styles.iconInfo}/>
+                        <Ionicons name="mail-outline" style={styles.iconInfo}/>
                         <Text style={styles.text,styles.marginTtem}>nguyenduongthucvu@gmail.com</Text>
                   </View>
                 </View>
@@ -67,25 +66,25 @@ const ProfileScreen = () => {
             <View style={styles.menuWrapper}>
                 <TouchableRipple onPress={() => {}}>
                   <View style={styles.menuItem}>
-                    <Ionicons name="heart-outline" size={25} style={styles.iconMenu}/>
+                    <Ionicons name="heart-outline" style={styles.iconMenu}/>
                     <Text style={styles.menuItemText}>Favorites</Text>
                   </View>
                 </TouchableRipple>
                 <TouchableRipple onPress={() => {}}>
                   <View style={styles.menuItem}>
-                    <Ionicons name="share-outline" size={25} style={styles.iconMenu}/>
+                    <Ionicons name="share-outline" style={styles.iconMenu}/>
                     <Text style={styles.menuItemText}>Share</Text>
                   </View>
                 </TouchableRipple>
                 <TouchableRipple onPress={() => {}}>
                   <View style={styles.menuItem}>
-                    <Ionicons name="settings-outline" size={25} style={styles.iconMenu}/>
+                    <Ionicons name="settings-outline" style={styles.iconMenu}/>
                     <Text style={styles.menuItemText}>Settings</Text>
                   </View>
                 </TouchableRipple>
                 <TouchableRipple onPress={createTwoButtonAlert}>
                 <View style={styles.menuItem}>
-                  <Ionicons name="log-out-outline" size={25} style={styles.iconMenuDanger}/>
+                  <Ionicons name="log-out-outline" style={styles.iconMenuDanger}/>
                   <Text style={styles.menuItemTextDanger}>Log out</Text>
                 </View>
                 </TouchableRipple>
@@ -107,13 +106,14 @@ const styles = StyleSheet.create({
         color: "#303030"
     },
     iconButton:{
-        color:"#52575D"
-  },
+        color:"#52575D",
+        fontSize: 30
+    },
     row: {
         flexDirection: 'row',
         marginBottom: 10,
         marginTop: 10,
-  },
+    },
     image: {
         flex: 1,
         height: undefined,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         marginBottom: 15,
         marginTop: 25,
-  },
+    },
 
     infoContainer: {
         alignSelf: "center",
@@ -191,33 +191,33 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 15,
         paddingHorizontal: 30,
-  },
+    },
     menuItemText: {
         color: '#4C9FDB',
         marginLeft: 20,
         fontWeight: '600',
         fontSize: 16,
         lineHeight: 26,
-  },
+    },
     menuItemTextDanger: {
         color: '#E86363',
         marginLeft: 20,
         fontWeight: '600',
         fontSize: 16,
         lineHeight: 26,
-  },
+    },
     iconInfo:{
         color: '#303030',
+        fontSize: 20,
         marginLeft: 30
-  },
+    },
     iconMenu:{
         color: '#4C9FDB',
-  },
+        fontSize:25,
+    },
     iconMenuDanger:{
         color: '#E86363',
-  },
-
-
-
+        fontSize:25,
+    },
 
 });
