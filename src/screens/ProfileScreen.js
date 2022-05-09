@@ -1,13 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView,Alert  } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {Avatar,Title,Caption,TouchableRipple} from 'react-native-paper';
 
 const ProfileScreen = () => {
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      "Confirm",
+      "Are you sure want to logout",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Logout Pressed"),
+        },
+        { text: "OK", onPress: () => console.log("Logout Pressed") }
+      ]
+    );
     return (
         <SafeAreaView style={styles.container}>
           <View style={styles.titleBar}>
-                    <Ionicons style={styles.IconButton} name="ios-arrow-back" size={24} ></Ionicons>
+                <Ionicons style={styles.iconButton} name="ios-arrow-back" size={24} ></Ionicons>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ alignSelf: "center" }}>
@@ -50,63 +62,40 @@ const ProfileScreen = () => {
                         <Text style={styles.text,styles.marginTtem}>nguyenduongthucvu@gmail.com</Text>
                   </View>
                 </View>
-      <View style={ styles.borderInfoSection } >
-      </View>
-
-
-        <View style={styles.menuWrapper}>
-
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="heart-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Favorites</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="heart-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Favorites</Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="heart-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Favorites</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="heart-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Favorites</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="share-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Share</Text>
-          </View>
-        </TouchableRipple>
-         <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="settings-outline" color="#4C9FDB" size={25}/>
-            <Text style={styles.menuItemText}>Settings</Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Ionicons name="log-out-outline" color="#E86363" size={25}/>
-            <Text style={styles.menuItemTextDanger}>Log out</Text>
-          </View>
-        </TouchableRipple>
-
-      </View>
-            </ScrollView>
+            <View style={ styles.borderInfoSection } >
+            </View>
+            <View style={styles.menuWrapper}>
+                <TouchableRipple onPress={() => {}}>
+                  <View style={styles.menuItem}>
+                    <Ionicons name="heart-outline" size={25} style={styles.iconMenu}/>
+                    <Text style={styles.menuItemText}>Favorites</Text>
+                  </View>
+                </TouchableRipple>
+                <TouchableRipple onPress={() => {}}>
+                  <View style={styles.menuItem}>
+                    <Ionicons name="share-outline" size={25} style={styles.iconMenu}/>
+                    <Text style={styles.menuItemText}>Share</Text>
+                  </View>
+                </TouchableRipple>
+                <TouchableRipple onPress={() => {}}>
+                  <View style={styles.menuItem}>
+                    <Ionicons name="settings-outline" size={25} style={styles.iconMenu}/>
+                    <Text style={styles.menuItemText}>Settings</Text>
+                  </View>
+                </TouchableRipple>
+                <TouchableRipple onPress={createTwoButtonAlert}>
+                <View style={styles.menuItem}>
+                  <Ionicons name="log-out-outline" size={25} style={styles.iconMenuDanger}/>
+                  <Text style={styles.menuItemTextDanger}>Log out</Text>
+                </View>
+                </TouchableRipple>
+        </View>
+          </ScrollView>
         </SafeAreaView>
     );
+
 }
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -117,13 +106,13 @@ const styles = StyleSheet.create({
         fontFamily: "HelveticaNeue",
         color: "#303030"
     },
-   IconButton:{
-  color:"#52575D"
+    iconButton:{
+        color:"#52575D"
   },
     row: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    marginTop: 10,
+        flexDirection: 'row',
+        marginBottom: 10,
+        marginTop: 10,
   },
     image: {
         flex: 1,
@@ -162,9 +151,9 @@ const styles = StyleSheet.create({
     },
 
     userInfoSection: {
-    paddingHorizontal: 30,
-    marginBottom: 15,
-    marginTop: 25,
+        paddingHorizontal: 30,
+        marginBottom: 15,
+        marginTop: 25,
   },
 
     infoContainer: {
@@ -182,47 +171,53 @@ const styles = StyleSheet.create({
         flex: 1
     },
     borderStat:{
-      borderColor: "#DFD8C8",
-      borderLeftWidth: 1,
-      borderRightWidth: 1
+        borderColor: "#DFD8C8",
+        borderLeftWidth: 1,
+        borderRightWidth: 1
     },
     borderInfoSection: {
-      borderColor: "#DFD8C8",
-      borderTopWidth: 1,
-      marginLeft: 60,
-      marginRight: 60
-      },
+        borderColor: "#DFD8C8",
+        borderTopWidth: 1,
+        marginLeft: 60,
+        marginRight: 60
+    },
      menuWrapper: {
-      marginTop: 10,
+        marginTop: 10,
     },
     marginTtem: {
-      marginLeft: 20,
+        marginLeft: 20,
     },
-  menuItem: {
-    flexDirection: 'row',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
+    menuItem: {
+        flexDirection: 'row',
+        paddingVertical: 15,
+        paddingHorizontal: 30,
   },
-  menuItemText: {
-    color: '#4C9FDB',
-    marginLeft: 20,
-    fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 26,
+    menuItemText: {
+        color: '#4C9FDB',
+        marginLeft: 20,
+        fontWeight: '600',
+        fontSize: 16,
+        lineHeight: 26,
   },
     menuItemTextDanger: {
-    color: '#E86363',
-    marginLeft: 20,
-    fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 26,
+        color: '#E86363',
+        marginLeft: 20,
+        fontWeight: '600',
+        fontSize: 16,
+        lineHeight: 26,
   },
     iconInfo:{
-      color: '#303030',
-      marginLeft: 30
-    }
+        color: '#303030',
+        marginLeft: 30
+  },
+    iconMenu:{
+        color: '#4C9FDB',
+  },
+    iconMenuDanger:{
+        color: '#E86363',
+  },
 
 
 
 
-});export default ProfileScreen;
+});
