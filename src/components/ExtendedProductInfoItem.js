@@ -1,9 +1,15 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import React, {useState} from 'react';
 import {Icon} from 'react-native-elements';
 import {TEXT_COLOR} from '../constants/Colors';
 
-const ExtendedProductInfoItem = ({title, description}) => {
+const ExtendedProductInfoItem = ({title, description, isEdit = false}) => {
   const [isShowDescription, setIsShowDescription] = useState(false);
 
   const handleShowDescription = () => setIsShowDescription(!isShowDescription);
@@ -22,7 +28,13 @@ const ExtendedProductInfoItem = ({title, description}) => {
 
       {isShowDescription && (
         <View style={styles.descriptionContainer}>
-          <Text style={styles.description}>{description}</Text>
+          {!isEdit ? (
+            <Text style={styles.description}>{description}</Text>
+          ) : (
+            <TextInput multiline style={styles.description}>
+              {description}
+            </TextInput>
+          )}
         </View>
       )}
     </TouchableOpacity>

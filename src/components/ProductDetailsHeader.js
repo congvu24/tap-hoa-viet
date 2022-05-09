@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const ProductDetailsHeader = ({productCode = ''}) => {
+const ProductDetailsHeader = ({productCode = '', isEdit = false}) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
@@ -15,10 +15,18 @@ const ProductDetailsHeader = ({productCode = ''}) => {
         <Text style={styles.productCode}>{productCode}</Text>
       </View>
 
-      <View style={styles.rightSection}>
-        <Icon type="material" name="edit" />
-        <Icon style={styles.moreIcon} type="material" name="delete" />
-      </View>
+      {!isEdit && (
+        <View style={styles.rightSection}>
+          <Icon type="material" name="edit" />
+          <Icon style={styles.deleteIcon} type="material" name="delete" />
+        </View>
+      )}
+
+      {isEdit && (
+        <View style={styles.rightSection}>
+          <Text style={styles.saveText}>Save</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -50,5 +58,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   rightSection: {flexDirection: 'row', alignItems: 'center'},
-  moreIcon: {marginLeft: 25},
+  deleteIcon: {marginLeft: 25},
+  saveText: {fontSize: 18, fontWeight: '700', color: 'black'},
 });
