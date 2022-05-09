@@ -5,54 +5,18 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ToastAndroid,
 } from 'react-native';
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
+import {TextInput} from 'react-native-gesture-handler';
 import HorizontalInputField from '../components/HorizontalInputField';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Picker} from '@react-native-picker/picker';
 import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';
-import {
-  BACKGROUND_COLOR,
-  MATERIAL_LIGHT_GREEN_COLOR,
-  WHITE_COLOR,
-} from '../constants/Colors';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import DefaultImage from '../images/ic_upload.png';
-const AddProductScreen = () => {
-  const [filePath, setFilePath] = useState(
-    Image.resolveAssetSource(DefaultImage).uri,
-  );
+import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
 
-  const chooseFile = type => {
-    let options = {
-      mediaType: type,
-      maxWidth: 400,
-      maxHeight: 400,
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
-        alert('Đã huỷ thao tác');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera không khả dụng');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Không có quyền truy cập');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert('Fuck cậu Hoàn');
-        return;
-      }
-      console.log(response.assets.map(item => item.uri));
-      setFilePath(String(response.assets.map(item => item.uri)));
-    });
-  };
-
-  {
+export default class AddProductScreen extends Component {
+  render() {
     return (
       <KeyboardAvoidingView
         style={[
@@ -61,13 +25,12 @@ const AddProductScreen = () => {
             flexDirection: 'column',
           },
         ]}>
-        <View style={styles.topContainer}>
-          <TouchableOpacity
-            style={styles.uploadButton}
-            onPress={() => chooseFile('photo')}>
-            <Image style={styles.uploadLogo} source={{uri: filePath}} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.topContainer}>
+          <Image
+            style={styles.uploadLogo}
+            source={require('../images/ic_upload.png')}
+          />
+        </TouchableOpacity>
 
         <View style={styles.bottomContainer}>
           <SafeAreaView>
@@ -94,9 +57,7 @@ const AddProductScreen = () => {
       </KeyboardAvoidingView>
     );
   }
-};
-
-export default AddProductScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -115,14 +76,9 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
   },
   uploadLogo: {
-    width: 120,
-    height: 120,
-    marginStart: 20,
-  },
-  uploadButton: {
-    width: 150,
-    height: 150,
-    margin: 10,
+    width: 100,
+    height: 100,
+    margin: 30,
   },
   title: {
     justifyContent: 'flex-start',
@@ -137,7 +93,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    margin: 20,
     icon: 'add',
   },
 });
