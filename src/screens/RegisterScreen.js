@@ -18,8 +18,7 @@ import Loader from '../components/Loader';
 import PopUp from '../components/Popup';
 import Logo from '../components/Logo';
 
-
-export default function RegisterScreen({navigation}) {
+export function RegisterScreen({navigation}) {
   const [mobile, setMobile] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -127,14 +126,15 @@ export default function RegisterScreen({navigation}) {
 
         <ScrollView
           style={styles.bottomSection}
-          contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+          contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
+        >
           <View
             style={{
               justifyContent: 'center',
               alignItems: 'center',
               height: '100%',
-
-            }}>
+            }}
+          >
             {/* <View style={{width:'95%',height:50, backgroundColor:'white'}}>
                                 <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
                                     <Text>Back</Text>
@@ -147,8 +147,8 @@ export default function RegisterScreen({navigation}) {
                   fontSize: 40,
                   marginTop: 10,
                   marginBottom: 24,
-
-                }}>
+                }}
+              >
                 Create {'\n'}Account
               </Text>
               <TextInput

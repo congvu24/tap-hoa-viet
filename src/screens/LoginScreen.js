@@ -31,6 +31,7 @@ export function LoginScreen({navigation}) {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           console.log('User signed in!');
+          navigation.replace('Homepage');
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {
@@ -62,6 +63,13 @@ export function LoginScreen({navigation}) {
     return subscriber; // unsubscribe on unmount
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      console.log(user)
+      navigation.replace('Homepage');
+    }
+  }, [user]);
+
   if (initializing) return null;
   const signOut = () => {
     auth()
@@ -69,54 +77,43 @@ export function LoginScreen({navigation}) {
       .then(() => console.log('User signed out!'));
   };
 
-  if (!user) {
-    return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <Logo />
-        <View style={styles.bottomContainer}>
-          <Text style={styles.title}>Chào mừng tới Tạp Hóa Việt</Text>
-          <TextInput
-            value={email}
-            onChangeText={text => setEmail(text)}
-            style={styles.textInput}
-            placeholderTextColor="#303030"
-            placeholder="Email"
-          />
-          <TextInput
-            value={password}
-            onChangeText={text => setPassword(text)}
-            secureTextEntry={true}
-            style={styles.textInput}
-            placeholderTextColor="#303030"
-            placeholder="Mật khẩu"
-          />
-          <TouchableOpacity style={styles.button} onPress={login}>
-            <Text style={{fontSize: 18, color: 'black'}}>Đăng nhập</Text>
+  return (
+    <View style={styles.container}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <Logo />
+      <View style={styles.bottomContainer}>
+        <Text style={styles.title}>Chào mừng tới Tạp Hóa Việt</Text>
+        <TextInput
+          value={email}
+          onChangeText={text => setEmail(text)}
+          style={styles.textInput}
+          placeholderTextColor="#303030"
+          placeholder="Email"
+        />
+        <TextInput
+          value={password}
+          onChangeText={text => setPassword(text)}
+          secureTextEntry={true}
+          style={styles.textInput}
+          placeholderTextColor="#303030"
+          placeholder="Mật khẩu"
+        />
+        <TouchableOpacity style={styles.button} onPress={login}>
+          <Text style={{fontSize: 18, color: 'black'}}>Đăng nhập</Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: 40,
+          }}
+        >
+          <Text>Bạn chưa có tài khoản? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={{fontWeight: 'bold'}}>Đăng ký ngay!</Text>
           </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 40,
-            }}
-          >
-            <Text>Bạn chưa có tài khoản? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={{fontWeight: 'bold'}}>Đăng ký ngay!</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
-    );
-  }
-
-  return (
-    <View>
-      <Text>Welcome {user.email}</Text>
-      <TouchableOpacity onPress={() => signOut()}>
-        <Text>Đăng xuất</Text>
-      </TouchableOpacity>
     </View>
   );
 }

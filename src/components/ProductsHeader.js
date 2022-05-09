@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -6,6 +6,7 @@ const ProductsHeader = ({
   title = '',
   numberOfProducts = 0,
   inventoryNumber = 0,
+  goToAddProduct = () => {},
 }) => {
   return (
     <View style={styles.container}>
@@ -13,7 +14,9 @@ const ProductsHeader = ({
         <Text style={styles.title}>{title}</Text>
         <View style={styles.iconsContainer}>
           <Icon name="search-outline" size={25} style={styles.icon} />
-          <Icon name="add-outline" size={25} style={styles.icon} />
+          <TouchableOpacity onPress={goToAddProduct}>
+            <Icon name="add-outline" size={25} style={styles.icon} />
+          </TouchableOpacity>
           <Icon name="funnel-outline" size={25} style={styles.icon} />
           <Icon />
         </View>

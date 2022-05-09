@@ -1,4 +1,3 @@
-
 import {
   Text,
   StyleSheet,
@@ -16,7 +15,7 @@ import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';
 import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
 
-export default class AddProductScreen extends Component {
+export class AddProductScreen extends Component {
   render() {
     return (
       <KeyboardAvoidingView
@@ -25,7 +24,8 @@ export default class AddProductScreen extends Component {
           {
             flexDirection: 'column',
           },
-        ]}>
+        ]}
+      >
         <TouchableOpacity style={styles.topContainer}>
           <Image
             style={styles.uploadLogo}
@@ -37,22 +37,26 @@ export default class AddProductScreen extends Component {
           <SafeAreaView>
             <HorizontalInputField
               title="Mã Hàng"
-              hint="Mã Hàng Tự Động"></HorizontalInputField>
+              hint="Mã Hàng Tự Động"
+            ></HorizontalInputField>
 
             <HorizontalInputField
               title="Mã Vạch"
-              hint="Mã Vạch"></HorizontalInputField>
+              hint="Mã Vạch"
+            ></HorizontalInputField>
 
             <HorizontalInputField
               title="Tên Hàng"
-              hint="Tên Hàng"></HorizontalInputField>
+              hint="Tên Hàng"
+            ></HorizontalInputField>
           </SafeAreaView>
 
           <PickerWithTitle title="Nhóm Hàng" hint="Rau non"></PickerWithTitle>
 
           <PickerWithTitle
             title="Thương Hiệu"
-            hint="Liên Xô chấm Mỹ"></PickerWithTitle>
+            hint="Liên Xô chấm Mỹ"
+          ></PickerWithTitle>
         </View>
         <FAB style={styles.FAB} />
       </KeyboardAvoidingView>

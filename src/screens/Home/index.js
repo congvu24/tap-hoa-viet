@@ -12,7 +12,7 @@ const HomeScreen = () => {
     <View style={styles.rootContainer}>
       <ScrollView>
         <View style={styles.inner}>
-          <Text style={[styles.text]}>Welcome, {currentUser}</Text>
+          <Text style={[styles.text]}>Welcome back, {currentUser}</Text>
 
           <View style={styles.dailyIncomeContainer}>
             <DailyIncomeCard income={income} />

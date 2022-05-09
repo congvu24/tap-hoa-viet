@@ -2,15 +2,21 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
 import ProductsHeader from '../components/ProductsHeader';
 import ProductItem from '../components/ProductItem';
+import {useNavigation} from '@react-navigation/native';
 
 const sampleImg =
   'https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
 
 export const ProductsScreen = () => {
+  const navigation = useNavigation();
+  console.log(navigation)
+  const goToAddProduct = () => navigation.navigate('AddProduct');
+
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
         title="Hàng hóa"
+        goToAddProduct={goToAddProduct}
         numberOfProducts={40}
         inventoryNumber={184}
       />

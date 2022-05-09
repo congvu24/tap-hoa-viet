@@ -15,6 +15,7 @@ import {
   ProductsScreen,
   RegisterScreen,
 } from '../screens';
+import HomeScreen from '../screens/Home';
 const Tab = createBottomTabNavigator();
 
 export function BottomNavigationBar() {
@@ -33,26 +34,26 @@ export function BottomNavigationBar() {
       }}
     >
       <Tab.Screen
-        name="Add product"
-        component={AddProductScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem
               focused={focused}
-              text="Home"
+              text="Trang chủ"
               imageSource={require('../images/home.png')}
             />
           ),
         }}
       />
       <Tab.Screen
-        name="Login"
-        component={LoginScreen}
+        name="Income"
+        component={AddProductScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem
               focused={focused}
-              text="Income"
+              text="Thu nhập"
               imageSource={require('../images/income.png')}
             />
           ),
@@ -75,7 +76,7 @@ export function BottomNavigationBar() {
           tabBarIcon: ({focused}) => (
             <TabBarItem
               focused={focused}
-              text="Warehouse"
+              text="Sản phẩm"
               imageSource={require('../images/warehouse.png')}
             />
           ),
@@ -88,7 +89,7 @@ export function BottomNavigationBar() {
           tabBarIcon: ({focused}) => (
             <TabBarItem
               focused={focused}
-              text="Profile"
+              text="Tài khoản"
               imageSource={require('../images/user.png')}
             />
           ),
@@ -157,7 +158,6 @@ const styles = StyleSheet.create({
   },
   tabBarText: {
     fontSize: 12,
-    textTransform: 'uppercase',
     fontWeight: '500',
   },
   centerTabBar: {
