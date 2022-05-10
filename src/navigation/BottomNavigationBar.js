@@ -84,7 +84,7 @@ export function BottomNavigationBar() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProductsScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem
