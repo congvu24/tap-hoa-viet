@@ -83,8 +83,8 @@ export function BottomNavigationBar() {
         }}
       />
       <Tab.Screen
-        name="Register"
-        component={RegisterScreen}
+        name="Profile"
+        component={ProductsScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem
