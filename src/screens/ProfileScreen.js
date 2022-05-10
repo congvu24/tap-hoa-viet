@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import {TEXT_COLOR,TEXT_SECONDARY_COLOR, RED_COLOR, SECONDARY_COLOR} from '../constants/Colors';
 
 export const ProfileScreen = () => {
   const createTwoButtonAlert = () =>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 12,
-    color: '#AEB5BC',
+    color: TEXT_SECONDARY_COLOR,
     textTransform: 'uppercase',
     fontWeight: '500',
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   usernameText: {
-    color: '#AEB5BC',
+    color: TEXT_SECONDARY_COLOR,
     fontSize: 14,
   },
   profileName: {
@@ -183,12 +183,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   borderStat: {
-    borderColor: '#DFD8C8',
+    borderColor: BORDER_GREY_COLOR,
     borderLeftWidth: 1,
     borderRightWidth: 1,
   },
   borderInfoSection: {
-    borderColor: '#DFD8C8',
+    borderColor: 55,
     borderTopWidth: 1,
     marginLeft: 60,
     marginRight: 60,
@@ -205,30 +205,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   menuItemText: {
-    color: '#4C9FDB',
+    color: SECONDARY_COLOR,
     marginLeft: 20,
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 26,
   },
   menuItemTextDanger: {
-    color: '#E86363',
+    color: RED_COLOR,
     marginLeft: 20,
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 26,
   },
   iconInfo: {
-    color: '#303030',
+    color: TEXT_COLOR,
     fontSize: 20,
     marginLeft: 30,
   },
   iconMenu: {
-    color: '#4C9FDB',
+    color: SECONDARY_COLOR,
     fontSize: 25,
   },
   iconMenuDanger: {
-    color: '#E86363',
+    color: RED_COLOR,
     fontSize: 25,
   },
 });
