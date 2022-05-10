@@ -14,6 +14,7 @@ import {
   LoginScreen,
   ProductsScreen,
   RegisterScreen,
+  ProfileScreen,
 } from '../screens';
 import HomeScreen from '../screens/Home';
 const Tab = createBottomTabNavigator();
