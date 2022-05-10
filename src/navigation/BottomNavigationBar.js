@@ -3,18 +3,12 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
-  GRAY_COLOR,
   PRIMARY_COLOR,
   RED_COLOR,
   TEXT_COLOR,
   WHITE_COLOR,
 } from '../constants/Colors';
-import {
-  AddProductScreen,
-  LoginScreen,
-  ProductsScreen,
-  RegisterScreen,
-} from '../screens';
+import {AddProductScreen, ProductsScreen, ProfileScreen} from '../screens';
 import HomeScreen from '../screens/Home';
 const Tab = createBottomTabNavigator();
 
@@ -84,7 +78,7 @@ export function BottomNavigationBar() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProductsScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem

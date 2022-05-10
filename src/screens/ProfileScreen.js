@@ -7,10 +7,11 @@ import {
   Image,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
-import {Ionicons, MaterialIcons} from '@expo/vector-icons';
-import {Avatar, Title, Caption, TouchableRipple} from 'react-native-paper';
-const ProfileScreen = () => {
+import Icon from 'react-native-vector-icons/Ionicons';
+
+export const ProfileScreen = () => {
   const createTwoButtonAlert = () =>
     Alert.alert('Confirm', 'Are you sure want to logout', [
       {
@@ -22,14 +23,14 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleBar}>
-        <Ionicons style={styles.iconButton} name="ios-arrow-back"></Ionicons>
+        <Icon style={styles.iconButton} name="ios-arrow-back"></Icon>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{alignSelf: 'center'}}>
           <View style={styles.profileImage}>
             <Image
               style={(styles.profileImage, styles.image)}
-              source={require()}
+              //source={require()}
             ></Image>
           </View>
         </View>
@@ -56,19 +57,19 @@ const ProfileScreen = () => {
 
         <View style={styles.userInfoSection}>
           <View style={styles.row}>
-            <Ionicons name="navigate-outline" style={styles.iconInfo} />
+            <Icon name="navigate-outline" style={styles.iconInfo} />
             <Text style={(styles.text, styles.marginTtem)}>
               Ho Chi Minh city, Vietnam
             </Text>
           </View>
           <View style={styles.row}>
-            <Ionicons name="call-outline" style={styles.iconInfo} />
+            <Icon name="call-outline" style={styles.iconInfo} />
             <Text style={(styles.text, styles.marginTtem)}>
               +(84) 945447290
             </Text>
           </View>
           <View style={styles.row}>
-            <Ionicons name="mail-outline" style={styles.iconInfo} />
+            <Icon name="mail-outline" style={styles.iconInfo} />
             <Text style={(styles.text, styles.marginTtem)}>
               nguyenduongthucvu@gmail.com
             </Text>
@@ -76,36 +77,35 @@ const ProfileScreen = () => {
         </View>
         <View style={styles.borderInfoSection}></View>
         <View style={styles.menuWrapper}>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Ionicons name="heart-outline" style={styles.iconMenu} />
+              <Icon name="heart-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Favorites</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Ionicons name="share-outline" style={styles.iconMenu} />
+              <Icon name="share-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Share</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Ionicons name="settings-outline" style={styles.iconMenu} />
+              <Icon name="settings-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Settings</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={createTwoButtonAlert}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={createTwoButtonAlert}>
             <View style={styles.menuItem}>
-              <Ionicons name="log-out-outline" style={styles.iconMenuDanger} />
+              <Icon name="log-out-outline" style={styles.iconMenuDanger} />
               <Text style={styles.menuItemTextDanger}>Log out</Text>
             </View>
-          </TouchableRipple>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
