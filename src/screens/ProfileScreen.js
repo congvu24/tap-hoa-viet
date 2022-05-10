@@ -7,11 +7,12 @@ import {
   Image,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Avatar, Title, Caption, TouchableRipple} from 'react-native-paper';
 
-const ProfileScreen = () => {
+
+export const ProfileScreen = () => {
   const createTwoButtonAlert = () =>
     Alert.alert('Confirm', 'Are you sure want to logout', [
       {
@@ -77,30 +78,30 @@ const ProfileScreen = () => {
         </View>
         <View style={styles.borderInfoSection}></View>
         <View style={styles.menuWrapper}>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="heart-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Favorites</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="share-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Share</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="settings-outline" style={styles.iconMenu} />
               <Text style={styles.menuItemText}>Settings</Text>
             </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={createTwoButtonAlert}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={createTwoButtonAlert}>
             <View style={styles.menuItem}>
               <Icon name="log-out-outline" style={styles.iconMenuDanger} />
               <Text style={styles.menuItemTextDanger}>Log out</Text>
             </View>
-          </TouchableRipple>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
