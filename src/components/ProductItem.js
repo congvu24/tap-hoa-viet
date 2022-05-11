@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 
 const ProductItem = ({
@@ -9,7 +9,7 @@ const ProductItem = ({
   numberOfInventories,
 }) => {
   return (
-    <TouchableOpacity>
+    <View>
       <View style={styles.container}>
         <View style={styles.leftSection}>
           <Image source={{uri: imgSrc}} style={styles.img} />
@@ -27,7 +27,7 @@ const ProductItem = ({
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

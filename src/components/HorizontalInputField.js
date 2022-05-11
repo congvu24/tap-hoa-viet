@@ -10,6 +10,10 @@ const HorizontalInputField = ({
   title = '',
   hint = '',
   showBarcodeIcon = false,
+  isNumberKeyBoard = false,
+  isDisable = false,
+  setInputData,
+  defaultValue = '',
 }) => {
   const {
     field: {onChange, onBlur, value, ref},
@@ -30,18 +34,24 @@ const HorizontalInputField = ({
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.textInput}>
-        <TextInput
-          placeholder={hint}
-          multiline={false}
-          value={value}
-          onChangeText={onChange}
-          onBlur={onBlur}
-          ref={ref}
-          style={{color: error ? 'red' : 'black'}}
-        />
-        <Text style={error ? styles.error : styles.invisible}>
-          Vui lòng nhập đúng thông tin
-        </Text>
+        {!isNumberKeyBoard ? (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        ) : (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            keyboardType="numeric"
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

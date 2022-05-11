@@ -8,9 +8,14 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
+import {Overlay} from 'react-native-elements';
+import Loader from '../components/Loader';
 import auth from '@react-native-firebase/auth';
 import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
 import Logo from '../components/Logo';
+import userSlice from '../redux/reducer/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {store} from '../redux/store';
 
 export function LoginScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
@@ -18,6 +23,8 @@ export function LoginScreen({navigation}) {
   const [user, setUser] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
+  const dispatch = useDispatch();
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -27,18 +34,25 @@ export function LoginScreen({navigation}) {
 
   const login = () => {
     if (isValidForm()) {
+      setLoader(true);
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(res => {
           console.log('User signed in!');
+          setLoader(false);
+          //const currentUser = auth().currentUser;
+          //console.log('ll', currentUser);
+          //dispatch(userSlice.actions.setUserInfo(currentUser));
           navigation.replace('Homepage');
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {
+            setLoader(false);
             Alert.alert('Tài khoản này không tồn tại!');
           }
 
           if (error.code === 'auth/wrong-password') {
+            setLoader(false);
             Alert.alert('Mật khẩu chưa chính xác!');
           }
 
@@ -65,7 +79,7 @@ export function LoginScreen({navigation}) {
 
   useEffect(() => {
     if (user) {
-      console.log(user)
+      dispatch(userSlice.actions.setUserInfo(user));
       navigation.replace('Homepage');
     }
   }, [user]);
@@ -114,6 +128,9 @@ export function LoginScreen({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
+      <Overlay isVisible={loader}>
+        <Loader text={'Đang đăng nhập, xin vui lòng đợi...'} />
+      </Overlay>
     </View>
   );
 }
