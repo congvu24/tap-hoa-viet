@@ -1,13 +1,26 @@
 import {Text, StyleSheet, View, Image, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native';
 import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
-
+import {useController} from 'react-hook-form';
 const HorizontalInputField = ({
+  name,
+  defaultValue,
   title = '',
   hint = '',
   showBarcodeIcon = false,
+  isNumberKeyBoard = false,
+  isDisable = false,
+  setInputData,
+  defaultValue = '',
 }) => {
+  const {
+    field: {onChange, onBlur, value, ref},
+    fieldState: {invalid, error},
+  } = useController({
+    name,
+    defaultValue,
+  });
   return (
     <SafeAreaView
       style={[
@@ -15,10 +28,29 @@ const HorizontalInputField = ({
         {
           flexDirection: 'row',
         },
-      ]}>
+      ]}
+    >
       <Text style={styles.title}>{title}</Text>
+
       <View style={styles.textInput}>
-        <TextInput placeholder={hint} multiline={false} />
+        {!isNumberKeyBoard ? (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        ) : (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            keyboardType="numeric"
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -59,5 +91,11 @@ const styles = StyleSheet.create({
   barcodeButton: {
     width: 16,
     height: 16,
+  },
+  error: {
+    color: 'red',
+  },
+  invisible: {
+    display: 'none',
   },
 });

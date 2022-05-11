@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.8.8",
     "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-community/cli-platform-android": "^7.0.1",
     "@react-native-community/datetimepicker": "^6.1.2",
@@ -25,6 +26,7 @@
     "axios": "^0.26.1",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
+    "nanoid": "^3.3.4",
     "react": "17.0.2",
     "react-hook-form": "^7.30.0",
     "react-native": "0.68.1",
@@ -43,7 +45,8 @@
     "react-native-vector-icons": "^9.1.0",
     "react-redux": "^8.0.1",
     "redux-persist": "^6.0.0",
-    "victory-native": "^36.3.2"
+    "victory-native": "^36.3.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

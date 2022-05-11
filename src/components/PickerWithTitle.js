@@ -1,9 +1,16 @@
-import {Text, StyleSheet, View, SafeAreaView} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import React, {Component} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {GRAY_COLOR} from '../constants/Colors';
 import {Picker} from '@react-native-picker/picker';
 
-const PickerWithTitle = ({title = '', hint = ''}) => {
+const PickerWithTitle = ({
+  title = '',
+  hint = '',
+  items = [],
+  selectedValue,
+  setGroup,
+}) => {
   return (
     <SafeAreaView
       style={[
@@ -11,12 +18,19 @@ const PickerWithTitle = ({title = '', hint = ''}) => {
         {
           flexDirection: 'row',
         },
-      ]}>
+      ]}
+    >
       <Text style={styles.title}>{title}</Text>
-      <Picker style={styles.picker}>
-        <Picker.Item label={hint} value="key0" />
-        <Picker.Item label="Rau xanh" value="key1" />
-        <Picker.Item label="Rau múp" value="key2" />
+      <Picker
+        style={styles.picker}
+        selectedValue={selectedValue}
+        onValueChange={(value, index) => setGroup(value)}
+      >
+        {items.map((item, index) => {
+          return (
+            <Picker.Item label={item.label} value={item.value} key={index} />
+          );
+        })}
       </Picker>
     </SafeAreaView>
   );
