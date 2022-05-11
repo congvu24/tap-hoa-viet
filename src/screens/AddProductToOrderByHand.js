@@ -29,7 +29,7 @@ export default function AddProductToOrderByHand() {
         <Icon name="left" size={20} color={BLACK_COLOR} />
       </TouchableOpacity>
       <View style={styles.formWrap}>
-        <HorizontalInputField title="Sản phẩm" hint="Vỉ trứng" />
+        <HorizontalInputField title="Sản phẩm" hint="Vỉ trứng"  />
         <HorizontalInputField title="Giá nhập" hint="8,000đ" />
         <HorizontalInputField title="Giá bán" hint="10,000đ" />
         <HorizontalInputField title="Số lượng" hint="1" />

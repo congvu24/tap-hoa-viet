@@ -1,6 +1,5 @@
-import {Text, StyleSheet, Platform} from 'react-native';
+import {Text, StyleSheet, Platform, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {MATERIAL_GREY_COLOR} from '../constants/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {TouchableOpacity} from 'react-native';

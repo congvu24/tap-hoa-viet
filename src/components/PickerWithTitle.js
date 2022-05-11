@@ -1,6 +1,5 @@
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {GRAY_COLOR} from '../constants/Colors';
 import {Picker} from '@react-native-picker/picker';
 

@@ -5,13 +5,12 @@ import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
 import {useController} from 'react-hook-form';
 const HorizontalInputField = ({
   name,
-  defaultValue,
   title = '',
   hint = '',
   showBarcodeIcon = false,
   isNumberKeyBoard = false,
   isDisable = false,
-  setInputData,
+  setInputData = value => {},
   defaultValue = '',
 }) => {
   const {
@@ -39,7 +38,7 @@ const HorizontalInputField = ({
             multiline={false}
             editable={!isDisable}
             onChangeText={text => setInputData(text)}
-            value={defaultValue !== '' ? defaultValue : null}
+            value={defaultValue !== '' ? defaultValue : ''}
           />
         ) : (
           <TextInput
@@ -48,7 +47,7 @@ const HorizontalInputField = ({
             editable={!isDisable}
             keyboardType="numeric"
             onChangeText={text => setInputData(text)}
-            value={defaultValue !== '' ? defaultValue : null}
+            value={defaultValue !== '' ? defaultValue : ''}
           />
         )}
       </View>
