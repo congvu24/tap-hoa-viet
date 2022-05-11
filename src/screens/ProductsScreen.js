@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import ProductsHeader from '../components/ProductsHeader';
 import ProductItem from '../components/ProductItem';
@@ -9,26 +15,25 @@ const sampleImg =
 
 export const ProductsScreen = () => {
   const navigation = useNavigation();
-  console.log(navigation)
-  const goToAddProduct = () => navigation.navigate('AddProduct');
 
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
         title="Hàng hóa"
-        goToAddProduct={goToAddProduct}
         numberOfProducts={40}
         inventoryNumber={184}
       />
       <ScrollView style={styles.itemsContainer}>
         {/* Sample products */}
-        <ProductItem
-          imgSrc={sampleImg}
-          productName="Air Jordan 1"
-          productId="NIJ016"
-          price="4,300,000"
-          numberOfInventories={16}
-        />
+        <TouchableOpacity onPress={() => navigation.push('ProductDetails')}>
+          <ProductItem
+            imgSrc={sampleImg}
+            productName="Air Jordan 1"
+            productId="NIJ016"
+            price="4,300,000"
+            numberOfInventories={16}
+          />
+        </TouchableOpacity>
 
         <ProductItem
           imgSrc={sampleImg}

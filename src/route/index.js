@@ -5,7 +5,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {WHITE_COLOR} from '../constants/Colors';
 import LoadingModal from '../components/LoadingModal';
 import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
-import {AddProductScreen, LoginScreen, ProductsScreen, RegisterScreen} from '../screens';
+import {
+  AddProductScreen,
+  LoginScreen,
+  ProductsScreen,
+  RegisterScreen,
+} from '../screens';
 import EditProductScreen from '../screens/EditProductScreen';
 import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 import HomePageScreen from '../screens/HomePageScreen';
