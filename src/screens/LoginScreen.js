@@ -12,7 +12,7 @@ import auth from '@react-native-firebase/auth';
 import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
 import Logo from '../components/Logo';
 import userSlice from '../redux/reducer/userSlice';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {store} from '../redux/store';
 
 export function LoginScreen({navigation}) {
@@ -22,6 +22,8 @@ export function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+
+  const uid = useSelector(state => state.user.uid);
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -33,10 +35,12 @@ export function LoginScreen({navigation}) {
     if (isValidForm()) {
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(res => {
           console.log('User signed in!');
-          dispatch(userSlice.actions.setUserInfo(user));
-          navigation.replace('Homepage');
+          const currentUserUid = auth().currentUser.uid;
+          // console.log('ll', currentUser);
+          dispatch(userSlice.actions.setUserInfo(currentUserUid));
+          // navigation.replace('Homepage');
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {
@@ -68,14 +72,14 @@ export function LoginScreen({navigation}) {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      dispatch(userSlice.actions.setUserInfo(user));
-      navigation.replace('Homepage');
-      console.log(store.getState());
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     console.log(user);
+  //     dispatch(userSlice.actions.setUserInfo(user));
+  //     navigation.replace('Homepage');
+  //     console.log(store.getState());
+  //   }
+  // }, [user]);
 
   if (initializing) return null;
   const signOut = () => {
@@ -90,6 +94,7 @@ export function LoginScreen({navigation}) {
       <Logo />
       <View style={styles.bottomContainer}>
         <Text style={styles.title}>Chào mừng tới Tạp Hóa Việt</Text>
+        <Text>{uid}</Text>
         <TextInput
           value={email}
           onChangeText={text => setEmail(text)}

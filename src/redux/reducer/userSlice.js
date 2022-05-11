@@ -2,10 +2,13 @@ import {createSlice} from '@reduxjs/toolkit';
 
 export default createSlice({
   name: 'user',
-  initialState: {},
+  initialState: {
+    uid: '',
+  },
   reducers: {
     setUserInfo: (state, action) => {
-      state = action.payload;
+      console.log(action);
+      state.uid = action.payload;
       console.log('add successfully' + action.payload);
     },
   },
