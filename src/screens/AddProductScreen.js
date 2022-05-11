@@ -18,8 +18,12 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 
 export const AddProductScreen = () => {
+  const [isPickerShow, setIsPickerShow] = useState(false);
+  const [date, setDate] = useState(new Date(Date.now()));
+
   const schema = yup.object().shape({
     name: yup.string().required().max(20),
     quantity: yup.number().required(),
@@ -32,6 +36,10 @@ export const AddProductScreen = () => {
     importDate: yup.string(),
     exportDate: yup.string(),
   });
+
+  const showPicker = () => {
+    setIsPickerShow(true);
+  };
 
   const formMethod = useForm({
     resolver: yupResolver(schema),
@@ -131,17 +139,9 @@ export const AddProductScreen = () => {
               hint="Nhập mã QR Code"
             />
 
-            <HorizontalInputField
-              name="importDate"
-              title="Ngày nhập kho"
-              hint="Ngày nhập kho"
-            />
+            <DateTimePickerWithTitle title="Ngày nhập kho" />
 
-            <HorizontalInputField
-              name="exportDate"
-              title="Ngày nhập kho"
-              hint="Ngày nhập kho"
-            />
+            <DateTimePickerWithTitle title="Ngày xuất kho" />
           </SafeAreaView>
 
           <PickerWithTitle title="Nhóm Hàng" hint="Rau non" />
