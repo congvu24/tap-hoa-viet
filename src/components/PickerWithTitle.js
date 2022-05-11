@@ -6,13 +6,7 @@ import {Picker} from '@react-native-picker/picker';
 
 const PickerWithTitle = ({title = '', hint = ''}) => {
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        {
-          flexDirection: 'row',
-        },
-      ]}>
+    <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>{title}</Text>
       <Picker style={styles.picker}>
         <Picker.Item label={hint} value="key0" />
@@ -31,6 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 20,
+    flexDirection: 'row',
   },
   title: {
     flex: 1,

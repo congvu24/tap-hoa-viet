@@ -1,14 +1,23 @@
 import {Text, StyleSheet, View, Image} from 'react-native';
 import React, {Component} from 'react';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
-
+import {useController} from 'react-hook-form';
 const HorizontalInputField = ({
+  name,
+  defaultValue,
   title = '',
   hint = '',
   showBarcodeIcon = false,
 }) => {
+  const {
+    field: {onChange, onBlur, value, ref},
+    fieldState: {invalid, error},
+  } = useController({
+    name,
+    defaultValue,
+  });
   return (
     <SafeAreaView
       style={[
@@ -16,10 +25,23 @@ const HorizontalInputField = ({
         {
           flexDirection: 'row',
         },
-      ]}>
+      ]}
+    >
       <Text style={styles.title}>{title}</Text>
+
       <View style={styles.textInput}>
-        <TextInput placeholder={hint} multiline={false} />
+        <TextInput
+          placeholder={hint}
+          multiline={false}
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          ref={ref}
+          style={{color: error ? 'red' : 'black'}}
+        />
+        <Text style={error ? styles.error : styles.invisible}>
+          Vui lòng nhập đúng thông tin
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -60,5 +82,11 @@ const styles = StyleSheet.create({
   barcodeButton: {
     width: 16,
     height: 16,
+  },
+  error: {
+    color: 'red',
+  },
+  invisible: {
+    display: 'none',
   },
 });

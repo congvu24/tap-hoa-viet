@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.8.8",
     "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-community/datetimepicker": "^6.1.2",
     "@react-native-community/masked-view": "^0.1.11",
@@ -39,7 +40,8 @@
     "react-native-vector-icons": "^9.1.0",
     "react-redux": "^8.0.1",
     "redux-persist": "^6.0.0",
-    "victory-native": "^36.3.2"
+    "victory-native": "^36.3.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
