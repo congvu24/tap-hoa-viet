@@ -27,11 +27,11 @@ const ProductDetailsScreen = ({
       <ProductDetailsHeader productCode={productCode} />
       <ScrollView style={styles.scrolledContainer}>
         <View style={styles.imageSliderContainer}>
-          <SliderBox
+          {/* <SliderBox
             images={images}
             sliderBoxHeight={250}
             dotColor={PRIMARY_COLOR}
-          />
+          /> */}
         </View>
 
         <View style={styles.productInfoContainer}>

@@ -8,6 +8,10 @@ const HorizontalInputField = ({
   title = '',
   hint = '',
   showBarcodeIcon = false,
+  isNumberKeyBoard = false,
+  isDisable = false,
+  setInputData,
+  defaultValue = '',
 }) => {
   return (
     <SafeAreaView
@@ -16,10 +20,28 @@ const HorizontalInputField = ({
         {
           flexDirection: 'row',
         },
-      ]}>
+      ]}
+    >
       <Text style={styles.title}>{title}</Text>
       <View style={styles.textInput}>
-        <TextInput placeholder={hint} multiline={false} />
+        {!isNumberKeyBoard ? (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        ) : (
+          <TextInput
+            placeholder={hint}
+            multiline={false}
+            editable={!isDisable}
+            keyboardType="numeric"
+            onChangeText={text => setInputData(text)}
+            value={defaultValue !== '' ? defaultValue : null}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
