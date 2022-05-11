@@ -13,13 +13,13 @@ const HorizontalInputField = ({
   setInputData = value => {},
   defaultValue = '',
 }) => {
-  const {
-    field: {onChange, onBlur, value, ref},
-    fieldState: {invalid, error},
-  } = useController({
-    name,
-    defaultValue,
-  });
+  // const {
+  //   field: {onChange, onBlur, value, ref},
+  //   fieldState: {invalid, error},
+  // } = useController({
+  //   name,
+  //   defaultValue,
+  // });
   return (
     <SafeAreaView
       style={[
