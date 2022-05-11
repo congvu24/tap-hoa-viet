@@ -39,6 +39,9 @@ export function LoginScreen({navigation}) {
         .signInWithEmailAndPassword(email, password)
         .then(res => {
           console.log('User signed in!');
+          const currentUserUid = auth().currentUser.uid;
+          // console.log('ll', currentUser);
+          dispatch(userSlice.actions.setUserInfo(currentUserUid));
           setLoader(false);
           //const currentUser = auth().currentUser;
           //console.log('ll', currentUser);

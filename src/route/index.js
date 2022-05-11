@@ -2,7 +2,7 @@ import {View, Text, StatusBar, SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {WHITE_COLOR} from '../constants/Colors';
+import {BLACK_COLOR, WHITE_COLOR} from '../constants/Colors';
 import LoadingModal from '../components/LoadingModal';
 import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
 import {
@@ -15,13 +15,16 @@ import EditProductScreen from '../screens/EditProductScreen';
 import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 import HomePageScreen from '../screens/HomePageScreen';
 import Splash from '../screens/SplashScreen';
+import CreateOrderScreen from '../screens/CreateOrderScreen';
+import AddProductToOrder from '../screens/AddProductToOrder';
+import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppRoute() {
   return (
     <SafeAreaView style={styles.wrap}>
-      <StatusBar backgroundColor={WHITE_COLOR} hidden={false} />
+      <StatusBar backgroundColor={BLACK_COLOR} hidden={false} />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Splash"
@@ -36,11 +39,29 @@ export default function AppRoute() {
           <Stack.Screen name="Homepage" component={HomePageScreen} />
           <Stack.Screen name="Products" component={ProductsScreen} />
           <Stack.Screen
+            name="CreateOrder"
+            component={CreateOrderScreen}
+            options={{
+              animation: 'fade_from_bottom',
+            }}
+          />
+          <Stack.Screen
+            name="AddProductToOrder"
+            component={AddProductToOrder}
+          />
+          <Stack.Screen
             name="ProductDetails"
             component={ProductDetailsScreen}
           />
           <Stack.Screen name="EditProduct" component={EditProductScreen} />
           <Stack.Screen name="AddProduct" component={AddProductScreen} />
+          <Stack.Screen
+            name="AddProductToOrderByHand"
+            component={AddProductToOrderByHand}
+            options={{
+              animation: 'fade_from_bottom',
+            }}
+          />
 
           {/* <BottomNavigationBar /> */}
         </Stack.Navigator>

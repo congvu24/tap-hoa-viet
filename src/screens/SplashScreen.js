@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   text: {
-    color: WHITE_COLOR,
+    color: PRIMARY_COLOR,
     marginTop: 10,
   },
 });
