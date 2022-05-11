@@ -1,4 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -9,6 +10,7 @@ import {
   WHITE_COLOR,
 } from '../constants/Colors';
 import {AddProductScreen, ProductsScreen, ProfileScreen} from '../screens';
+import CreateOrderScreen from '../screens/CreateOrderScreen';
 import HomeScreen from '../screens/Home';
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +57,7 @@ export function BottomNavigationBar() {
       />
       <Tab.Screen
         name="AddOrder"
-        component={AddProductScreen}
+        component={CreateOrderScreen}
         options={{
           tabBarIcon: () => (
             <Icon name="add-outline" size={45} style={{color: WHITE_COLOR}} />
@@ -93,14 +95,18 @@ export function BottomNavigationBar() {
   );
 }
 
-const CustomCenterTabBarButton = ({children, onPress}) => (
-  <TouchableOpacity
-    style={[styles.centerTabBar, styles.shadow]}
-    onPress={onPress}
-  >
-    <View style={styles.centerTabBarButton}>{children}</View>
-  </TouchableOpacity>
-);
+const CustomCenterTabBarButton = ({children, onPress}) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      style={[styles.centerTabBar, styles.shadow]}
+      onPress={() => navigation.navigate('CreateOrder')}
+    >
+      <View style={styles.centerTabBarButton}>{children}</View>
+    </TouchableOpacity>
+  );
+};
 
 const TabBarItem = ({focused, text, imageSource}) => (
   <View style={styles.tabBarItemContainer}>

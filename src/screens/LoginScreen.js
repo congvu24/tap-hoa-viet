@@ -40,7 +40,7 @@ export function LoginScreen({navigation}) {
           const currentUserUid = auth().currentUser.uid;
           // console.log('ll', currentUser);
           dispatch(userSlice.actions.setUserInfo(currentUserUid));
-          // navigation.replace('Homepage');
+          navigation.replace('Homepage');
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {

@@ -5,11 +5,11 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
+  SafeAreaView
 } from 'react-native';
 import React, {Component} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import HorizontalInputField from '../components/HorizontalInputField';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Picker} from '@react-native-picker/picker';
 import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';

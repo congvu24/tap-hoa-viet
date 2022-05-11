@@ -1,7 +1,6 @@
-import {Text, StyleSheet, View, Image} from 'react-native';
+import {Text, StyleSheet, View, Image, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
 
 const HorizontalInputField = ({
