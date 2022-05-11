@@ -11,6 +11,9 @@ import {
 import auth from '@react-native-firebase/auth';
 import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
 import Logo from '../components/Logo';
+import userSlice from '../redux/reducer/userSlice';
+import {useDispatch} from 'react-redux';
+import {store} from '../redux/store';
 
 export function LoginScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
@@ -18,6 +21,7 @@ export function LoginScreen({navigation}) {
   const [user, setUser] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -31,6 +35,7 @@ export function LoginScreen({navigation}) {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           console.log('User signed in!');
+          dispatch(userSlice.actions.setUserInfo(user));
           navigation.replace('Homepage');
         })
         .catch(error => {
@@ -65,8 +70,10 @@ export function LoginScreen({navigation}) {
 
   useEffect(() => {
     if (user) {
-      console.log(user)
+      console.log(user);
+      dispatch(userSlice.actions.setUserInfo(user));
       navigation.replace('Homepage');
+      console.log(store.getState());
     }
   }, [user]);
 
