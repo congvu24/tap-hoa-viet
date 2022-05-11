@@ -1,19 +1,32 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 import {BACKGROUND_COLOR, TEXT_COLOR} from '../../constants/Colors';
 import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
+import auth from '@react-native-firebase/auth';
 
-const HomeScreen = () => {
-  const currentUser = 'Khoa';
+const HomeScreen = ({navigation}) => {
+  const user = useSelector(state => state.user);
+  const currentUser = user.email;
   const income = 50000000;
+  const signOut = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('Login');
+      });
+  };
 
   return (
     <View style={styles.rootContainer}>
       <ScrollView>
         <View style={styles.inner}>
           <Text style={[styles.text]}>Welcome back, {currentUser}</Text>
-
+          <TouchableOpacity onPress={() => signOut()}>
+            <Text>Signout</Text>
+          </TouchableOpacity>
           <View style={styles.dailyIncomeContainer}>
             <DailyIncomeCard income={income} />
           </View>
