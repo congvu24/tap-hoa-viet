@@ -10,48 +10,52 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import {TEXT_COLOR,TEXT_SECONDARY_COLOR, RED_COLOR, SECONDARY_COLOR,BORDER_GREY_COLOR} from '../constants/Colors';
+const data = [
+  {Name: 'Pham Hoai Bao bao', }
+];
 export const ProfileScreen = () => {
+  
   const createTwoButtonAlert = () =>
-    Alert.alert('Confirm', 'Are you sure want to logout', [
+    Alert.alert('Xác nhận', 'Bạn có thực sự muốn đăng xuất?', [
       {
-        text: 'Cancel',
+        text: 'Không',
         onPress: () => console.log('Cancel Logout Pressed'),
       },
-      {text: 'OK', onPress: () => console.log('Logout Pressed')},
+      {text: 'Có', onPress: () => console.log('Logout Pressed')},
     ]);
+  
   return (
+
     <SafeAreaView style={styles.container}>
-      <View style={styles.titleBar}>
-        <Icon style={styles.iconButton} name="ios-arrow-back"></Icon>
-      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{alignSelf: 'center'}}>
           <View style={styles.profileImage}>
             <Image
               style={(styles.profileImage, styles.image)}
-              //source={require()}
+              source={require('../images/profile/default_avatar.png')}
             ></Image>
           </View>
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={[styles.text, styles.profileName]}>Cong Vu</Text>
+
+          <Text  style={[styles.text, styles.profileName]}>PHBao</Text>
           <Text style={[styles.text, styles.usernameText]}>@congvu24</Text>
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statsBox}>
-            <Text style={[styles.text, styles.statText]}>483</Text>
-            <Text style={[styles.text, styles.subText]}>Stats 1</Text>
+            <Text style={[styles.text, styles.statText]}>1,000</Text>
+            <Text style={[styles.text, styles.subText]}>Loại Sản Phẩm</Text>
           </View>
           <View style={[styles.statsBox, styles.borderStat]}>
-            <Text style={[styles.text, styles.statText]}>45,844</Text>
-            <Text style={[styles.text, styles.subText]}>Sale</Text>
+            <Text style={[styles.text, styles.statText]}>40,500</Text>
+            <Text style={[styles.text, styles.subText]}>Lượng Sản Phẩm</Text>
           </View>
           <View style={styles.statsBox}>
-            <Text style={[styles.text, styles.statText]}>302</Text>
-            <Text style={[styles.text, styles.subText]}>Product</Text>
+            <Text style={[styles.text, styles.statText]}>23,020</Text>
+            <Text style={[styles.text, styles.subText]}>Giao Dịch</Text>
           </View>
         </View>
 
@@ -80,32 +84,34 @@ export const ProfileScreen = () => {
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="heart-outline" style={styles.iconMenu} />
-              <Text style={styles.menuItemText}>Favorites</Text>
+              <Text style={styles.menuItemText}>Yêu Thích</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="share-outline" style={styles.iconMenu} />
-              <Text style={styles.menuItemText}>Share</Text>
+              <Text style={styles.menuItemText}>Chia sẻ</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
               <Icon name="settings-outline" style={styles.iconMenu} />
-              <Text style={styles.menuItemText}>Settings</Text>
+              <Text style={styles.menuItemText}>Cài Đặt</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={createTwoButtonAlert}>
             <View style={styles.menuItem}>
               <Icon name="log-out-outline" style={styles.iconMenuDanger} />
-              <Text style={styles.menuItemTextDanger}>Log out</Text>
+              <Text style={styles.menuItemTextDanger}>Đăng xuất</Text>
             </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <View style={styles.marginBottomScreen}></View>
     </SafeAreaView>
   );
 };
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -119,6 +125,9 @@ const styles = StyleSheet.create({
   iconButton: {
     color: '#52575D',
     fontSize: 30,
+  },
+  marginBottomScreen:{
+    marginTop: 80,
   },
   row: {
     flexDirection: 'row',
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 12,
-    color: '#AEB5BC',
+    color: TEXT_SECONDARY_COLOR,
     textTransform: 'uppercase',
     fontWeight: '500',
   },
@@ -146,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   usernameText: {
-    color: '#AEB5BC',
+    color: TEXT_SECONDARY_COLOR,
     fontSize: 14,
   },
   profileName: {
@@ -181,12 +190,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   borderStat: {
-    borderColor: '#DFD8C8',
-    borderLeftWidth: 1,
+    borderColor: BORDER_GREY_COLOR,
+    borderLeftWidth: 2,
     borderRightWidth: 1,
   },
   borderInfoSection: {
-    borderColor: '#DFD8C8',
+    borderColor: 55,
     borderTopWidth: 1,
     marginLeft: 60,
     marginRight: 60,
@@ -203,30 +212,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   menuItemText: {
-    color: '#4C9FDB',
+    color: SECONDARY_COLOR,
     marginLeft: 20,
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 26,
   },
   menuItemTextDanger: {
-    color: '#E86363',
+    color: RED_COLOR,
     marginLeft: 20,
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 26,
   },
   iconInfo: {
-    color: '#303030',
+    color: TEXT_COLOR,
     fontSize: 20,
     marginLeft: 30,
   },
   iconMenu: {
-    color: '#4C9FDB',
+    color: SECONDARY_COLOR,
     fontSize: 25,
   },
   iconMenuDanger: {
-    color: '#E86363',
+    color: RED_COLOR,
     fontSize: 25,
   },
 });
