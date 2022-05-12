@@ -13,22 +13,15 @@ const HorizontalInputField = ({
   setInputData = value => {},
   defaultValue = '',
 }) => {
-  // const {
-  //   field: {onChange, onBlur, value, ref},
-  //   fieldState: {invalid, error},
-  // } = useController({
-  //   name,
-  //   defaultValue,
-  // });
+  const {
+    field: {onChange, onBlur, value, ref},
+    fieldState: {invalid, error},
+  } = useController({
+    name,
+    defaultValue,
+  });
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        {
-          flexDirection: 'row',
-        },
-      ]}
-    >
+    <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.textInput}>
@@ -37,8 +30,9 @@ const HorizontalInputField = ({
             placeholder={hint}
             multiline={false}
             editable={!isDisable}
-            onChangeText={text => setInputData(text)}
-            value={defaultValue !== '' ? defaultValue : ''}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            ref={ref}
           />
         ) : (
           <TextInput
@@ -46,10 +40,14 @@ const HorizontalInputField = ({
             multiline={false}
             editable={!isDisable}
             keyboardType="numeric"
-            onChangeText={text => setInputData(text)}
-            value={defaultValue !== '' ? defaultValue : ''}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            ref={ref}
           />
         )}
+        <Text style={error ? styles.error : styles.invisible}>
+          Vui lòng nhập đúng thông tin
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -63,6 +61,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 20,
+    flexDirection: 'row',
   },
   title: {
     flex: 1,

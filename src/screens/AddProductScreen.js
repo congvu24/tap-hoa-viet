@@ -7,9 +7,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import HorizontalInputField from '../components/HorizontalInputField';
 import {Picker} from '@react-native-picker/picker';
@@ -21,9 +21,14 @@ import {nanoid} from '@reduxjs/toolkit';
 import {Button} from 'react-native-elements';
 import {PRIMARY_COLOR} from '../constants/Colors';
 import {firebase} from '@react-native-firebase/auth';
+import * as yup from 'yup';
+import {FormProvider, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import DefaultImage from '../images/ic_upload.png';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export const AddProductScreen = () => {
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
   const [productCode, setproductCode] = useState(nanoid(11));
   const [barCode, setbarCode] = useState('');
   const [productName, setproductName] = useState('');
@@ -33,6 +38,63 @@ export const AddProductScreen = () => {
   const [numberOfProducts, setnumberOfProducts] = useState('');
   const [productGroup, setproductGroup] = useState('thoiTrang');
 
+  const schema = yup.object().shape({
+    id: yup.string().required('Id is required'),
+    name: yup.string().required().max(20),
+    brand: yup.string().required().max(20),
+    quantity: yup.number().required(),
+    price: yup.number().required(),
+    category: yup.string().required(),
+    description: yup.string().required(),
+    importPrice: yup.number().required(),
+    exportPrice: yup.number().required(),
+    qrCode: yup.string(),
+    importDate: yup.string(),
+    exportDate: yup.string(),
+  });
+
+  const formMethod = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmitKey = useCallback(() => {
+    formMethod.handleSubmit(onSubmit)();
+  }, [formMethod, onSubmit]);
+
+  const onSubmit = useCallback(data => {
+    console.log(data);
+  }, []);
+
+  const [filePath, setFilePath] = useState(
+    Image.resolveAssetSource(DefaultImage).uri,
+  );
+
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 400,
+      maxHeight: 400,
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        alert('Đã huỷ thao tác');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('Camera không khả dụng');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Không có quyền truy cập');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert('Fuck cậu Hoàn');
+        return;
+      }
+      console.log(response.assets.map(item => item.uri));
+      setFilePath(String(response.assets.map(item => item.uri)));
+    });
+  };
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => setUserId(user.uid));
   }, []);
@@ -103,97 +165,97 @@ export const AddProductScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[
-        styles.container,
-        {
-          flexDirection: 'column',
-        },
-      ]}
-    >
-      <ScrollView style={styles.scrollView}>
-        <TouchableOpacity style={styles.topContainer}>
-          <Image
-            style={styles.uploadLogo}
-            source={require('../images/ic_upload.png')}
-          />
-        </TouchableOpacity>
+    <FormProvider {...formMethod}>
+      <KeyboardAvoidingView style={[styles.container]}>
+        <ScrollView style={styles.scrollView}>
+          <TouchableOpacity
+            style={styles.uploadButton}
+            onPress={() => chooseFile('photo')}
+          >
+            <Image style={styles.uploadLogo} source={{uri: filePath}} />
+          </TouchableOpacity>
+          <View style={styles.bottomContainer}>
+            <SafeAreaView>
+              <HorizontalInputField
+                name="id"
+                title="Mã Hàng"
+                hint="Mã Hàng Tự Động"
+                isDisable={true}
+                defaultValue={productCode}
+              />
 
-        <View style={styles.bottomContainer}>
-          <SafeAreaView>
-            <HorizontalInputField
-              title="Mã Hàng"
-              hint="Mã Hàng Tự Động"
-              isDisable={true}
-              defaultValue={productCode}
+              <HorizontalInputField
+                name="qrCode"
+                title="Mã Vạch"
+                hint="Mã Vạch"
+                setInputData={handleBarCode}
+                defaultValue={barCode}
+              />
+
+              <HorizontalInputField
+                name="name"
+                title="Tên Hàng"
+                hint="Tên Hàng"
+                setInputData={handleProductName}
+                defaultValue={productName}
+              />
+
+              <HorizontalInputField
+                name="brand"
+                title="Thương hiệu"
+                hint="Thương hiệu"
+                setInputData={handleBrand}
+                defaultValue={brand}
+              />
+
+              <HorizontalInputField
+                name="importPrice"
+                title="Giá vốn"
+                hint="Giá vốn"
+                isNumberKeyBoard={true}
+                setInputData={handleCapitalPrice}
+                defaultValue={capitalPrice}
+              />
+
+              <HorizontalInputField
+                name="exportPrice"
+                title="Giá bán"
+                hint="Giá bán"
+                isNumberKeyBoard={true}
+                setInputData={handleSellPrice}
+                defaultValue={sellPrice}
+              />
+
+              <HorizontalInputField
+                name="quantity"
+                title="Số lượng"
+                hint="Số lượng"
+                isNumberKeyBoard={true}
+                setInputData={handleNumberOfProducts}
+                defaultValue={numberOfProducts}
+              />
+            </SafeAreaView>
+
+            <PickerWithTitle
+              title="Nhóm Hàng"
+              hint="Nhóm hàng..."
+              items={groupOfProducts}
+              selectedValue={productGroup}
+              setGroup={setproductGroup}
             />
 
-            <HorizontalInputField
-              title="Mã Vạch"
-              hint="Mã Vạch"
-              setInputData={handleBarCode}
-              defaultValue={barCode}
-            />
-
-            <HorizontalInputField
-              title="Tên Hàng"
-              hint="Tên Hàng"
-              setInputData={handleProductName}
-              defaultValue={productName}
-            />
-
-            <HorizontalInputField
-              title="Thương hiệu"
-              hint="Thương hiệu"
-              setInputData={handleBrand}
-              defaultValue={brand}
-            />
-
-            <HorizontalInputField
-              title="Giá vốn"
-              hint="Giá vốn"
-              isNumberKeyBoard={true}
-              setInputData={handleCapitalPrice}
-              defaultValue={capitalPrice}
-            />
-
-            <HorizontalInputField
-              title="Giá bán"
-              hint="Giá bán"
-              isNumberKeyBoard={true}
-              setInputData={handleSellPrice}
-              defaultValue={sellPrice}
-            />
-
-            <HorizontalInputField
-              title="Số lượng"
-              hint="Số lượng"
-              isNumberKeyBoard={true}
-              setInputData={handleNumberOfProducts}
-              defaultValue={numberOfProducts}
-            />
-          </SafeAreaView>
-
-          <PickerWithTitle
-            title="Nhóm Hàng"
-            hint="Nhóm hàng..."
-            items={groupOfProducts}
-            selectedValue={productGroup}
-            setGroup={setproductGroup}
-          />
-
-          <View style={styles.addBtnContainer}>
-            <Button
-              title={'Add Product'}
-              buttonStyle={styles.addBtn}
-              titleStyle={styles.addBtnTitle}
-              onPress={uploadProduct}
-            />
+            <View style={styles.addBtnContainer}>
+              <Button
+                title={'Add Product'}
+                buttonStyle={styles.addBtn}
+                titleStyle={styles.addBtnTitle}
+                onPress={onSubmitKey}
+              />
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      {/* <FAB style={styles.FAB} /> */}
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </FormProvider>
   );
 };
 
@@ -202,6 +264,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BACKGROUND_COLOR,
     position: 'relative',
+    flexDirection: 'column',
   },
   scrollView: {
     flex: 1,
