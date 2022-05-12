@@ -39,13 +39,10 @@ export function LoginScreen({navigation}) {
         .signInWithEmailAndPassword(email, password)
         .then(res => {
           console.log('User signed in!');
-          const currentUserUid = auth().currentUser.uid;
-          // console.log('ll', currentUser);
-          dispatch(userSlice.actions.setUserInfo(currentUserUid));
           setLoader(false);
-          //const currentUser = auth().currentUser;
-          //console.log('ll', currentUser);
-          //dispatch(userSlice.actions.setUserInfo(currentUser));
+          // const currentUser = auth().currentUser;
+          // console.log('ll', currentUser);
+          // dispatch(userSlice.actions.setUserInfo(currentUser));
           navigation.replace('Homepage');
         })
         .catch(error => {
@@ -126,7 +123,7 @@ export function LoginScreen({navigation}) {
           }}
         >
           <Text>Bạn chưa có tài khoản? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => navigation.replace('Register')}>
             <Text style={{fontWeight: 'bold'}}>Đăng ký ngay!</Text>
           </TouchableOpacity>
         </View>

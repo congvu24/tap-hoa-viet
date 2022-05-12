@@ -8,7 +8,7 @@ import auth from '@react-native-firebase/auth';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);
-  const currentUser = user.email;
+  const currentUser = user.name;
   const income = 50000000;
   const signOut = () => {
     auth()
