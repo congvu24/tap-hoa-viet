@@ -55,7 +55,7 @@ export function WeeklyIncomeChart() {
           }
           y="earnings"
           interpolation="cardinal"
-          animate={{duration: 2000, onLoad: 500}}
+          // animate={{duration: 2000, onLoad: 500}}
           padding={100}
           style={{
             data: {
