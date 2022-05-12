@@ -16,6 +16,7 @@ import Logo from '../components/Logo';
 import userSlice from '../redux/reducer/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {store} from '../redux/store';
+import firestore from '@react-native-firebase/firestore';
 
 export function LoginScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
@@ -40,10 +41,19 @@ export function LoginScreen({navigation}) {
         .then(res => {
           console.log('User signed in!');
           setLoader(false);
-          // const currentUser = auth().currentUser;
-          // console.log('ll', currentUser);
-          // dispatch(userSlice.actions.setUserInfo(currentUser));
-          navigation.replace('Homepage');
+          console.log(auth().currentUser.uid);
+          firestore()
+            .collection('Users')
+            .doc(auth().currentUser.uid)
+            .get()
+            .then(documentSnapshot => {
+              if (documentSnapshot.exists) {
+                dispatch(
+                  userSlice.actions.setUserInfo(documentSnapshot.data()),
+                );
+                navigation.replace('Homepage');
+              }
+            });
         })
         .catch(error => {
           if (error.code === 'auth/user-not-found') {
@@ -79,8 +89,16 @@ export function LoginScreen({navigation}) {
 
   useEffect(() => {
     if (user) {
-      dispatch(userSlice.actions.setUserInfo(user));
-      navigation.replace('Homepage');
+      firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            dispatch(userSlice.actions.setUserInfo(documentSnapshot.data()));
+            navigation.replace('Homepage');
+          }
+        });
     }
   }, [user]);
 
