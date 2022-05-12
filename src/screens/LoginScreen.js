@@ -51,8 +51,8 @@ export function LoginScreen({navigation}) {
                 dispatch(
                   userSlice.actions.setUserInfo(documentSnapshot.data()),
                 );
-                navigation.replace('Homepage');
               }
+              navigation.replace('Homepage');
             });
         })
         .catch(error => {

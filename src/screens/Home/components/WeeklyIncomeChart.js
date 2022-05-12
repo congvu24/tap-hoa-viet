@@ -8,7 +8,7 @@ import {
   VictoryLabel,
   VictoryScatter,
 } from 'victory-native';
-import {PRIMARY_COLOR} from '../../../constants/Colors';
+import {BLACK_COLOR, PRIMARY_COLOR} from '../../../constants/Colors';
 import {formatMoney} from '../../../utils';
 
 const data = [
@@ -38,13 +38,13 @@ const {width: screenWidth} = Dimensions.get('screen');
 export function WeeklyIncomeChart() {
   const {lastDate} = getDateRangeOfMonth();
   return (
-    <View style={styles.rootContainer}>
+    <View style={[styles.rootContainer]}>
       <VictoryChart
         width={screenWidth - 80}
         style={styles.chartContainer}
         theme={VictoryTheme.material}
         domainPadding={{x: [20, 50], y: [15, 25]}}
-        padding={{top: 20, bottom: 40, left: 60, right: 10}}
+        padding={{top: 30, bottom: 50, left: 60, right: 10}}
       >
         <VictoryLine
           data={data}
@@ -87,7 +87,7 @@ export function WeeklyIncomeChart() {
         <VictoryAxis
           dependentAxis
           label="Doanh thu (VND)"
-          axisLabelComponent={<VictoryLabel y={18} x={0} angle={0} />}
+          axisLabelComponent={<VictoryLabel y={28} x={0} angle={0} />}
           style={{
             axis: {
               fill: PRIMARY_COLOR,
@@ -136,4 +136,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   lineLabel: {fontSize: 12},
+  shadow: {
+    shadowColor: BLACK_COLOR,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 3.5,
+    elevation: 3,
+  },
 });

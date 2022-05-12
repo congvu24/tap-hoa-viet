@@ -1,36 +1,54 @@
-import {StyleSheet, Text} from 'react-native';
 import React from 'react';
-import {Card} from 'react-native-elements';
+import {StyleSheet, Text, View} from 'react-native';
+import {
+  TEXT_COLOR,
+  TEXT_SECONDARY_COLOR,
+  WHITE_COLOR,
+} from '../../../constants/Colors';
 import {formatMoney} from '../../../utils';
-import {GRAY_COLOR, TEXT_COLOR} from '../../../constants/Colors';
 
-export function DailyIncomeCard({income}) {
+export function DailyIncomeCard() {
+  const income = 5000000;
+  const compareLastDay = 0.24;
+
+  const renderPercent = number => {
+    const sign = number < 0 ? '-' : '+';
+
+    return `${sign}${(number * 100).toFixed(2)}%`;
+  };
   return (
-    <Card containerStyle={styles.cardContainer}>
-      <Text style={[styles.text, styles.cardTitle]}>Doanh thu hôm nay</Text>
+    <View style={styles.cardContainer}>
+      <Text style={[styles.text, styles.cardTitle]}>Doanh thu</Text>
       <Text style={[styles.text, styles.cardNumber]}>
-        {formatMoney(income)} VND
+        ₫ {formatMoney(income)}
       </Text>
-    </Card>
+      <Text style={[styles.text, styles.increasePercent]}>
+        {renderPercent(compareLastDay)} so với hôm qua
+      </Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   cardContainer: {
     width: '100%',
-    backgroundColor: GRAY_COLOR,
     margin: 0,
-    paddingVertical: 30,
-    borderRadius: 6,
+
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
-    color: TEXT_COLOR,
-    fontSize: 16,
+    color: WHITE_COLOR,
   },
   cardTitle: {
     fontSize: 16,
+    fontWeight: '500',
   },
   cardNumber: {
-    fontSize: 24,
+    fontSize: 28,
+    fontWeight: '700',
+  },
+  increasePercent: {
+    fontSize: 12,
   },
 });
