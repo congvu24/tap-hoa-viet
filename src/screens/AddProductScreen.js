@@ -26,6 +26,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 
 export const AddProductScreen = () => {
   const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
@@ -235,6 +236,9 @@ export const AddProductScreen = () => {
                 defaultValue={numberOfProducts}
               />
             </SafeAreaView>
+
+            <DateTimePickerWithTitle title="Ngày nhập kho" />
+            <DateTimePickerWithTitle title="Ngày xuất kho" />
 
             <PickerWithTitle
               title="Nhóm Hàng"
