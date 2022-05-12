@@ -34,7 +34,10 @@ export default function AppRoute() {
           }}
         >
           <Stack.Screen name="Splash" component={Splash} />
-          <Stack.Screen name="Login" component={LoginScreen} options={{
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
               animation: 'slide_from_left',
             }}
           />
