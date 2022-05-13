@@ -2,14 +2,18 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import {BACKGROUND_COLOR, TEXT_COLOR} from '../../constants/Colors';
+import {
+  BACKGROUND_COLOR,
+  PRIMARY_COLOR,
+  TEXT_COLOR,
+  WHITE_COLOR,
+} from '../../constants/Colors';
 import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
 import auth from '@react-native-firebase/auth';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);
   const currentUser = user.name;
-  const income = 50000000;
   const signOut = () => {
     auth()
       .signOut()
@@ -21,20 +25,25 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.rootContainer}>
-      <ScrollView>
-        <View style={styles.inner}>
-          <Text style={[styles.text]}>Welcome back, {currentUser}</Text>
-          <TouchableOpacity onPress={() => signOut()}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollViewContainer}
+      >
+        <View style={styles.header}>
+          <Text style={[styles.text]}>
+            Welcome back{currentUser && `, ${currentUser}`}
+          </Text>
+          {/* <TouchableOpacity onPress={() => signOut()}>
             <Text>Signout</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View style={styles.dailyIncomeContainer}>
-            <DailyIncomeCard income={income} />
+            <DailyIncomeCard />
           </View>
-
+        </View>
+        <View style={styles.inner}>
           <View style={styles.shortcutButtonsContainer}>
             <SliderShortcut />
           </View>
-
           <View style={styles.weeklyIncomeContainer}>
             <Text style={[styles.text]}>Doanh thu tháng này</Text>
 
@@ -53,24 +62,42 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: BACKGROUND_COLOR,
+    // backgroundColor: BACKGROUND_COLOR,
+    paddingBottom: 80,
+  },
+  scrollViewContainer: {
+    backgroundColor: PRIMARY_COLOR,
+    flex: 1,
+  },
+  header: {
+    height: 200,
+    width: '100%',
+    paddingTop: 30,
+    paddingBottom: 20,
+
+    alignItems: 'center',
+  },
+  dailyIncomeContainer: {
+    width: '100%',
+    marginVertical: 30,
   },
   inner: {
+    marginTop: 50,
     paddingVertical: 30,
     paddingHorizontal: 30,
+    backgroundColor: BACKGROUND_COLOR,
+    height: '100%',
+    flex: 1,
   },
   text: {
     color: TEXT_COLOR,
     fontSize: 16,
   },
-  dailyIncomeContainer: {
-    marginTop: 10,
-  },
   shortcutButtonsContainer: {
-    marginTop: 20,
+    marginTop: -100,
   },
   weeklyIncomeContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   monthlyIncomeChart: {
     marginTop: 10,
