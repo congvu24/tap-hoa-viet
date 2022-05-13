@@ -97,7 +97,14 @@ export const AddProductScreen = () => {
     });
   };
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => setUserId(user.uid));
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId('');
+        console.log('Signed Out');
+      }
+    });
   }, []);
 
   const handleProductCode = text => {
@@ -247,7 +254,6 @@ export const AddProductScreen = () => {
               selectedValue={productGroup}
               setGroup={setproductGroup}
             />
-
             <View style={styles.addBtnContainer}>
               <Button
                 title={'Add Product'}
