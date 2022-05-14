@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import userSlice from '../redux/reducer/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {store} from '../redux/store';
+import {TEXT_COLOR, WHITE_COLOR} from '../constants/Colors';
 
 export function RegisterScreen({navigation}) {
   const [phone, setPhone] = useState('');
@@ -31,35 +32,27 @@ export function RegisterScreen({navigation}) {
   const [loader, setLoader] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState(
-    'Việc đăng ký hiện chưa hoàn tất',
-  );
+  const [errorText, setErrorText] = useState('Việc đăng ký hiện chưa hoàn tất');
   const [popUpErr, setPopUpErr] = useState(false);
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
-
-  
-
-  
 
   const createAccount = () => {
     setError(false);
     setLoader(true);
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials)=>{
-        if(userCredentials.user){
+      .then(userCredentials => {
+        if (userCredentials.user) {
           userCredentials.user.updateProfile({
-            displayName: name
-          })
+            displayName: name,
+          });
         }
-        
-    })
+      })
       .then(() => {
         setLoader(false);
         setRegistered(true);
         onSubmit();
-        
       })
       .catch(error => {
         setLoader(false);
@@ -82,7 +75,7 @@ export function RegisterScreen({navigation}) {
       name: name,
       phone: phone,
       email: email,
-    })
+    });
     firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
@@ -92,9 +85,7 @@ export function RegisterScreen({navigation}) {
         phone: phone,
         email: email,
       })
-      .then(() => {
-        
-      })
+      .then(() => {})
       .catch(error => {
         setLoader(false);
         showErr(true, true, error.message);
@@ -110,7 +101,7 @@ export function RegisterScreen({navigation}) {
     setPassword('');
     setPhone('');
     setName('');
-    
+
     dispatch(userSlice.actions.setUserInfo(user));
     console.log('register', user);
     navigation.navigate('Homepage');
@@ -118,9 +109,17 @@ export function RegisterScreen({navigation}) {
 
   const validate = () => {
     if ((email, password, confirmPassword == '')) {
-      showErr(true, true, 'Không thể đăng kí \n vui lòng điền đầy đủ thông tin');
+      showErr(
+        true,
+        true,
+        'Không thể đăng kí \n vui lòng điền đầy đủ thông tin',
+      );
     } else if (confirmPassword != password) {
-      showErr(true, true, 'Không thể đăng kí \n mật khẩu của bạn không giống nhau');
+      showErr(
+        true,
+        true,
+        'Không thể đăng kí \n mật khẩu của bạn không giống nhau',
+      );
     } else if (password.length < 6) {
       showErr(
         true,
@@ -174,10 +173,19 @@ export function RegisterScreen({navigation}) {
               height: '100%',
             }}
           >
-            <View style={{width:'10%',height:30, backgroundColor:'transparent', position:'absolute', top:10, left:12}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Icon name="arrow-back" size={30} color="#000" />
-                </TouchableOpacity>
+            <View
+              style={{
+                width: '10%',
+                height: 30,
+                backgroundColor: 'transparent',
+                position: 'absolute',
+                top: 10,
+                left: 12,
+              }}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Icon name="arrow-back" size={30} color="#000" />
+              </TouchableOpacity>
             </View>
             <View style={{width: '80%', marginBottom: 20}}>
               <Text
@@ -280,16 +288,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#60CDE5',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    marginTop: 10,
     // justifyContent:'center',
     // alignItems:'center'
   },
   textInput: {
     height: 48,
     width: '100%',
-    color: '#303030',
+    color: TEXT_COLOR,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#303030',
+    borderColor: WHITE_COLOR,
     paddingLeft: 10,
     marginTop: 10,
   },

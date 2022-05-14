@@ -24,7 +24,7 @@ Sound.setCategory('Playback');
 export default function AddProductToOrder() {
   const navigation = useNavigation();
   const [granted, setGranted] = useState(false);
-
+  const [barcodeValue, setBarcodeValue] = useState('Undefined Product');
   const goBack = () => {
     navigation.goBack();
   };
@@ -37,7 +37,9 @@ export default function AddProductToOrder() {
     });
     whoosh.play();
 
-    Toast.show('Đã thêm: Rau Muống x1', {
+    setBarcodeValue(event.nativeEvent.codeStringValue);
+
+    Toast.show(barcodeValue, {
       duration: 400,
       position: Toast.positions.TOP,
       shadow: true,
