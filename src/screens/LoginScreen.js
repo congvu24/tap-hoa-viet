@@ -11,7 +11,13 @@ import {
 import {Overlay} from 'react-native-elements';
 import Loader from '../components/Loader';
 import auth from '@react-native-firebase/auth';
-import {PRIMARY_COLOR, WHITE_COLOR, TEXT_COLOR} from '../constants/Colors';
+import {
+  PRIMARY_COLOR,
+  WHITE_COLOR,
+  TEXT_COLOR,
+  MATERIAL_LIGHT_GREEN_COLOR,
+  MATERIAL_RED_COLOR,
+} from '../constants/Colors';
 import Logo from '../components/Logo';
 import userSlice from '../redux/reducer/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,7 +36,9 @@ export function LoginScreen({navigation}) {
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
-    if (initializing) setInitializing(false);
+    if (initializing) {
+      setInitializing(false);
+    }
   }
 
   const login = () => {
@@ -102,7 +110,9 @@ export function LoginScreen({navigation}) {
     }
   }, [user]);
 
-  if (initializing) return null;
+  if (initializing) {
+    return null;
+  }
   const signOut = () => {
     auth()
       .signOut()
@@ -142,7 +152,9 @@ export function LoginScreen({navigation}) {
         >
           <Text>Bạn chưa có tài khoản? </Text>
           <TouchableOpacity onPress={() => navigation.replace('Register')}>
-            <Text style={{fontWeight: 'bold'}}>Đăng ký ngay!</Text>
+            <Text style={{fontWeight: 'bold', color: WHITE_COLOR}}>
+              Đăng ký ngay!
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -163,6 +175,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     padding: 14,
+    marginTop: 20,
   },
   title: {
     alignSelf: 'center',
@@ -174,10 +187,10 @@ const styles = StyleSheet.create({
   textInput: {
     height: 48,
     width: '100%',
-    color: '#303030',
+    color: TEXT_COLOR,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#303030',
+    borderColor: WHITE_COLOR,
     paddingLeft: 10,
     marginTop: 10,
   },
