@@ -15,8 +15,13 @@ import HorizontalInputField from '../components/HorizontalInputField';
 import {Picker} from '@react-native-picker/picker';
 import PickerWithTitle from '../components/PickerWithTitle';
 import {FAB} from 'react-native-elements';
-import {BACKGROUND_COLOR, WHITE_COLOR} from '../constants/Colors';
-import {addProduct} from '../services/products';
+import {
+  BACKGROUND_COLOR,
+  MATERIAL_RED_COLOR,
+  WHITE_COLOR,
+} from '../constants/Colors';
+import {addProduct} from '../services/addProducts';
+import {deleteProduct} from '../services/deleteProduct';
 import {nanoid} from '@reduxjs/toolkit';
 import {Button} from 'react-native-elements';
 import {PRIMARY_COLOR} from '../constants/Colors';
@@ -172,6 +177,29 @@ export const AddProductScreen = () => {
       });
   };
 
+  const deleteProduct = () => {
+    deleteProduct(
+      userId,
+      productCode,
+      barCode,
+      productName,
+      brand,
+      capitalPrice,
+      sellPrice,
+      numberOfProducts,
+      productGroup,
+    )
+      .then(() => {
+        console.log('product deleted!');
+        Alert.alert('Status', 'Delete product successfully!');
+        resetTextFields();
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert('Status', 'Failed to delete product!');
+      });
+  };
+
   return (
     <FormProvider {...formMethod}>
       <KeyboardAvoidingView style={[styles.container]}>
@@ -254,12 +282,18 @@ export const AddProductScreen = () => {
               selectedValue={productGroup}
               setGroup={setproductGroup}
             />
-            <View style={styles.addBtnContainer}>
+            <View style={styles.buttonContainer}>
               <Button
-                title={'Add Product'}
+                title={'Add'}
                 buttonStyle={styles.addBtn}
-                titleStyle={styles.addBtnTitle}
+                titleStyle={styles.btnTitle}
                 onPress={onSubmitKey}
+              />
+              <Button
+                title={'Delete'}
+                buttonStyle={styles.deleteBtn}
+                titleStyle={styles.btnTitle}
+                onPress={deleteProduct}
               />
             </View>
           </View>
@@ -276,13 +310,16 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'column',
   },
+
   scrollView: {
     flex: 1,
   },
+
   topContainer: {
     backgroundColor: BACKGROUND_COLOR,
     flex: 1,
   },
+
   bottomContainer: {
     flex: 4,
     borderTopRightRadius: 30,
@@ -291,35 +328,56 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
     paddingBottom: 120,
   },
+
   uploadLogo: {
     width: 100,
     height: 100,
     margin: 30,
   },
+
   title: {
     justifyContent: 'flex-start',
     fontSize: 16,
     marginStart: 20,
     marginTop: 30,
   },
-  addBtnContainer: {
+
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   addBtn: {
+    width: 150,
     backgroundColor: PRIMARY_COLOR,
-    marginTop: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 30,
+    paddingRight: 30,
     paddingTop: 10,
     paddingBottom: 10,
     borderRadius: 8,
+    marginStart: 10,
+    marginEnd: 10,
   },
 
-  addBtnTitle: {
+  deleteBtn: {
+    width: 150,
+    backgroundColor: MATERIAL_RED_COLOR,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 8,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+
+  btnTitle: {
     fontSize: 18,
     fontWeight: '500',
   },
+
   FAB: {
     width: 60,
     height: 60,
