@@ -10,23 +10,36 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TEXT_COLOR,TEXT_SECONDARY_COLOR, RED_COLOR, SECONDARY_COLOR,BORDER_GREY_COLOR} from '../constants/Colors';
-const data = [
-  {Name: 'Pham Hoai Bao bao', }
-];
-export const ProfileScreen = () => {
-  
+import {
+  TEXT_COLOR,
+  TEXT_SECONDARY_COLOR,
+  RED_COLOR,
+  SECONDARY_COLOR,
+  BORDER_GREY_COLOR,
+} from '../constants/Colors';
+import auth from '@react-native-firebase/auth';
+const data = [{Name: 'Pham Hoai Bao bao'}];
+
+export const ProfileScreen = ({navigation}) => {
   const createTwoButtonAlert = () =>
     Alert.alert('Xác nhận', 'Bạn có thực sự muốn đăng xuất?', [
       {
         text: 'Không',
         onPress: () => console.log('Cancel Logout Pressed'),
       },
-      {text: 'Có', onPress: () => console.log('Logout Pressed')},
+      {text: 'Có', onPress: () => signOut()},
     ]);
-  
-  return (
 
+  const signOut = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('Login');
+      });
+  };
+
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{alignSelf: 'center'}}>
@@ -34,13 +47,12 @@ export const ProfileScreen = () => {
             <Image
               style={(styles.profileImage, styles.image)}
               source={require('../images/profile/default_avatar.png')}
-            ></Image>
+            />
           </View>
         </View>
 
         <View style={styles.infoContainer}>
-
-          <Text  style={[styles.text, styles.profileName]}>PHBao</Text>
+          <Text style={[styles.text, styles.profileName]}>PHBao</Text>
           <Text style={[styles.text, styles.usernameText]}>@congvu24</Text>
         </View>
 
@@ -79,7 +91,7 @@ export const ProfileScreen = () => {
             </Text>
           </View>
         </View>
-        <View style={styles.borderInfoSection}></View>
+        <View style={styles.borderInfoSection} />
         <View style={styles.menuWrapper}>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.menuItem}>
@@ -107,7 +119,7 @@ export const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <View style={styles.marginBottomScreen}></View>
+      <View style={styles.marginBottomScreen} />
     </SafeAreaView>
   );
 };
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
     color: '#52575D',
     fontSize: 30,
   },
-  marginBottomScreen:{
+  marginBottomScreen: {
     marginTop: 80,
   },
   row: {
