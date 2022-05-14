@@ -18,9 +18,11 @@ import {
   BORDER_GREY_COLOR,
 } from '../constants/Colors';
 import auth from '@react-native-firebase/auth';
+import {useSelector} from 'react-redux';
 const data = [{Name: 'Pham Hoai Bao bao'}];
 
 export const ProfileScreen = ({navigation}) => {
+  const user = useSelector(state => state.user);
   const createTwoButtonAlert = () =>
     Alert.alert('Xác nhận', 'Bạn có thực sự muốn đăng xuất?', [
       {
@@ -52,8 +54,8 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={[styles.text, styles.profileName]}>PHBao</Text>
-          <Text style={[styles.text, styles.usernameText]}>@congvu24</Text>
+          <Text style={[styles.text, styles.profileName]}>{user.name}</Text>
+          <Text style={[styles.text, styles.usernameText]}>{user.uid}</Text>
         </View>
 
         <View style={styles.statsContainer}>
@@ -81,13 +83,13 @@ export const ProfileScreen = ({navigation}) => {
           <View style={styles.row}>
             <Icon name="call-outline" style={styles.iconInfo} />
             <Text style={(styles.text, styles.marginTtem)}>
-              +(84) 945447290
+              {user.phone}
             </Text>
           </View>
           <View style={styles.row}>
             <Icon name="mail-outline" style={styles.iconInfo} />
             <Text style={(styles.text, styles.marginTtem)}>
-              nguyenduongthucvu@gmail.com
+              {user.email}
             </Text>
           </View>
         </View>
