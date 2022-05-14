@@ -142,17 +142,7 @@ export const AddProductScreen = () => {
   };
 
   const resetTextFields = () => {
-    setBarCode('');
-    setProductName('');
-    setBrand('');
-    setCapitalPrice('');
-    setSellPrice('');
-    setNumberOfProducts('');
-    setProductGroup('thoiTrang');
-
-    // reset product code
-    const newCode = nanoid(11);
-    setproductCode(newCode);
+    formMethod.reset();
   };
 
   const uploadProduct = () => {
