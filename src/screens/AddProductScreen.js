@@ -33,9 +33,8 @@ import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 
-export const AddProductScreen = () => {
+export const AddProductScreen = ({route, navigation}) => {
   const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
-  const [productCode, setproductCode] = useState(nanoid(11));
   const [barCode, setBarCode] = useState('');
   const [productName, setProductName] = useState('');
   const [brand, setBrand] = useState('');
@@ -44,7 +43,8 @@ export const AddProductScreen = () => {
   const [numberOfProducts, setNumberOfProducts] = useState('');
   const [productGroup, setProductGroup] = useState('thoiTrang');
   const [showBox, setShowBox] = useState(true);
-
+  const {productID, ...otherParam} = route.params ? route.params : {};
+  const [productCode, setproductCode] = useState(nanoid(11));
   const schema = yup.object().shape({
     id: yup.string().required('Id is required'),
     name: yup.string().required().max(20),
@@ -219,10 +219,10 @@ export const AddProductScreen = () => {
             <SafeAreaView>
               <HorizontalInputField
                 name="id"
-                title="Mã Hàng"
-                hint="Mã Hàng Tự Động"
+                title={'Mã Hàng'}
                 isDisable={true}
-                defaultValue={productCode}
+                value={JSON.stringify(productID)}
+                hint={JSON.stringify(productID)}
               />
 
               <HorizontalInputField

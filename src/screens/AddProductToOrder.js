@@ -38,7 +38,6 @@ export default function AddProductToOrder() {
     whoosh.play();
 
     setBarcodeValue(event.nativeEvent.codeStringValue);
-
     Toast.show(barcodeValue, {
       duration: 400,
       position: Toast.positions.TOP,
@@ -47,6 +46,11 @@ export default function AddProductToOrder() {
       hideOnPress: true,
       delay: 0,
     });
+    navigateToAddProductScreen(barcodeValue);
+  };
+
+  const navigateToAddProductScreen = value => {
+    navigation.navigate('AddProduct', {productID: value});
   };
 
   const goAddByHand = () => {
