@@ -36,13 +36,14 @@ import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 export const AddProductScreen = () => {
   const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
   const [productCode, setproductCode] = useState(nanoid(11));
-  const [barCode, setbarCode] = useState('');
-  const [productName, setproductName] = useState('');
-  const [brand, setbrand] = useState('');
-  const [capitalPrice, setcapitalPrice] = useState('');
-  const [sellPrice, setsellPrice] = useState('');
-  const [numberOfProducts, setnumberOfProducts] = useState('');
-  const [productGroup, setproductGroup] = useState('thoiTrang');
+  const [barCode, setBarCode] = useState('');
+  const [productName, setProductName] = useState('');
+  const [brand, setBrand] = useState('');
+  const [capitalPrice, setCapitalPrice] = useState('');
+  const [sellPrice, setSellPrice] = useState('');
+  const [numberOfProducts, setNumberOfProducts] = useState('');
+  const [productGroup, setProductGroup] = useState('thoiTrang');
+  const [showBox, setShowBox] = useState(true);
 
   const schema = yup.object().shape({
     id: yup.string().required('Id is required'),
@@ -117,37 +118,37 @@ export const AddProductScreen = () => {
   };
 
   const handleBarCode = text => {
-    setbarCode(text);
+    setBarCode(text);
   };
 
   const handleProductName = text => {
-    setproductName(text);
+    setProductName(text);
   };
 
   const handleBrand = text => {
-    setbrand(text);
+    setBrand(text);
   };
 
   const handleCapitalPrice = text => {
-    setcapitalPrice(text);
+    setCapitalPrice(text);
   };
 
   const handleSellPrice = text => {
-    setsellPrice(text);
+    setSellPrice(text);
   };
 
   const handleNumberOfProducts = text => {
-    setnumberOfProducts(text);
+    setNumberOfProducts(text);
   };
 
   const resetTextFields = () => {
-    setbarCode('');
-    setproductName('');
-    setbrand('');
-    setcapitalPrice('');
-    setsellPrice('');
-    setnumberOfProducts('');
-    setproductGroup('thoiTrang');
+    setBarCode('');
+    setProductName('');
+    setBrand('');
+    setCapitalPrice('');
+    setSellPrice('');
+    setNumberOfProducts('');
+    setProductGroup('thoiTrang');
 
     // reset product code
     const newCode = nanoid(11);
@@ -192,12 +193,26 @@ export const AddProductScreen = () => {
       .then(() => {
         console.log('product deleted!');
         Alert.alert('Status', 'Delete product successfully!');
-        resetTextFields();
       })
       .catch(err => {
         console.log(err);
         Alert.alert('Status', 'Failed to delete product!');
       });
+  };
+
+  const showConfirmDialog = () => {
+    return Alert.alert('Delete Product', 'Do you want to delete this item?', [
+      {
+        text: 'Yes',
+        onPress: () => {
+          setShowBox(false);
+          deleteProduct();
+        },
+      },
+      {
+        text: 'No',
+      },
+    ]);
   };
 
   return (
@@ -280,7 +295,7 @@ export const AddProductScreen = () => {
               hint="Nhóm hàng..."
               items={groupOfProducts}
               selectedValue={productGroup}
-              setGroup={setproductGroup}
+              setGroup={setProductGroup}
             />
             <View style={styles.buttonContainer}>
               <Button
@@ -293,7 +308,7 @@ export const AddProductScreen = () => {
                 title={'Delete'}
                 buttonStyle={styles.deleteBtn}
                 titleStyle={styles.btnTitle}
-                onPress={deleteProduct}
+                onPress={showConfirmDialog}
               />
             </View>
           </View>
