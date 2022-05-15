@@ -5,7 +5,6 @@ export const getProduct = async userId => {
     .collection('ProductCreators')
     .doc(userId)
     .collection('ProductsList')
-    .limit(6)
     .get();
 
   return products;
