@@ -39,12 +39,17 @@ export const ProductsScreen = () => {
     });
   }, []);
 
+  const goToAddProduct = () => {
+    navigation.push('AddProduct');
+  };
+
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
         title="Hàng hóa"
         numberOfProducts={40}
         inventoryNumber={184}
+        goToAddProduct={goToAddProduct}
       />
       <ScrollView
         style={styles.itemsContainer}
