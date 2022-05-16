@@ -2,7 +2,11 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const ProductDetailsHeader = ({productCode = '', isEdit = false}) => {
+const ProductDetailsHeader = ({
+  productCode = '',
+  isEdit = false,
+  onBackPress,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
@@ -11,6 +15,7 @@ const ProductDetailsHeader = ({productCode = '', isEdit = false}) => {
           size={35}
           type="material"
           name="chevron-left"
+          onPress={onBackPress}
         />
         <Text style={styles.productCode}>{productCode}</Text>
       </View>

@@ -1,9 +1,16 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import ProductDetailsHeader from '../components/ProductDetailsHeader';
 import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import {SliderBox} from 'react-native-image-slider-box';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
+import {useNavigation} from '@react-navigation/native';
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -22,9 +29,17 @@ const ProductDetailsScreen = ({
   sellPrice = 0,
   numberOfProduct = 0,
 }) => {
+  // const [images, setImages] = useState([]);
+  // useEffect(() => {}, [])
+  const navigate = useNavigation();
+
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader productCode={productCode} />
+      <ProductDetailsHeader
+        productCode={productCode}
+        onBackPress={() => navigate.pop()}
+      />
+      {/* <ActivityIndicator /> */}
       <ScrollView style={styles.scrolledContainer}>
         <View style={styles.imageSliderContainer}>
           {/* <SliderBox
@@ -80,14 +95,14 @@ const ProductDetailsScreen = ({
               </Text>
             </View>
 
-            <ExtendedProductInfoItem
+            {/* <ExtendedProductInfoItem
               title={'Mô tả'}
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
             />
             <ExtendedProductInfoItem
               title={'Ghi chú'}
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-            />
+            /> */}
           </View>
         </View>
       </ScrollView>
