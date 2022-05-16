@@ -18,6 +18,7 @@ import Splash from '../screens/SplashScreen';
 import CreateOrderScreen from '../screens/CreateOrderScreen';
 import AddProductToOrder from '../screens/AddProductToOrder';
 import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
+import OrderSummary from '../screens/OrderSummary';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default function AppRoute() {
               animation: 'fade_from_bottom',
             }}
           />
+          <Stack.Screen name="OrderSummary" component={OrderSummary} />
           <Stack.Screen
             name="AddProductToOrder"
             component={AddProductToOrder}
