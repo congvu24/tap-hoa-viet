@@ -17,6 +17,7 @@ import HomePageScreen from '../screens/HomePageScreen';
 import Splash from '../screens/SplashScreen';
 import CreateOrderScreen from '../screens/CreateOrderScreen';
 import AddProductToOrder from '../screens/AddProductToOrder';
+import ReportScreen from '../screens/ReportScreen';
 import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
 import OrderSummary from '../screens/OrderSummary';
 
@@ -63,6 +64,7 @@ export default function AppRoute() {
           />
           <Stack.Screen name="EditProduct" component={EditProductScreen} />
           <Stack.Screen name="AddProduct" component={AddProductScreen} />
+          <Stack.Screen name="Report" component={ReportScreen} />
           <Stack.Screen
             name="AddProductToOrderByHand"
             component={AddProductToOrderByHand}
