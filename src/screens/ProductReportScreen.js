@@ -41,8 +41,6 @@ export default function ProductReportScree() {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
   },
   itemsContainer: {
     marginTop: 15,

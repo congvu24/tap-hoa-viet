@@ -1,7 +1,7 @@
 import {Text, StyleSheet, View, Image, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity} from 'react-native';
-import {GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
+import {BLACK_COLOR, GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
 import {useController} from 'react-hook-form';
 const HorizontalInputField = ({
   name,
@@ -28,6 +28,7 @@ const HorizontalInputField = ({
         {!isNumberKeyBoard ? (
           <TextInput
             placeholder={hint}
+            placeholderTextColor={BLACK_COLOR}
             multiline={false}
             editable={!isDisable}
             onChangeText={onChange}
@@ -37,6 +38,7 @@ const HorizontalInputField = ({
         ) : (
           <TextInput
             placeholder={hint}
+            placeholderTextColor={BLACK_COLOR}
             multiline={false}
             editable={!isDisable}
             keyboardType="numeric"

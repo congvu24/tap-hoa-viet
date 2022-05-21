@@ -19,49 +19,64 @@ import {firebase} from '@react-native-firebase/firestore';
 export const ProductsScreen = () => {
   const navigation = useNavigation();
   const [products, setProducts] = useState(null);
-  const [refresing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [numberOfInventories, setNumberOfInventories] = useState(0);
+  const [numberOfProducts, setNumberOfProducts] = useState(0);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      getProduct(user.uid).then(data => {
-        setProducts(data['_docs']);
-      });
-    });
+    handleData();
   }, []);
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    firebase.auth().onAuthStateChanged(user => {
-      getProduct(user.uid).then(data => {
-        setProducts(data['_docs']);
-        setRefreshing(false);
-      });
-    });
+    await handleData();
+    await setRefreshing(false);
   }, []);
+
+  const handleProducts = data => setProducts(data);
+  const handleInventories = data => setNumberOfInventories(data);
+  const handleNumberOfProducts = data => setNumberOfProducts(data);
+
+  const handleData = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      getProduct(
+        user.uid,
+        handleProducts,
+        handleNumberOfProducts,
+        handleInventories,
+      );
+    });
+  };
 
   const goToAddProduct = () => {
     navigation.push('AddProduct');
   };
 
+  console.log(products);
+
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
         title="Hàng hóa"
-        numberOfProducts={40}
-        inventoryNumber={184}
+        numberOfProducts={products && numberOfProducts}
+        inventoryNumber={numberOfInventories && numberOfInventories}
         goToAddProduct={goToAddProduct}
       />
       <ScrollView
         style={styles.itemsContainer}
         refreshControl={
-          <RefreshControl refreshing={refresing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         {products &&
           products.map((item, index) => {
             return (
               <TouchableOpacity
-                onPress={() => navigation.push('ProductDetails')}
+                onPress={() =>
+                  navigation.push('ProductDetails', {
+                    productCode: item._data.productCode,
+                  })
+                }
                 key={index}
               >
                 <ProductItem
