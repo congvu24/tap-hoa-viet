@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ProductDetailsHeader from '../components/ProductDetailsHeader';
@@ -11,87 +12,137 @@ import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import {SliderBox} from 'react-native-image-slider-box';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import {useNavigation} from '@react-navigation/native';
+import {getProductByProductCode} from '../services/getProduct';
+import {firebase} from '@react-native-firebase/auth';
+import {deleteProductByProductCode} from '../services/deleteProduct';
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
   'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1121&q=80',
-  'https://images.unsplash.com/photo-1581017316471-1f6ef7ce6fd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
-  'https://images.unsplash.com/photo-1552066344-2464c1135c32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
 ];
 
-const ProductDetailsScreen = ({
-  productName = 'Giày thể thao cá tính',
-  productCode = 'NU016',
-  barCode = 'thisIsBarCode',
-  category = 'Phụ kiện phụ nữ',
-  brand = 'Nike',
-  capitalPrice = 0,
-  sellPrice = 0,
-  numberOfProduct = 0,
-}) => {
-  // const [images, setImages] = useState([]);
-  // useEffect(() => {}, [])
+const ProductDetailsScreen = ({route}) => {
+  const {productCode} = route.params;
   const navigate = useNavigation();
+
+  // const [images, setImages] = useState([]);
+  const [productInfo, setProductInfo] = useState(null);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    firebase.auth().onAuthStateChanged(user => {
+      unsubscribe = fetchData(user.uid);
+      console.log(unsubscribe);
+    });
+
+    return () => {
+      console.log('UNMOUNT');
+      unsubscribe();
+    };
+  }, []);
+
+  // handle set products
+  const handleSetProducts = data => setProductInfo(data);
+
+  // fetch data
+  const fetchData = userId => {
+    return getProductByProductCode(userId, productCode, handleSetProducts);
+  };
+
+  // on press delete button
+  const handleDeletePress = () => {
+    Alert.alert('Notification', 'Are you sure to delete this product?', [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'delete',
+        onPress: () => handleDelete(),
+      },
+    ]);
+  };
+
+  // handle delete
+  const handleDelete = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      navigate.pop();
+      deleteProductByProductCode(user.uid, productCode);
+    });
+  };
 
   return (
     <View style={styles.container}>
       <ProductDetailsHeader
-        productCode={productCode}
+        productCode={productInfo && productInfo.productCode}
         onBackPress={() => navigate.pop()}
+        onEditPress={() => navigate.push('EditProduct', {productCode})}
+        onDeletePress={handleDeletePress}
       />
       {/* <ActivityIndicator /> */}
       <ScrollView style={styles.scrolledContainer}>
         <View style={styles.imageSliderContainer}>
-          {/* <SliderBox
+          <SliderBox
             images={images}
             sliderBoxHeight={250}
             dotColor={PRIMARY_COLOR}
-          /> */}
+          />
         </View>
 
         <View style={styles.productInfoContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.mainText}>{productName}</Text>
+            <Text style={styles.mainText}>
+              {productInfo && productInfo.productName}
+            </Text>
           </View>
           <View style={styles.detailsContainer}>
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
-              <Text style={styles.simpleText}>{productCode}</Text>
+              <Text style={styles.simpleText}>
+                {productInfo && productInfo.productCode}
+              </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Mã vạch</Text>
-              <Text style={styles.simpleText}>{barCode}</Text>
+              <Text style={styles.simpleText}>
+                {productInfo && productInfo.barCode}
+              </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
-              <Text style={styles.simpleText}>{category}</Text>
+              <Text style={styles.simpleText}>
+                {productInfo && productInfo.productGroup}
+              </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Thương hiệu</Text>
-              <Text style={styles.simpleText}>{brand}</Text>
+              <Text style={styles.simpleText}>
+                {productInfo && productInfo.brand}
+              </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Giá vốn</Text>
               <Text style={[styles.simpleText, styles.primaryColor]}>
-                {capitalPrice}
+                {productInfo && productInfo.capitalPrice}
               </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Giá bán</Text>
               <Text style={[styles.simpleText, styles.primaryColor]}>
-                {sellPrice}
+                {productInfo && productInfo.sellPrice}
               </Text>
             </View>
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Tồn kho</Text>
               <Text style={[styles.simpleText, styles.primaryColor]}>
-                {numberOfProduct}
+                {productInfo && productInfo.numberOfProducts}
               </Text>
             </View>
 

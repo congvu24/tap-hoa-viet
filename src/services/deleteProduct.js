@@ -22,3 +22,23 @@ export const deleteProduct = (
     productGroup,
   });
 };
+
+export const deleteProductByProductCode = (userId, productCode) => {
+  return firestore()
+    .collection('ProductCreators')
+    .doc(userId)
+    .collection('ProductsList')
+    .where('productCode', '==', productCode)
+    .get()
+    .then(snapShot => {
+      return snapShot.docs[0].id;
+    })
+    .then(id => {
+      firestore()
+        .collection('ProductCreators')
+        .doc(userId)
+        .collection('ProductsList')
+        .doc(id)
+        .delete();
+    });
+};
