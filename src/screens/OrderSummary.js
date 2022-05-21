@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {
@@ -19,9 +20,24 @@ import {
 } from '../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch, useSelector} from 'react-redux';
+import {createOrder, updateInfo} from '../redux/reducer/order';
+import moment from 'moment';
 
 export default function OrderSummary() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const order = useSelector(state => state.order);
+  const numberOfProducts = Object.keys(order.products).reduce(
+    (sum, key) => sum + order.products[key].number,
+    0,
+  );
+  const amount = Object.keys(order.products).reduce(
+    (sum, key) =>
+      sum + order.products[key].sellPrice * order.products[key].number,
+    0,
+  );
 
   const goBack = () => {
     navigation.goBack();
@@ -29,6 +45,32 @@ export default function OrderSummary() {
 
   const goToAddProduct = () => {
     navigation.push('AddProductToOrder');
+  };
+
+  const handleOrderInfoChange = (key, value) => {
+    dispatch(updateInfo({[key]: value}));
+  };
+
+  const handleCheckout = () => {
+    dispatch(
+      createOrder({
+        onSuccess: () => {
+          Alert.alert('Thành công', 'Tạo đơn hàng thành công', [
+            {
+              text: 'Đóng',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ]);
+        },
+        onFailed: () => {
+          Alert.alert('Lỗi', 'Lỗi không thể tạo đơn hàng', [
+            {text: 'Đóng', onPress: () => {}},
+          ]);
+        },
+      }),
+    );
   };
 
   return (
@@ -48,23 +90,25 @@ export default function OrderSummary() {
         <View style={styles.sectionWrap}>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Số lượng sản phẩm: </Text>
-            <Text style={styles.rowValue}>20sp</Text>
+            <Text style={styles.rowValue}>{numberOfProducts}sp</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Tạm tính: </Text>
-            <Text style={styles.rowValue}>200.000đ</Text>
+            <Text style={styles.rowValue}>{amount}đ</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thời gian: </Text>
-            <Text style={styles.rowValue}>19h, 20/02/2022</Text>
+            <Text style={styles.rowValue}>
+              {moment().locale('vi').format('llll')}
+            </Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Khuyến mãi: </Text>
-            <Text style={styles.rowValue}>0đ</Text>
+            <Text style={styles.rowValue}>{order.discount}đ</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thành tiền: </Text>
-            <Text style={styles.rowValue}>200.000đ</Text>
+            <Text style={styles.rowValue}>{amount - order.discount}đ</Text>
           </View>
         </View>
         <View style={styles.sectionWrap}>
@@ -72,12 +116,18 @@ export default function OrderSummary() {
             placeholder="Người mua"
             style={styles.customerInput}
             placeholderTextColor={GRAY_COLOR}
+            onChangeText={value => {
+              handleOrderInfoChange('buyerName', value);
+            }}
           />
           <TextInput
             placeholder="SĐT"
             keyboardType="phone-pad"
             style={styles.customerInput}
             placeholderTextColor={GRAY_COLOR}
+            onChangeText={value => {
+              handleOrderInfoChange('buyerPhone', value);
+            }}
           />
         </View>
         <View style={styles.sectionWrap}>
@@ -85,12 +135,17 @@ export default function OrderSummary() {
             placeholder="Ghi chú"
             numberOfLines={5}
             textAlignVertical="top"
+            style={styles.customerInput}
             placeholderTextColor={GRAY_COLOR}
+            onChangeText={value => {
+              handleOrderInfoChange('note', value);
+            }}
           />
         </View>
       </View>
       <View style={styles.btnWrap}>
         <TouchableOpacity
+          onPress={handleCheckout}
           style={[styles.nextBtn, {flex: 2, backgroundColor: GREEN_COLOR}]}
         >
           <Text style={styles.nextBtnText}>Hoàn thành</Text>
@@ -162,7 +217,9 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: BLACK_COLOR,
   },
-  customerInput: {},
+  customerInput: {
+    color: BLACK_COLOR,
+  },
   pageTitle: {
     fontSize: 20,
     textAlign: 'center',
