@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getProductByProductCode} from '../services/getProduct';
 import {firebase} from '@react-native-firebase/auth';
 import {deleteProductByProductCode} from '../services/deleteProduct';
+import auth from '@react-native-firebase/auth';
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -30,14 +31,13 @@ const ProductDetailsScreen = ({route}) => {
 
   useEffect(() => {
     let unsubscribe;
+    let uid = auth().currentUser?.uid;
 
-    firebase.auth().onAuthStateChanged(user => {
-      unsubscribe = fetchData(user.uid);
-      console.log(unsubscribe);
-    });
+    if (uid) {
+      unsubscribe = fetchData(uid);
+    }
 
     return () => {
-      console.log('UNMOUNT');
       unsubscribe();
     };
   }, []);
@@ -66,10 +66,10 @@ const ProductDetailsScreen = ({route}) => {
 
   // handle delete
   const handleDelete = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      navigate.pop();
-      deleteProductByProductCode(user.uid, productCode);
-    });
+    let uid = auth().currentUser?.uid;
+
+    navigate.pop();
+    deleteProductByProductCode(uid, productCode);
   };
 
   return (
