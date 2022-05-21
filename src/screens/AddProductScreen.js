@@ -43,7 +43,9 @@ export const AddProductScreen = ({route, navigation}) => {
   const [numberOfProducts, setNumberOfProducts] = useState('');
   const [productGroup, setProductGroup] = useState('thoiTrang');
   const [showBox, setShowBox] = useState(true);
-  const {productID, ...otherParam} = route.params ? route.params : {};
+  const {productID, ...otherParam} = route.params
+    ? route.params
+    : {productID: 'null'};
   const [productCode, setproductCode] = useState(nanoid(11));
   const schema = yup.object().shape({
     id: yup.string().required('Id is required'),
@@ -66,7 +68,8 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const onSubmitKey = useCallback(() => {
     formMethod.handleSubmit(onSubmit)();
-  }, [formMethod, onSubmit]);
+    uploadProduct();
+  }, [formMethod, onSubmit, uploadProduct]);
 
   const onSubmit = useCallback(data => {
     console.log(data);
@@ -220,17 +223,16 @@ export const AddProductScreen = ({route, navigation}) => {
               <HorizontalInputField
                 name="id"
                 title={'Mã Hàng'}
-                isDisable={true}
-                value={JSON.stringify(productID)}
-                hint={JSON.stringify(productID)}
+                setInputData={handleProductCode}
+                defaultValue={productCode}
               />
 
               <HorizontalInputField
                 name="qrCode"
                 title="Mã Vạch"
-                hint="Mã Vạch"
-                setInputData={handleBarCode}
-                defaultValue={barCode}
+                isDisable={true}
+                value={JSON.stringify(productID)}
+                hint={JSON.stringify(productID)}
               />
 
               <HorizontalInputField
