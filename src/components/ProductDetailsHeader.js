@@ -2,7 +2,14 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const ProductDetailsHeader = ({productCode = '', isEdit = false}) => {
+const ProductDetailsHeader = ({
+  productCode = '',
+  isEdit = false,
+  onBackPress,
+  onEditPress,
+  onSavePress,
+  onDeletePress,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
@@ -11,20 +18,29 @@ const ProductDetailsHeader = ({productCode = '', isEdit = false}) => {
           size={35}
           type="material"
           name="chevron-left"
+          onPress={onBackPress}
         />
         <Text style={styles.productCode}>{productCode}</Text>
       </View>
 
       {!isEdit && (
         <View style={styles.rightSection}>
-          <Icon type="material" name="edit" />
-          <Icon style={styles.deleteIcon} type="material" name="delete" />
+          <Icon type="material" name="edit" onPress={onEditPress} />
+          <Icon
+            // iconStyle={styles.deleteIcon}
+            containerStyle={styles.deleteIcon}
+            type="material"
+            name="delete"
+            onPress={onDeletePress}
+          />
         </View>
       )}
 
       {isEdit && (
         <View style={styles.rightSection}>
-          <Text style={styles.saveText}>Save</Text>
+          <Text onPress={onSavePress} style={styles.saveText}>
+            Save
+          </Text>
         </View>
       )}
     </View>

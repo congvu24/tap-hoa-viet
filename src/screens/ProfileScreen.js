@@ -18,25 +18,35 @@ import {
   BORDER_GREY_COLOR,
 } from '../constants/Colors';
 import auth from '@react-native-firebase/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {signOut} from '../redux/reducer/userSlice';
 const data = [{Name: 'Pham Hoai Bao bao'}];
 
 export const ProfileScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.user);
   const createTwoButtonAlert = () =>
     Alert.alert('Xác nhận', 'Bạn có thực sự muốn đăng xuất?', [
       {
         text: 'Không',
         onPress: () => console.log('Cancel Logout Pressed'),
       },
-      {text: 'Có', onPress: () => signOut()},
+      {text: 'Có', onPress: () => handleSignOut()},
     ]);
 
-  const signOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('User signed out!');
-        navigation.navigate('Login');
-      });
+  const handleSignOut = () => {
+    try {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signed out!');
+          dispatch(signOut());
+          navigation.replace('Login');
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -52,8 +62,8 @@ export const ProfileScreen = ({navigation}) => {
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={[styles.text, styles.profileName]}>PHBao</Text>
-          <Text style={[styles.text, styles.usernameText]}>@congvu24</Text>
+          <Text style={[styles.text, styles.profileName]}>{user.name}</Text>
+          <Text style={[styles.text, styles.usernameText]}>{user.uid}</Text>
         </View>
 
         <View style={styles.statsContainer}>
@@ -80,15 +90,11 @@ export const ProfileScreen = ({navigation}) => {
           </View>
           <View style={styles.row}>
             <Icon name="call-outline" style={styles.iconInfo} />
-            <Text style={(styles.text, styles.marginTtem)}>
-              +(84) 945447290
-            </Text>
+            <Text style={(styles.text, styles.marginTtem)}>{user.phone}</Text>
           </View>
           <View style={styles.row}>
             <Icon name="mail-outline" style={styles.iconInfo} />
-            <Text style={(styles.text, styles.marginTtem)}>
-              nguyenduongthucvu@gmail.com
-            </Text>
+            <Text style={(styles.text, styles.marginTtem)}>{user.email}</Text>
           </View>
         </View>
         <View style={styles.borderInfoSection} />

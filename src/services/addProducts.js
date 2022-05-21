@@ -20,9 +20,9 @@ export const addProduct = (
       barCode,
       productName,
       brand,
-      capitalPrice,
-      sellPrice,
-      numberOfProducts,
+      capitalPrice: Number(capitalPrice),
+      sellPrice: Number(sellPrice),
+      numberOfProducts: Number(numberOfProducts),
       productGroup,
     });
 };
