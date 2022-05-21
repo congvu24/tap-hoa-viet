@@ -68,14 +68,24 @@ export default function OrderSummary() {
           </View>
         </View>
         <View style={styles.sectionWrap}>
-          <TextInput placeholder="Người mua" style={styles.customerInput} />
-          <TextInput placeholder="SĐT" style={styles.customerInput} />
+          <TextInput
+            placeholder="Người mua"
+            style={styles.customerInput}
+            placeholderTextColor={GRAY_COLOR}
+          />
+          <TextInput
+            placeholder="SĐT"
+            keyboardType="phone-pad"
+            style={styles.customerInput}
+            placeholderTextColor={GRAY_COLOR}
+          />
         </View>
         <View style={styles.sectionWrap}>
           <TextInput
             placeholder="Ghi chú"
             numberOfLines={5}
             textAlignVertical="top"
+            placeholderTextColor={GRAY_COLOR}
           />
         </View>
       </View>

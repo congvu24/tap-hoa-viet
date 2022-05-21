@@ -23,7 +23,7 @@ export const ProductsScreen = () => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      getProduct(user.uid).then(data => {
+      getProduct(user?.uid).then(data => {
         setProducts(data['_docs']);
       });
     });
@@ -42,6 +42,8 @@ export const ProductsScreen = () => {
   const goToAddProduct = () => {
     navigation.push('AddProduct');
   };
+
+  console.log(products);
 
   return (
     <View style={styles.screenContainer}>

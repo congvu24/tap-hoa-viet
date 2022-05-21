@@ -60,7 +60,7 @@ export function LoginScreen({navigation}) {
                   userSlice.actions.setUserInfo(documentSnapshot.data()),
                 );
               }
-              navigation.replace('Homepage');
+              // navigation.replace('Homepage');
             });
         })
         .catch(error => {
@@ -113,11 +113,6 @@ export function LoginScreen({navigation}) {
   if (initializing) {
     return null;
   }
-  const signOut = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
-  };
 
   return (
     <View style={styles.container}>

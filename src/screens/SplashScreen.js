@@ -8,17 +8,22 @@ import {
 } from 'react-native';
 import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import auth from '@react-native-firebase/auth';
 import {
   BACKGROUND_COLOR,
   PRIMARY_COLOR,
   WHITE_COLOR,
 } from '../constants/Colors';
+import {getCurrentProfile} from '../redux/reducer/userSlice';
 
 export default function Splash({text = 'Loading', callback = null}) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const isLogged = false;
+
+  const isLogged = useSelector(state => state.user.isLogin);
+
+  console.log(isLogged);
 
   useEffect(() => {
     if (callback) {
@@ -26,18 +31,17 @@ export default function Splash({text = 'Loading', callback = null}) {
     } else {
       setTimeout(() => {
         if (isLogged) {
-          // dispatch(
-          //   getCurrentProfile({
-          //     data: null,
-          //     onSuccess: () => navigation.replace('Home'),
-          //   }),
-          // );
-
-          navigation.replace('Homepage');
+          dispatch(
+            getCurrentProfile({
+              data: null,
+              onSuccess: () => navigation.replace('Homepage'),
+              onFailed: () => navigation.replace('Login'),
+            }),
+          );
         } else {
           navigation.replace('Login');
         }
-      }, 2000);
+      }, 1000);
     }
   }, [isLogged]);
 
