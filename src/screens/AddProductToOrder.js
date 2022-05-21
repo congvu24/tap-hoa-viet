@@ -5,10 +5,12 @@ import {
   Image,
   TouchableOpacity,
   PermissionsAndroid,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   BACKGROUND_COLOR,
+  BLACK_COLOR,
   GRAY_COLOR,
   PRIMARY_COLOR,
   RED_COLOR,
@@ -19,34 +21,51 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {CameraScreen} from 'react-native-camera-kit';
 import Sound from 'react-native-sound';
 import Toast from 'react-native-root-toast';
+import {getProductByBarCode} from '../services/getProduct';
+import {useDispatch, useSelector} from 'react-redux';
+import {addProduct} from '../redux/reducer/order';
+import {CheckBox} from 'react-native-elements';
+import {setInputProductNumber} from '../redux/reducer/userSlice';
+import Dialog from 'react-native-dialog';
+
 Sound.setCategory('Playback');
 
 export default function AddProductToOrder() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const numberOfProducts = useSelector(
+    state => Object.keys(state.order.products).length,
+  );
+  const isCheckInputProduct = useSelector(
+    state => state.user.inputProductNumber,
+  );
+
+  const numberInputRef = useRef();
+
   const [granted, setGranted] = useState(false);
-  const [barcodeValue, setBarcodeValue] = useState('Undefined Product');
+  const [isLoading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [productNumber, setProductNumber] = useState(1);
+  const [product, setProduct] = useState('');
+
   const goBack = () => {
     navigation.goBack();
   };
 
+  var whoosh = new Sound('beep_06.mp3', Sound.MAIN_BUNDLE, error => {
+    if (error) {
+      console.log('error', error);
+    }
+  });
+
   const onGetBarcode = event => {
-    var whoosh = new Sound('beep_06.mp3', Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        return;
-      }
-    });
-    whoosh.play();
+    if (isLoading) {
+      return;
+    }
 
-    setBarcodeValue(event.nativeEvent.codeStringValue);
-
-    Toast.show(barcodeValue, {
-      duration: 400,
-      position: Toast.positions.TOP,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-    });
+    setLoading(true);
+    findAndAddProductToCart(event.nativeEvent.codeStringValue);
   };
 
   const goAddByHand = () => {
@@ -55,6 +74,69 @@ export default function AddProductToOrder() {
 
   const goCheckout = () => {
     navigation.goBack();
+  };
+
+  const handleCheckInputProductNumber = () => {
+    dispatch(setInputProductNumber(!isCheckInputProduct));
+  };
+
+  const resetScan = () => {
+    setShowModal(false);
+    setProductNumber(1);
+    setProduct('');
+    setLoading(false);
+  };
+
+  const findAndAddProductToCart = async barCode => {
+    whoosh.play();
+
+    try {
+      const resProduct = await getProductByBarCode('wef');
+      if (resProduct) {
+        if (isCheckInputProduct) {
+          setProduct(resProduct);
+          setShowModal(true);
+        } else {
+          setProduct(resProduct);
+          handleAddProduct(resProduct);
+        }
+      } else {
+        Alert.alert(
+          'Lỗi',
+          'Không tìm thấy sản phẩm, bạn có muốn thêm sản phẩm ngay?',
+          [
+            {
+              text: 'Để sau',
+              onPress: () => {
+                setLoading(false);
+              },
+              style: 'cancel',
+            },
+            {text: 'Thêm', onPress: () => console.log('OK Pressed')},
+          ],
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAddProduct = productToAdd => {
+    dispatch(addProduct({...productToAdd, number: productNumber}));
+
+    Toast.show(`${productToAdd.productName} x${productNumber}`, {
+      duration: 400,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+      backgroundColor: WHITE_COLOR,
+      textColor: BLACK_COLOR,
+    });
+    setTimeout(() => {
+      resetScan();
+    }, 300);
   };
 
   useEffect(() => {
@@ -103,9 +185,36 @@ export default function AddProductToOrder() {
         <TouchableOpacity style={styles.addbtn} onPress={goCheckout}>
           <Text style={styles.addbtnText}>Đơn hàng</Text>
           <Icon name="shoppingcart" color={WHITE_COLOR} size={16} />
-          <Text style={styles.countPopup}>99</Text>
+          {numberOfProducts > 0 && (
+            <Text style={styles.countPopup}>{numberOfProducts}</Text>
+          )}
         </TouchableOpacity>
+        <View style={styles.checkNumberBtn}>
+          <CheckBox
+            containerStyle={{padding: 0}}
+            checked={isCheckInputProduct}
+            onPress={handleCheckInputProductNumber}
+          />
+          <Text style={styles.checkNumberText}>Nhập số lượng sản phẩm</Text>
+        </View>
       </View>
+
+      <Dialog.Container visible={showModal}>
+        <Dialog.Title>Số lượng</Dialog.Title>
+        <Dialog.Description>Nhập số lượng cho sản phẩm:</Dialog.Description>
+        <Dialog.Input
+          keyboardType="numeric"
+          autoFocus={true}
+          onChangeText={value => setProductNumber(parseInt(value))}
+          textInputRef={numberInputRef}
+          placeholder={'1'}
+        />
+        <Dialog.Button label="Huỷ" onPress={resetScan} />
+        <Dialog.Button
+          label="Tiếp tục"
+          onPress={() => handleAddProduct(product)}
+        />
+      </Dialog.Container>
     </View>
   );
 }
@@ -196,5 +305,16 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     fontSize: 11,
     fontWeight: '500',
+  },
+  checkNumberBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  checkNumberText: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
+    color: GRAY_COLOR,
   },
 });

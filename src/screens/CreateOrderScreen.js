@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {
@@ -18,9 +19,15 @@ import {
 } from '../constants/Colors';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch, useSelector} from 'react-redux';
+import {addProduct, clearOrder, removeProduct} from '../redux/reducer/order';
 
 export default function CreateOrderScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const order = useSelector(state => state.order);
+  const productIds = Object.keys(order.products);
+  const productCount = productIds.length;
 
   const goBack = () => {
     navigation.goBack();
@@ -34,6 +41,31 @@ export default function CreateOrderScreen() {
     navigation.push('OrderSummary');
   };
 
+  const handleClearOrder = () => {
+    Alert.alert('Xác nhận', 'Bạn có chắc muốn tiếp tục huỷ đơn hàng?', [
+      {
+        text: 'Huỷ',
+        onPress: () => {
+          console.log('Cancel clear');
+        },
+        style: 'cancel',
+      },
+      {text: 'Tiếp tục', onPress: () => dispatch(clearOrder())},
+    ]);
+  };
+
+  const handleAddProduct = product => {
+    console.log(product);
+    dispatch(addProduct({...product, number: 1}));
+  };
+
+  const handleRemoveProduct = product => {
+    console.log(product);
+    dispatch(removeProduct({...product, number: 1}));
+  };
+
+  console.log(order);
+
   return (
     <View style={styles.wrap}>
       <TouchableOpacity
@@ -44,91 +76,78 @@ export default function CreateOrderScreen() {
       >
         <Icon name="left" size={20} color={BLACK_COLOR} />
       </TouchableOpacity>
-      {/* <View style={styles.emptyWrap}>
-        <View style={styles.empty}>
-          <Image source={require('../images/basket.png')} />
-          <Text style={styles.subText}>Đơn hàng trống</Text>
-          <TouchableOpacity style={styles.btn} onPress={goToAddProduct}>
-            <Text style={styles.btnText}>Thêm sản phẩm +</Text>
-          </TouchableOpacity>
+      {productCount === 0 && (
+        <View style={styles.emptyWrap}>
+          <View style={styles.empty}>
+            <Image source={require('../images/basket.png')} />
+            <Text style={styles.subText}>Đơn hàng trống</Text>
+            <TouchableOpacity style={styles.btn} onPress={goToAddProduct}>
+              <Text style={styles.btnText}>Thêm sản phẩm +</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View> */}
+      )}
 
-      <ScrollView>
-        <View>
-          <View style={styles.item}>
-            <View style={styles.itemNameWrap}>
-              <Image
-                source={require('../images/shop.png')}
-                style={styles.itemImage}
-              />
-              <Text style={styles.itemName}>item</Text>
-            </View>
-            <View style={styles.itemBtnWrap}>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="minus" />
+      {productCount !== 0 && (
+        <>
+          <ScrollView>
+            <View>
+              {productIds.map(key => {
+                const item = order.products[key];
+                return (
+                  <View style={styles.item} key={key}>
+                    <View style={styles.itemNameWrap}>
+                      <Image
+                        source={require('../images/shop.png')}
+                        style={styles.itemImage}
+                      />
+                      <Text style={styles.itemName}>{item.productName}</Text>
+                    </View>
+                    <View style={styles.itemBtnWrap}>
+                      <TouchableOpacity
+                        style={styles.itemBtn}
+                        onPress={() =>
+                          handleRemoveProduct({...item, productId: key})
+                        }
+                      >
+                        <Icon name="minus" color={BLACK_COLOR} />
+                      </TouchableOpacity>
+                      <Text style={styles.itemBtn}>{item.number}</Text>
+                      <TouchableOpacity
+                        style={styles.itemBtn}
+                        onPress={() =>
+                          handleAddProduct({...item, productId: key})
+                        }
+                      >
+                        <Icon name="plus" color={BLACK_COLOR} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })}
+
+              <TouchableOpacity style={styles.addItem} onPress={goToAddProduct}>
+                <Text style={styles.addItemText}>Thêm sản phẩm</Text>
+                <Icon name="plus" style={styles.addItemText} />
               </TouchableOpacity>
-              <Text style={styles.itemBtn}>1</Text>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="plus" />
-              </TouchableOpacity>
             </View>
+          </ScrollView>
+          <View style={styles.btnWrap}>
+            <TouchableOpacity
+              onPress={handleClearOrder}
+              style={[styles.nextBtn, {backgroundColor: PRIMARY_COLOR}]}
+            >
+              <Text style={styles.nextBtnText}>Huỷ</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.nextBtn, {flex: 2, backgroundColor: GREEN_COLOR}]}
+              onPress={goToSummary}
+            >
+              <Text style={styles.nextBtnText}>Tiếp tục</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.item}>
-            <View style={styles.itemNameWrap}>
-              <Image
-                source={require('../images/shop.png')}
-                style={styles.itemImage}
-              />
-              <Text style={styles.itemName}>item</Text>
-            </View>
-            <View style={styles.itemBtnWrap}>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="minus" />
-              </TouchableOpacity>
-              <Text style={styles.itemBtn}>1</Text>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="plus" />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.item}>
-            <View style={styles.itemNameWrap}>
-              <Image
-                source={require('../images/shop.png')}
-                style={styles.itemImage}
-              />
-              <Text style={styles.itemName}>item</Text>
-            </View>
-            <View style={styles.itemBtnWrap}>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="minus" />
-              </TouchableOpacity>
-              <Text style={styles.itemBtn}>1</Text>
-              <TouchableOpacity style={styles.itemBtn}>
-                <Icon name="plus" />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.addItem} onPress={goToAddProduct}>
-            <Text style={styles.addItemText}>Thêm sản phẩm</Text>
-            <Icon name="plus" style={styles.addItemText} />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <View style={styles.btnWrap}>
-        <TouchableOpacity
-          style={[styles.nextBtn, {backgroundColor: PRIMARY_COLOR}]}
-        >
-          <Text style={styles.nextBtnText}>Huỷ</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.nextBtn, {flex: 2, backgroundColor: GREEN_COLOR}]}
-          onPress={goToSummary}
-        >
-          <Text style={styles.nextBtnText}>Tiếp tục</Text>
-        </TouchableOpacity>
-      </View>
+        </>
+      )}
     </View>
   );
 }
@@ -202,6 +221,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 12,
     borderRadius: 5,
+    color: BLACK_COLOR,
   },
   itemBtnWrap: {
     flexDirection: 'row',

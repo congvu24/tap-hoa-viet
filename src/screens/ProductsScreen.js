@@ -52,6 +52,8 @@ export const ProductsScreen = () => {
     navigation.push('AddProduct');
   };
 
+  console.log(products);
+
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
