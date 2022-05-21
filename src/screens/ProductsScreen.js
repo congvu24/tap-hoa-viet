@@ -23,9 +23,11 @@ export const ProductsScreen = () => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      getProduct(user?.uid).then(data => {
-        setProducts(data['_docs']);
-      });
+      if (user) {
+        getProduct(user?.uid).then(data => {
+          setProducts(data['_docs']);
+        });
+      }
     });
   }, []);
 
