@@ -11,10 +11,11 @@ import ProductsHeader from '../components/ProductsHeader';
 import ProductItem from '../components/ProductItem';
 import {useNavigation} from '@react-navigation/native';
 import {getProduct} from '../services/getProduct';
+import auth from '@react-native-firebase/auth';
+import {useSelector} from 'react-redux';
 
 const sampleImg =
   'https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
-import {firebase} from '@react-native-firebase/firestore';
 
 export const ProductsScreen = () => {
   const navigation = useNavigation();
@@ -22,6 +23,9 @@ export const ProductsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
+
+  const test = useSelector(state => state.user.email);
+  console.log(test);
 
   useEffect(() => {
     handleData();
@@ -38,21 +42,21 @@ export const ProductsScreen = () => {
   const handleNumberOfProducts = data => setNumberOfProducts(data);
 
   const handleData = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    let uid = auth().currentUser?.uid;
+
+    if (uid) {
       getProduct(
-        user.uid,
+        uid,
         handleProducts,
         handleNumberOfProducts,
         handleInventories,
       );
-    });
+    }
   };
 
   const goToAddProduct = () => {
     navigation.push('AddProduct');
   };
-
-  console.log(products);
 
   return (
     <View style={styles.screenContainer}>
