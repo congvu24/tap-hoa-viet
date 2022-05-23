@@ -1,6 +1,16 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
+export const saveProductsToReduxStore = (uid, dispatchData) => {
+  return firestore()
+    .collection('ProductCreators')
+    .doc(uid)
+    .collection('ProductsList')
+    .onSnapshot(snapShot => {
+      dispatchData(snapShot.docs);
+    });
+};
+
 export const getProduct = (
   userId,
   setProduct,
@@ -12,18 +22,20 @@ export const getProduct = (
     .doc(userId)
     .collection('ProductsList')
     .onSnapshot(snapShot => {
-      // update product list
-      setProduct(snapShot.docs);
+      if (setProduct && setNumberOfProducts && setInventories) {
+        // update product list
+        setProduct(snapShot.docs);
 
-      // update number of products
-      setNumberOfProducts(snapShot.size);
+        // update number of products
+        setNumberOfProducts(snapShot.size);
 
-      // update inventories
-      let inventories = 0;
-      snapShot.docs.forEach(doc => {
-        inventories += doc.data().numberOfProducts;
-      });
-      setInventories(inventories);
+        // update inventories
+        let inventories = 0;
+        snapShot.docs.forEach(doc => {
+          inventories += doc.data().numberOfProducts;
+        });
+        setInventories(inventories);
+      }
     });
 };
 

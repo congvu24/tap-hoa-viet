@@ -23,6 +23,8 @@ import userSlice from '../redux/reducer/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {store} from '../redux/store';
 import firestore from '@react-native-firebase/firestore';
+import {saveProductsToReduxStore} from '../services/getProduct';
+import {getProductsList} from '../redux/reducer/productSlice';
 
 export function LoginScreen({navigation}) {
   // Set an initializing state whilst Firebase connects
@@ -40,6 +42,10 @@ export function LoginScreen({navigation}) {
       setInitializing(false);
     }
   }
+
+  const saveProducts = data => {
+    dispatch(getProductsList(data));
+  };
 
   const login = () => {
     if (isValidForm()) {
@@ -104,6 +110,7 @@ export function LoginScreen({navigation}) {
         .then(documentSnapshot => {
           if (documentSnapshot.exists) {
             dispatch(userSlice.actions.setUserInfo(documentSnapshot.data()));
+            saveProductsToReduxStore(auth().currentUser.uid, saveProducts);
             navigation.replace('Homepage');
           }
         });
