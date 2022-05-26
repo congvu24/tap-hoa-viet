@@ -24,9 +24,6 @@ export const ProductsScreen = () => {
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
 
-  const test = useSelector(state => state.user.email);
-  console.log(test);
-
   useEffect(() => {
     handleData();
   }, []);
