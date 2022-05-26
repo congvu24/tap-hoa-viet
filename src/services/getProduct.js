@@ -83,3 +83,15 @@ export const getProductByBarCode = async barcode => {
   }))[0];
   return product;
 };
+
+export const getProductFromFirestore = async () => {
+  const uid = auth().currentUser?.uid;
+
+  const res = await firestore()
+    .collection('ProductCreators')
+    .doc(uid)
+    .collection('ProductsList')
+    .get();
+
+  return res.docs.map(item => ({...item.data(), productId: item.id}));
+};
