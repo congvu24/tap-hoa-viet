@@ -1,37 +1,52 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View,Image, ScrollView, TouchableOpacity,FlatList } from 'react-native'
 import ProductsGroupItem from '../components/ProductsGroupItem'
+import {firebase} from '@react-native-firebase/firestore';
+import React, {useState, useEffect, useCallback} from 'react'
+import DefaultImage from '../images/ic_inventory.png';
 
-import React from 'react'
+const categories = ['Popular', 'Organic', 'Thời trang', 'Thể thao'];
+
 
 export default function ProductReportScree() {
+  const [filePath, setFilePath] = useState(
+    Image.resolveAssetSource(DefaultImage).uri,
+  );
+  const handleData = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      getProduct(
+        user.uid,
+        handleProducts,
+        handleNumberOfProducts,
+        handleInventories,
+      );
+    });
+  };
   return (
     <View style={styles.screenContainer}>
-      
-       <ScrollView
-        style={styles.itemsContainer}
-        // refreshControl={
-        //   <RefreshControl refreshing={refresing} onRefresh={onRefresh} />
-        // }
-      >
+      <View style={styles.itemsContainer}>
         <View style={styles.extraSection}>
           <Text style={styles.numberText}>
-            Bạn dang có <Text style={styles.number}>256</Text> sản phẩm trong kho hàng
+            <Text> Số lượng sản phẩm có trong kho: <Text style={styles.number}>2576</Text></Text>
           </Text>
         </View>
-            <ProductsGroupItem
-              imgSrc=''
-              productGroup='{item._data.productName}'
-              
-              numberOfInventories='{item._data.numberOfProducts}'
-            />
-            <ProductsGroupItem
-              imgSrc=''
-              productGroup='{item._data.productName}'
-              
-              numberOfInventories='{item._data.numberOfProducts}'
-            />
-        <View style={{paddingBottom: 75}}></View>
-      </ScrollView>
+        <FlatList
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            marginTop: 10,
+            paddingBottom: 50,
+          }}
+          numColumns={2}
+          data={categories}
+          renderItem={({item}) => {
+            return <ProductsGroupItem
+              imgSrc = {filePath}
+              productGroup = {item}
+              numberOfInventories = {3}
+            />;
+          }}
+        />
+      </View>
     </View>
   )
 }
@@ -45,8 +60,6 @@ const styles = StyleSheet.create({
   itemsContainer: {
     marginTop: 15,
     backgroundColor: 'white',
-    paddingLeft: 20,
-    paddingRight: 20,
   },
 
   title: {
@@ -67,4 +80,18 @@ const styles = StyleSheet.create({
   number: {
     color: '#4C9FDB',
   },
+  
+  // categoryContainer: {
+
+  //   flexDirection: 'row',
+  //   wrap: true,
+  //   marginTop: 15,
+  //   backgroundColor: 'white',
+  //   paddingLeft: 20,
+  //   paddingRight: 20,
+  //   justifyContent: 'space-between',
+  // },
+   
+    
+    
 });

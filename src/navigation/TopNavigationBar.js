@@ -74,9 +74,10 @@ const TabBarItem = ({focused, text, imageSource}) => (
 
 const styles = StyleSheet.create({
     rootContainer: {
-        marginTop: 5,
-        backgroundColor: WHITE_COLOR,
-        borderRadius: 15,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
         height: 50,
     },
       shadow: {
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
           width: 10,
           height: 10,
         },
-        shadowOpacity: 0.35,
+        shadowOpacity: 0.55,
         shadowRadius: 3.5,
         elevation: 5,
     },
