@@ -69,21 +69,21 @@ export const AddProductScreen = ({route, navigation}) => {
   const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
   const schema = yup.object().shape({
     id: yup.string(),
-    name: yup.string().required().max(20),
+    productName: yup.string().required().max(20),
     brand: yup.string().required().max(20),
     quantity: yup.number().required(),
     capitalPrice: yup.number().required(),
     sellPrice: yup.number().required(),
     qrCode: yup.string(),
-    importDate: yup.string(),
-    exportDate: yup.string(),
+    // importDate: yup.string(),
+    // exportDate: yup.string(),
   });
 
   const {handleSubmit, reset, control, getValues} = useForm({
     defaultValues: {
-      qrCode: 'cac',
+      qrCode: productCode,
     },
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = data => {
@@ -220,7 +220,7 @@ export const AddProductScreen = ({route, navigation}) => {
             />
 
             <HorizontalInputField
-              name="name"
+              name="productName"
               title="Tên Hàng"
               hint="Tên Hàng"
               setInputData={handleProductName}
