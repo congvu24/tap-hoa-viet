@@ -1,7 +1,7 @@
-import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BACKGROUND_COLOR,
   PRIMARY_COLOR,
@@ -10,22 +10,25 @@ import {
 } from '../../constants/Colors';
 import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
 import auth from '@react-native-firebase/auth';
+import {setOffset} from '../../redux/reducer/app';
+import useScroll from '../../utils/useScroll';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);
+  const {ref, onScroll} = useScroll();
+
   const currentUser = user.name;
-  const signOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('User signed out!');
-        navigation.navigate('Login');
-      });
-  };
 
   return (
-    <View style={styles.rootContainer}>
+    <Animated.View
+      style={{
+        ...styles.rootContainer,
+        ...{opacity: 1},
+      }}
+    >
       <ScrollView
+        ref={ref}
+        onScroll={onScroll}
         showsVerticalScrollIndicator={false}
         style={styles.scrollViewContainer}
       >
@@ -53,7 +56,7 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 };
 

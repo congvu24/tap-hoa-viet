@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   SafeAreaView,
+  Animated,
 } from 'react-native';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
@@ -32,9 +33,13 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {resetOffset, setOffset} from '../redux/reducer/app';
+import useScroll from '../utils/useScroll';
 
 export const AddProductScreen = ({route, navigation}) => {
+  const {ref, onScroll} = useScroll();
+
   const categoryList = useSelector(state => state.category.categoryList).map(
     item => ({
       label: item.name,
@@ -222,7 +227,7 @@ export const AddProductScreen = ({route, navigation}) => {
   return (
     <FormProvider {...formMethod}>
       <KeyboardAvoidingView style={[styles.container]}>
-        <ScrollView style={styles.scrollView}>
+        <ScrollView ref={ref} style={styles.scrollView} onScroll={onScroll}>
           <TouchableOpacity
             style={styles.uploadButton}
             onPress={() => chooseFile('photo')}

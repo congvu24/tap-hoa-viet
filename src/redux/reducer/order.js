@@ -30,6 +30,8 @@ export const createOrder = createAsyncThunk(
 
       order.products = listProduct;
 
+      // check with current productList
+
       await createOrderToFirestore(order);
       thunkApi.dispatch(clearOrder());
       payload.onSuccess?.();
