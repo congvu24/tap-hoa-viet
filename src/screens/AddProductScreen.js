@@ -34,16 +34,28 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
+import {useSelector} from 'react-redux';
 
 export const AddProductScreen = ({route, navigation}) => {
-  const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
+  const categoryList = useSelector(state => state.category.categoryList).map(
+    item => ({
+      label: item.name,
+      key: item.categoryId,
+    }),
+  );
+  categoryList.push({
+    label: 'Khác',
+    key: 'other',
+  });
+
+  const userId = useSelector(state => state.user.uid);
   const [barCode, setBarCode] = useState('');
   const [productName, setProductName] = useState('');
   const [brand, setBrand] = useState('');
   const [capitalPrice, setCapitalPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [numberOfProducts, setNumberOfProducts] = useState('25');
-  const [productGroup, setProductGroup] = useState('thoiTrang');
+  const [productGroup, setProductGroup] = useState('');
   const [showBox, setShowBox] = useState(true);
   const {productID, ...otherParam} = route.params
     ? route.params
@@ -273,7 +285,7 @@ export const AddProductScreen = ({route, navigation}) => {
             <PickerWithTitle
               title="Nhóm Hàng"
               hint="Nhóm hàng..."
-              items={groupOfProducts}
+              items={categoryList}
               selectedValue={productGroup}
               setGroup={setProductGroup}
             />
