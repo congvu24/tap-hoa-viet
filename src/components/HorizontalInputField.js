@@ -6,14 +6,7 @@ import {
   GRAY_COLOR,
   MATERIAL_GREY_COLOR,
 } from '../constants/Colors';
-<<<<<<< HEAD
 import {Controller, useController} from 'react-hook-form';
-=======
-import {useController} from 'react-hook-form';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import {useNavigation} from '@react-navigation/native';
-
->>>>>>> 5d885ccc30c1ed432ac6f33902af7ed78f3ed01f
 const HorizontalInputField = ({
   name,
   title = '',
@@ -24,12 +17,7 @@ const HorizontalInputField = ({
   isDisable = false,
   setInputData,
   defaultValue = '',
-<<<<<<< HEAD
   control,
-=======
-  keyboardType = 'default',
-  textValue = '',
->>>>>>> 5d885ccc30c1ed432ac6f33902af7ed78f3ed01f
 }) => {
   // const {
   //   field: {onChange, onBlur, value, ref},
@@ -51,7 +39,6 @@ const HorizontalInputField = ({
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.textInput}>
-<<<<<<< HEAD
         {!isNumberKeyBoard ? (
           // <TextInput
           //   placeholder={hint}
@@ -102,39 +89,6 @@ const HorizontalInputField = ({
                 // ref={ref}
               />
             )}
-=======
-        {showBarcodeIcon ? (
-          <View style={styles.parent}>
-            <TextInput
-              style={styles.textField}
-              placeholder={hint}
-              placeholderTextColor={GRAY_COLOR}
-              multiline={false}
-              editable={!isDisable}
-              onChangeText={onChangeText}
-              onBlur={onBlur}
-              ref={ref}
-              value={textValue}
-            />
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ScanBarcode')}
-              styles={styles.barcodeIcon}
-            >
-              <Icon name="barcode" size={20} />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TextInput
-            placeholder={hint}
-            placeholderTextColor={GRAY_COLOR}
-            multiline={false}
-            editable={!isDisable}
-            keyboardType={keyboardType}
-            onChangeText={onChangeText}
-            value={textValue}
-            onBlur={onBlur}
-            ref={ref}
->>>>>>> 5d885ccc30c1ed432ac6f33902af7ed78f3ed01f
           />
         )}
         {/* <Text style={error ? styles.error : styles.invisible}>
