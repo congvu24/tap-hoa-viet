@@ -82,7 +82,7 @@ export default function CreateOrderScreen() {
           <View style={styles.empty}>
             <Image source={require('../images/basket.png')} />
             <Text style={styles.subText}>Đơn hàng trống</Text>
-            <TouchableOpacity style={styles.btn} onPress={pickImage}>
+            <TouchableOpacity style={styles.btn} onPress={goToAddProduct}>
               <Text style={styles.btnText}>Thêm sản phẩm +</Text>
             </TouchableOpacity>
           </View>
