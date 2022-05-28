@@ -1327,6 +1327,11 @@
   resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-14.8.0.tgz"
   integrity sha512-PGDK3vSdA3IISoqtSuCyzVrui8x2LpUhNpOnvxtXW0jnX5MvcXDVuQ0+DRlEt+09sR81B4AiBEunhQKbbBmb+g==
 
+"@react-native-firebase/storage@^14.11.0":
+  version "14.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-14.11.0.tgz#65d652b9696650f3c704d4f4144bb12673483acc"
+  integrity sha512-B8emtJEfNzsxBVyCnJ5f26z4OPU5bQefHgc8mrjUjDvhWqWDstcLumevFKBlm8XFWpqQup3re+JRH/TcQPaB9w==
+
 "@react-native-picker/picker@^2.4.1":
   version "2.4.1"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.4.1.tgz"
@@ -3930,6 +3935,11 @@ internal-slot@^1.0.3:
     has "^1.0.3"
     side-channel "^1.0.4"
 
+intl@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/intl/-/intl-1.2.5.tgz#82244a2190c4e419f8371f5aa34daa3420e2abde"
+  integrity sha1-giRKIZDE5Bn4Nx9ao02qNCDiq94=
+
 invariant@*, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
@@ -6191,10 +6201,10 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
-react-native-image-picker@^4.8.2:
-  version "4.8.2"
-  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-4.8.2.tgz"
-  integrity sha512-4Hiwkw1hAxQn+5O/zPFkY+NrRPB2EMQ6CeX8fV0AKd2VtPsgCycF6NOUoO9MAt2mv2ums374pZkuG9zp8l7mfA==
+react-native-image-picker@^4.8.3:
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.8.3.tgz#a74801e8428325133a42dcd818fa54f08e6b20e6"
+  integrity sha512-mA3xKN8TtXpLl3Aoo65ArZvusv3gCsbe3/hsOLKI1DcC+QcYPcDnsYK/ft05rWBj4BdiJ9E2JoveiHNtU8W9GA==
 
 react-native-image-slider-box@^1.1.22:
   version "1.1.22"
