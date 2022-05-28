@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
     },
 
     textNumber: {
-      fontSize: 22,
-      fontWeight: 'bold',
+      fontSize: 18,
+      fontWeight: '500',
       color: '#fff'
     }
 })

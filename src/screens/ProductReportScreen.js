@@ -2,15 +2,28 @@ import { StyleSheet, Text, View,Image, ScrollView, TouchableOpacity,FlatList } f
 import ProductsGroupItem from '../components/ProductsGroupItem'
 import {firebase} from '@react-native-firebase/firestore';
 import React, {useState, useEffect, useCallback} from 'react'
+import _ from 'lodash';
 import DefaultImage from '../images/ic_inventory.png';
+import {getProduct} from '../services/getProduct';
 
-const categories = ['Popular', 'Organic', 'Thời trang', 'Thể thao'];
 
 
 export default function ProductReportScree() {
+  const [products, setProducts] = useState(null);
+  const [numberOfInventories, setNumberOfInventories] = useState(0);
+  const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const handleProducts = data => setProducts(data);
+  const handleInventories = data => setNumberOfInventories(data);
+  const handleNumberOfProducts = data => setNumberOfProducts(data);
+
   const [filePath, setFilePath] = useState(
     Image.resolveAssetSource(DefaultImage).uri,
   );
+
+  useEffect(() => {
+    handleData();
+  }, []);
+
   const handleData = () => {
     firebase.auth().onAuthStateChanged(user => {
       getProduct(
@@ -21,12 +34,24 @@ export default function ProductReportScree() {
       );
     });
   };
+
+  console.log(products);
+  console.log("ton kho nè: ",numberOfInventories);
+  console.log("khong biet là cai gi nè: ",numberOfProducts);
+  console.log(
+    _.chain(products)
+      // Group the elements of Array based on `color` property
+      .groupBy("_data.productGroup")
+      // `key` is group's name (color), `value` is the array of objects
+      .map((value, key) => ({ group: key, products: value }))
+      .value()
+  );
   return (
     <View style={styles.screenContainer}>
       <View style={styles.itemsContainer}>
         <View style={styles.extraSection}>
           <Text style={styles.numberText}>
-            <Text> Số lượng sản phẩm có trong kho: <Text style={styles.number}>2576</Text></Text>
+            <Text style={styles.title}> Số lượng sản phẩm có trong kho: <Text style={styles.number}>{numberOfInventories}</Text></Text>
           </Text>
         </View>
         <FlatList
@@ -37,12 +62,12 @@ export default function ProductReportScree() {
             paddingBottom: 50,
           }}
           numColumns={2}
-          data={categories}
+          data={products}
           renderItem={({item}) => {
             return <ProductsGroupItem
               imgSrc = {filePath}
-              productGroup = {item}
-              numberOfInventories = {3}
+              productGroup = {item._data.productGroup}
+              numberOfInventories = {item._data.numberOfProducts}
             />;
           }}
         />
@@ -58,14 +83,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemsContainer: {
-    marginTop: 15,
+    marginTop: 8,
     backgroundColor: 'white',
   },
 
   title: {
-    fontSize: 24,
+    fontSize: 16,
     color: 'black',
-    fontWeight: '600',
   },
 
   extraSection: {
