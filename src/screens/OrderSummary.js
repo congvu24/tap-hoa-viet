@@ -23,6 +23,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {createOrder, updateInfo} from '../redux/reducer/order';
 import moment from 'moment';
+import {formatMoney} from '../utils';
 
 export default function OrderSummary() {
   const navigation = useNavigation();
@@ -94,7 +95,7 @@ export default function OrderSummary() {
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Tạm tính: </Text>
-            <Text style={styles.rowValue}>{amount}đ</Text>
+            <Text style={styles.rowValue}>{formatMoney(amount)}đ</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thời gian: </Text>
@@ -108,7 +109,9 @@ export default function OrderSummary() {
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thành tiền: </Text>
-            <Text style={styles.rowValue}>{amount - order.discount}đ</Text>
+            <Text style={styles.rowValue}>
+              {formatMoney(amount - order.discount)}đ
+            </Text>
           </View>
         </View>
         <View style={styles.sectionWrap}>

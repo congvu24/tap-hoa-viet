@@ -21,6 +21,9 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {addProduct, clearOrder, removeProduct} from '../redux/reducer/order';
+import {formatMoney} from '../utils';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {uploadFile} from '../services/upload';
 
 export default function CreateOrderScreen() {
   const navigation = useNavigation();
@@ -64,8 +67,6 @@ export default function CreateOrderScreen() {
     dispatch(removeProduct({...product, number: 1}));
   };
 
-  console.log(order);
-
   return (
     <View style={styles.wrap}>
       <TouchableOpacity
@@ -81,7 +82,7 @@ export default function CreateOrderScreen() {
           <View style={styles.empty}>
             <Image source={require('../images/basket.png')} />
             <Text style={styles.subText}>Đơn hàng trống</Text>
-            <TouchableOpacity style={styles.btn} onPress={goToAddProduct}>
+            <TouchableOpacity style={styles.btn} onPress={pickImage}>
               <Text style={styles.btnText}>Thêm sản phẩm +</Text>
             </TouchableOpacity>
           </View>
@@ -101,7 +102,12 @@ export default function CreateOrderScreen() {
                         source={require('../images/shop.png')}
                         style={styles.itemImage}
                       />
-                      <Text style={styles.itemName}>{item.productName}</Text>
+                      <View>
+                        <Text style={styles.itemName}>{item.productName}</Text>
+                        <Text style={styles.itemMoney}>
+                          {formatMoney(item.number * item.sellPrice)}đ
+                        </Text>
+                      </View>
                     </View>
                     <View style={styles.itemBtnWrap}>
                       <TouchableOpacity
@@ -207,6 +213,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: BLACK_COLOR,
+  },
+  itemMoney: {
+    marginLeft: 10,
+    fontSize: 14,
+    fontWeight: '400',
+    color: GRAY_COLOR,
   },
   itemBtn: {
     padding: 4,

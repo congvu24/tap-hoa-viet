@@ -14,6 +14,7 @@ import EditProductImagesSlide from '../components/EditProductImagesSlide';
 import {getProductToEdit} from '../services/getProduct';
 import {editProduct} from '../services/editProduct';
 import {firebase} from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -37,8 +38,10 @@ const EditProductScreen = ({navigation, route}) => {
 
   // use effect
   useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(user => {
-      getProductToEdit(user.uid, productCode).then(data => {
+    let uid = auth().currentUser?.uid;
+
+    if (uid) {
+      getProductToEdit(uid, productCode).then(data => {
         setProductName(data.productName);
         setBarCode(data.barCode);
         setProductGroup(data.productGroup);
@@ -47,26 +50,25 @@ const EditProductScreen = ({navigation, route}) => {
         setSellPrice(data.sellPrice.toString());
         setNumberOfProducts(data.numberOfProducts.toString());
       });
-    });
-
-    return subscriber();
+    }
   }, []);
 
   // method save
   const handleSave = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      editProduct(
-        productName,
-        barCode,
-        brand,
-        productGroup,
-        sellPrice,
-        capitalPrice,
-        numberOfProducts,
-        user.uid,
-        productCode,
-      );
-    });
+    let uid = auth().currentUser?.uid;
+
+    editProduct(
+      productName,
+      barCode,
+      brand,
+      productGroup,
+      sellPrice,
+      capitalPrice,
+      numberOfProducts,
+      uid,
+      productCode,
+    );
+
     navigation.pop();
   };
 
