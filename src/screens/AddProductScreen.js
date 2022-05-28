@@ -36,6 +36,9 @@ import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
 import {useDispatch, useSelector} from 'react-redux';
 import {resetOffset, setOffset} from '../redux/reducer/app';
 import useScroll from '../utils/useScroll';
+import uuid from 'react-native-uuid';
+import CustomToolbar from '../components/CustomToolbar';
+import {useSelector} from 'react-redux';
 
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
@@ -50,19 +53,20 @@ export const AddProductScreen = ({route, navigation}) => {
     label: 'Khác',
     key: 'other',
   });
-  const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
+
+  const userId = useSelector(state => state.user.uid);
   const [barCode, setBarCode] = useState('');
   const [productName, setProductName] = useState('');
   const [brand, setBrand] = useState('');
   const [capitalPrice, setCapitalPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
-  const [numberOfProducts, setNumberOfProducts] = useState('');
-  const [productGroup, setProductGroup] = useState('thoiTrang');
+  const [numberOfProducts, setNumberOfProducts] = useState('25');
+  const [productGroup, setProductGroup] = useState('');
   const [showBox, setShowBox] = useState(true);
   const {productID, ...otherParam} = route.params
     ? route.params
     : {productID: 'null'};
-  const [productCode, setproductCode] = useState(nanoid(11));
+  const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
   const schema = yup.object().shape({
     id: yup.string().required('Id is required'),
     name: yup.string().required().max(20),
@@ -187,35 +191,13 @@ export const AddProductScreen = ({route, navigation}) => {
       });
   };
 
-  const deleteProduct = () => {
-    deleteProduct(
-      userId,
-      productCode,
-      barCode,
-      productName,
-      brand,
-      capitalPrice,
-      sellPrice,
-      numberOfProducts,
-      productGroup,
-    )
-      .then(() => {
-        console.log('product deleted!');
-        Alert.alert('Status', 'Delete product successfully!');
-      })
-      .catch(err => {
-        console.log(err);
-        Alert.alert('Status', 'Failed to delete product!');
-      });
-  };
-
   const showConfirmDialog = () => {
-    return Alert.alert('Delete Product', 'Do you want to delete this item?', [
+    return Alert.alert('Clear Form', 'Do you want to clear this form?', [
       {
         text: 'Yes',
         onPress: () => {
           setShowBox(false);
-          deleteProduct();
+          resetTextFields();
         },
       },
       {
@@ -227,7 +209,14 @@ export const AddProductScreen = ({route, navigation}) => {
   return (
     <FormProvider {...formMethod}>
       <KeyboardAvoidingView style={[styles.container]}>
-        <ScrollView ref={ref} style={styles.scrollView} onScroll={onScroll}>
+        <CustomToolbar
+          productCode={'Add Product'}
+          isEdit={true}
+          buttonText="Add"
+          onButtonPress={() => uploadProduct()}
+          onBackPress={() => navigation.pop()}
+        />
+        <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
           <TouchableOpacity
             style={styles.uploadButton}
             onPress={() => chooseFile('photo')}
@@ -239,8 +228,10 @@ export const AddProductScreen = ({route, navigation}) => {
               <HorizontalInputField
                 name="id"
                 title={'Mã Hàng'}
+                isDisable={true}
                 setInputData={handleProductCode}
                 defaultValue={productCode}
+                hint={productCode}
               />
 
               <HorizontalInputField
@@ -296,7 +287,6 @@ export const AddProductScreen = ({route, navigation}) => {
             </SafeAreaView>
 
             <DateTimePickerWithTitle title="Ngày nhập kho" />
-            <DateTimePickerWithTitle title="Ngày xuất kho" />
 
             <PickerWithTitle
               title="Nhóm Hàng"
@@ -313,7 +303,7 @@ export const AddProductScreen = ({route, navigation}) => {
                 onPress={onSubmitKey}
               />
               <Button
-                title={'Delete'}
+                title={'Clear'}
                 buttonStyle={styles.deleteBtn}
                 titleStyle={styles.btnTitle}
                 onPress={showConfirmDialog}
