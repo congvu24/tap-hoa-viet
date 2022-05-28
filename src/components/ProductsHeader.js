@@ -1,31 +1,77 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {DARK_GREY} from '../constants/Colors';
 
 const ProductsHeader = ({
   title = '',
   numberOfProducts = 0,
   inventoryNumber = 0,
   goToAddProduct = () => {},
+  changeSearchString,
 }) => {
+  const [isShowFindInput, setIsShowFindInput] = useState(false);
+
+  const handleOnPressFindIcon = () => {
+    setIsShowFindInput(true);
+  };
+
+  const handleCloseFindInput = () => {
+    changeSearchString('');
+    setIsShowFindInput(false);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.mainSection}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.iconsContainer}>
-          <Icon name="search-outline" size={25} style={styles.icon} />
-          <TouchableOpacity onPress={goToAddProduct}>
-            <Icon name="add-outline" size={25} style={styles.icon} />
-          </TouchableOpacity>
-          <Icon name="funnel-outline" size={25} style={styles.icon} />
-          <Icon />
+      {isShowFindInput ? (
+        <View style={styles.findContainer}>
+          <TextInput
+            style={styles.findTextInput}
+            onChangeText={text => changeSearchString(text)}
+          />
+          <Icon
+            name="search-outline"
+            size={25}
+            style={styles.floatingSearchIcon}
+            onPress={handleOnPressFindIcon}
+          />
+          <Icon
+            name="close-circle"
+            size={25}
+            style={styles.floatingCloseIcon}
+            onPress={handleCloseFindInput}
+          />
         </View>
-      </View>
+      ) : (
+        <View style={styles.mainSection}>
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.iconsContainer}>
+            <Icon
+              name="search-outline"
+              size={25}
+              style={styles.icon}
+              onPress={handleOnPressFindIcon}
+            />
+            <TouchableOpacity onPress={goToAddProduct}>
+              <Icon name="add-outline" size={25} style={styles.icon} />
+            </TouchableOpacity>
+            <Icon name="funnel-outline" size={25} style={styles.icon} />
+            <Icon />
+          </View>
+        </View>
+      )}
 
       <View style={styles.extraSection}>
         <Text style={styles.numberText}>
-          <Text style={styles.number}>{numberOfProducts}</Text> hàng hóa - Tồn
-          kho <Text style={styles.number}>{inventoryNumber}</Text>
+          <Text style={styles.number}>{numberOfProducts}</Text>
+          <Text style={{color: DARK_GREY}}> hàng hóa - Tồn kho </Text>
+          <Text style={styles.number}>{inventoryNumber}</Text>
         </Text>
       </View>
     </View>
@@ -52,6 +98,21 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  findContainer: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 15,
+    height: 62.5,
+  },
+  findTextInput: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingLeft: 50,
+    paddingRight: 45,
+    position: 'relative',
+    fontSize: 17,
+  },
   iconsContainer: {
     flexDirection: 'row',
   },
@@ -62,6 +123,17 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 30,
+    color: DARK_GREY,
+  },
+  floatingSearchIcon: {
+    position: 'absolute',
+    top: '50%',
+    left: 30,
+  },
+  floatingCloseIcon: {
+    position: 'absolute',
+    top: '50%',
+    right: 35,
   },
   extraSection: {
     paddingLeft: 20,

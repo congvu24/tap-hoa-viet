@@ -24,6 +24,9 @@ export const ProductsScreen = () => {
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
 
+  // search string
+  const [searchString, setSearchString] = useState('');
+
   useEffect(() => {
     handleData();
   }, []);
@@ -55,6 +58,13 @@ export const ProductsScreen = () => {
     navigation.push('AddProduct');
   };
 
+  // search string method
+  const handleChangeSearchString = text => {
+    setSearchString(text);
+  };
+
+  console.log('search string: ', searchString);
+
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
@@ -62,6 +72,7 @@ export const ProductsScreen = () => {
         numberOfProducts={products && numberOfProducts}
         inventoryNumber={numberOfInventories && numberOfInventories}
         goToAddProduct={goToAddProduct}
+        changeSearchString={handleChangeSearchString}
       />
       <ScrollView
         style={styles.itemsContainer}
@@ -70,26 +81,36 @@ export const ProductsScreen = () => {
         }
       >
         {products &&
-          products.map((item, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.push('ProductDetails', {
-                    productCode: item._data.productCode,
-                  })
-                }
-                key={index}
-              >
-                <ProductItem
-                  imgSrc={sampleImg}
-                  productName={item._data.productName}
-                  productId={item._data.productCode}
-                  price={item._data.sellPrice}
-                  numberOfInventories={item._data.numberOfProducts}
-                />
-              </TouchableOpacity>
-            );
-          })}
+          products
+            .filter((item, index) => {
+              if (searchString === '') {
+                return true;
+              } else {
+                return item._data.productName
+                  .toLowerCase()
+                  .includes(searchString.toLowerCase());
+              }
+            })
+            .map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.push('ProductDetails', {
+                      productCode: item._data.productCode,
+                    })
+                  }
+                  key={index}
+                >
+                  <ProductItem
+                    imgSrc={sampleImg}
+                    productName={item._data.productName}
+                    productId={item._data.productCode}
+                    price={item._data.sellPrice}
+                    numberOfInventories={item._data.numberOfProducts}
+                  />
+                </TouchableOpacity>
+              );
+            })}
 
         <View style={{paddingBottom: 75}}></View>
       </ScrollView>
