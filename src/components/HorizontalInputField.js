@@ -20,82 +20,52 @@ const HorizontalInputField = ({
   defaultValue = '',
   control,
 }) => {
-  // const {
-  //   field: {onChange, onBlur, value, ref},
-  //   fieldState: {invalid, error},
-  // } = useController({
-  //   name,
-  //   defaultValue,
-  // });
-
-  // const onChangeText = value => {
-  //   onChange(value);
-  //   setInputData(value);
-  // };
-
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={[styles.container]}>
-      <Text style={styles.title}>{title}</Text>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
+          <>
+            <Text style={styles.title}>{title}</Text>
+            <View style={styles.textInput}>
+              {!isNumberKeyBoard ? (
+                <TextInput
+                  placeholder={hint}
+                  value={value}
+                  placeholderTextColor={BLACK_COLOR}
+                  multiline={false}
+                  editable={true}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  // ref={ref}
+                />
+              ) : (
+                <TextInput
+                  placeholder={hint}
+                  value={value}
+                  keyboardType="numeric"
+                  placeholderTextColor={BLACK_COLOR}
+                  multiline={false}
+                  editable={true}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  // ref={ref}
+                />
+              )}
 
-      <View style={styles.textInput}>
-        {!isNumberKeyBoard ? (
-          // <TextInput
-          //   placeholder={hint}
-          //   placeholderTextColor={BLACK_COLOR}
-          //   multiline={false}
-          //   editable={!isDisable}
-          //   onChangeText={onChangeText}
-          //   onBlur={onBlur}
-          //   ref={ref}
-          // />
-
-          <Controller
-            name={name}
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                placeholder={hint}
-                value={value}
-                placeholderTextColor={BLACK_COLOR}
-                multiline={false}
-                editable={true}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                // ref={ref}
-              />
-            )}
-          />
-        ) : (
-          <Controller
-            name={name}
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                placeholder={hint}
-                value={value}
-                keyboardType="numeric"
-                placeholderTextColor={BLACK_COLOR}
-                multiline={false}
-                editable={true}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                // ref={ref}
-              />
-            )}
-          />
+              <Text style={error ? styles.error : styles.invisible}>
+                Vui lòng nhập đúng thông tin
+              </Text>
+            </View>
+          </>
         )}
-        {/* <Text style={error ? styles.error : styles.invisible}>
-          Vui lòng nhập đúng thông tin
-        </Text> */}
-      </View>
+      />
     </SafeAreaView>
   );
 };
