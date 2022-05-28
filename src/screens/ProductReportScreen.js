@@ -1,7 +1,23 @@
-import { StyleSheet, Text, View,Image, ScrollView, TouchableOpacity,FlatList } from 'react-native'
+import { 
+  StyleSheet, 
+  Text, 
+  View,Image, 
+  ScrollView, 
+  TouchableOpacity,
+  FlatList 
+} from 'react-native'
+import {
+  BACKGROUND_COLOR,
+  BLACK_COLOR,
+  GRAY_COLOR,
+  GREEN_COLOR,
+  PRIMARY_COLOR,
+  WHITE_COLOR,
+} from '../constants/Colors';
 import ProductsGroupItem from '../components/ProductsGroupItem'
 import {firebase} from '@react-native-firebase/firestore';
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 import DefaultImage from '../images/ic_inventory.png';
 import {getProduct} from '../services/getProduct';
@@ -9,12 +25,19 @@ import {getProduct} from '../services/getProduct';
 
 
 export default function ProductReportScree() {
+  const dispatch = useDispatch();
+
+  const productList = useSelector(state => state.product.productList);
+  const numberOfProducts = useSelector(
+    state => Object.keys(state.order.products).length,
+  );
   const [products, setProducts] = useState(null);
+  const [categoryList, setCategoryList] = useState(null);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
-  const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const [numberOfProduct, setNumberOfProduct] = useState(0);
   const handleProducts = data => setProducts(data);
   const handleInventories = data => setNumberOfInventories(data);
-  const handleNumberOfProducts = data => setNumberOfProducts(data);
+  const handleNumberOfProducts = data => setNumberOfProduct(data);
 
   const [filePath, setFilePath] = useState(
     Image.resolveAssetSource(DefaultImage).uri,
@@ -25,33 +48,34 @@ export default function ProductReportScree() {
   }, []);
 
   const handleData = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      getProduct(
-        user.uid,
-        handleProducts,
-        handleNumberOfProducts,
-        handleInventories,
-      );
-    });
+    // firebase.auth().onAuthStateChanged(user => {
+    //   getProduct(
+    //     user.uid,
+    //     handleProducts,
+    //     handleNumberOfProducts,
+    //     handleInventories,
+    //   );
+    // });
+    setCategoryList(
+      _.chain(productList)
+        .groupBy("productGroup")
+        .map((value, key) => {
+          console.log(value, key)
+          return ({ group: key, products: value })
+        })
+    );
+    
   };
 
-  console.log(products);
-  console.log("ton kho nè: ",numberOfInventories);
-  console.log("khong biet là cai gi nè: ",numberOfProducts);
-  console.log(
-    _.chain(products)
-      // Group the elements of Array based on `color` property
-      .groupBy("_data.productGroup")
-      // `key` is group's name (color), `value` is the array of objects
-      .map((value, key) => ({ group: key, products: value }))
-      .value()
-  );
+  console.log(categoryList);
+  
+
   return (
     <View style={styles.screenContainer}>
       <View style={styles.itemsContainer}>
         <View style={styles.extraSection}>
           <Text style={styles.numberText}>
-            <Text style={styles.title}> Số lượng sản phẩm có trong kho: <Text style={styles.number}>{numberOfInventories}</Text></Text>
+            <Text style={styles.title}> Số lượng sản phẩm có trong kho: <Text style={styles.number}>13</Text></Text>
           </Text>
         </View>
         <FlatList
@@ -66,8 +90,8 @@ export default function ProductReportScree() {
           renderItem={({item}) => {
             return <ProductsGroupItem
               imgSrc = {filePath}
-              productGroup = {item._data.productGroup}
-              numberOfInventories = {item._data.numberOfProducts}
+              productGroup = "{item._data.productGroup}"
+              numberOfInventories = '13'
             />;
           }}
         />
