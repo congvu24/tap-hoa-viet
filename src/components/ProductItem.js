@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
+import {DARK_GREY} from '../constants/Colors';
 
 const ProductItem = ({
   imgSrc = '',
@@ -16,7 +17,7 @@ const ProductItem = ({
 
           <View style={styles.idNameContainer}>
             <Text style={styles.mainText}>{productName}</Text>
-            <Text>{productId}</Text>
+            <Text style={styles.productId}>{productId}</Text>
           </View>
         </View>
 
@@ -55,6 +56,9 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 5,
     fontWeight: '500',
+  },
+  productId: {
+    color: DARK_GREY,
   },
   number: {
     color: '#4C9FDB',

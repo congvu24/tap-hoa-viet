@@ -11,6 +11,7 @@ export const BLUE_COLOR = '#3C6EEA';
 export const WHITE_COLOR = '#FFFFFF';
 export const GRAY_COLOR = '#9e9e9e';
 export const BLACK_COLOR = '#000000';
+export const DARK_GREY = '#7F8487';
 export const MATERIAL_RED_COLOR = '#F44336';
 export const MATERIAL_BLUE_COLOR = '#2196F3';
 export const MATERIAL_GREEN_COLOR = '#4CAF50';
