@@ -19,6 +19,7 @@ import CreateOrderScreen from '../screens/CreateOrderScreen';
 import AddProductToOrder from '../screens/AddProductToOrder';
 import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
 import OrderSummary from '../screens/OrderSummary';
+import ScanBarcodeScreen from '../screens/ScanBarcodeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,14 @@ export default function AppRoute() {
           <Stack.Screen
             name="AddProductToOrderByHand"
             component={AddProductToOrderByHand}
+            options={{
+              animation: 'fade_from_bottom',
+            }}
+          />
+
+          <Stack.Screen
+            name="ScanBarcode"
+            component={ScanBarcodeScreen}
             options={{
               animation: 'fade_from_bottom',
             }}

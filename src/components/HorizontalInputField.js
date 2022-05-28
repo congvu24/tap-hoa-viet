@@ -7,6 +7,9 @@ import {
   MATERIAL_GREY_COLOR,
 } from '../constants/Colors';
 import {useController} from 'react-hook-form';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
+
 const HorizontalInputField = ({
   name,
   title = '',
@@ -15,8 +18,10 @@ const HorizontalInputField = ({
   showBarcodeIcon = false,
   isNumberKeyBoard = false,
   isDisable = false,
-  setInputData = value => {},
+  setInputData,
   defaultValue = '',
+  keyboardType = 'default',
+  textValue = '',
 }) => {
   const {
     field: {onChange, onBlur, value, ref},
@@ -31,29 +36,42 @@ const HorizontalInputField = ({
     setInputData(value);
   };
 
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.textInput}>
-        {!isNumberKeyBoard ? (
-          <TextInput
-            placeholder={hint}
-            placeholderTextColor={BLACK_COLOR}
-            multiline={false}
-            editable={!isDisable}
-            onChangeText={onChangeText}
-            onBlur={onBlur}
-            ref={ref}
-          />
+        {showBarcodeIcon ? (
+          <View style={styles.parent}>
+            <TextInput
+              style={styles.textField}
+              placeholder={hint}
+              placeholderTextColor={GRAY_COLOR}
+              multiline={false}
+              editable={!isDisable}
+              onChangeText={onChangeText}
+              onBlur={onBlur}
+              ref={ref}
+              value={textValue}
+            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ScanBarcode')}
+              styles={styles.barcodeIcon}
+            >
+              <Icon name="barcode" size={20} />
+            </TouchableOpacity>
+          </View>
         ) : (
           <TextInput
             placeholder={hint}
-            placeholderTextColor={BLACK_COLOR}
+            placeholderTextColor={GRAY_COLOR}
             multiline={false}
             editable={!isDisable}
-            keyboardType="numeric"
+            keyboardType={keyboardType}
             onChangeText={onChangeText}
+            value={textValue}
             onBlur={onBlur}
             ref={ref}
           />
@@ -99,14 +117,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginEnd: 20,
   },
-  barcodeButton: {
-    width: 16,
-    height: 16,
-  },
+  barcodeIcon: {},
   error: {
     color: 'red',
   },
   invisible: {
     display: 'none',
+  },
+  inputField: {},
+  parent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

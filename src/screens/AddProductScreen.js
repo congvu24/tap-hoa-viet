@@ -62,7 +62,7 @@ export const AddProductScreen = ({route, navigation}) => {
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
   const schema = yup.object().shape({
-    id: yup.string().required('Id is required'),
+    id: yup.string(),
     name: yup.string().required().max(20),
     brand: yup.string().required().max(20),
     quantity: yup.number().required(),
@@ -82,6 +82,9 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const onSubmitKey = useCallback(() => {
     formMethod.handleSubmit(onSubmit)();
+    // formMethod.formState.isValid
+    //   ? uploadProduct()
+    //   : console.warn(formMethod.formState.errors);
     uploadProduct();
   }, [formMethod, onSubmit, uploadProduct]);
 
@@ -119,16 +122,6 @@ export const AddProductScreen = ({route, navigation}) => {
       setFilePath(String(response.assets.map(item => item.uri)));
     });
   };
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        setUserId(user.uid);
-      } else {
-        setUserId('');
-        console.log('Signed Out');
-      }
-    });
-  }, []);
 
   const handleProductCode = text => {
     setproductCode(text);
@@ -144,6 +137,7 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const handleBrand = text => {
     setBrand(text);
+    console.log(brand);
   };
 
   const handleCapitalPrice = text => {
@@ -160,9 +154,11 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const resetTextFields = () => {
     formMethod.reset();
+    setproductCode(uuid.v4().substring(0, 16));
   };
 
-  const uploadProduct = () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const uploadProduct = useCallback(() => {
     addProduct(
       userId,
       productCode,
@@ -183,7 +179,7 @@ export const AddProductScreen = ({route, navigation}) => {
         console.log(err);
         Alert.alert('Status', 'Failed to add product!');
       });
-  };
+  });
 
   const showConfirmDialog = () => {
     return Alert.alert('Clear Form', 'Do you want to clear this form?', [
@@ -224,7 +220,7 @@ export const AddProductScreen = ({route, navigation}) => {
                 title={'Mã Hàng'}
                 isDisable={true}
                 setInputData={handleProductCode}
-                defaultValue={productCode}
+                textValue={productCode}
                 hint={productCode}
               />
 
@@ -232,8 +228,9 @@ export const AddProductScreen = ({route, navigation}) => {
                 name="qrCode"
                 title="Mã Vạch"
                 isDisable={true}
-                value={JSON.stringify(productID)}
+                textValue={JSON.stringify(productID)}
                 hint={JSON.stringify(productID)}
+                showBarcodeIcon={true}
               />
 
               <HorizontalInputField
@@ -241,7 +238,7 @@ export const AddProductScreen = ({route, navigation}) => {
                 title="Tên Hàng"
                 hint="Tên Hàng"
                 setInputData={handleProductName}
-                defaultValue={productName}
+                textValue={productName}
               />
 
               <HorizontalInputField
@@ -249,34 +246,37 @@ export const AddProductScreen = ({route, navigation}) => {
                 title="Thương hiệu"
                 hint="Thương hiệu"
                 setInputData={handleBrand}
-                defaultValue={brand}
+                textValue={brand}
               />
 
               <HorizontalInputField
                 name="importPrice"
                 title="Giá vốn"
                 hint="Giá vốn"
+                keyboardType="numeric"
                 isNumberKeyBoard={true}
                 setInputData={handleCapitalPrice}
-                defaultValue={capitalPrice}
+                textValue={capitalPrice}
               />
 
               <HorizontalInputField
                 name="exportPrice"
                 title="Giá bán"
                 hint="Giá bán"
+                keyboardType="numeric"
                 isNumberKeyBoard={true}
                 setInputData={handleSellPrice}
-                defaultValue={sellPrice}
+                textValue={sellPrice}
               />
 
               <HorizontalInputField
                 name="quantity"
                 title="Số lượng"
                 hint="Số lượng"
+                keyboardType="numeric"
                 isNumberKeyBoard={true}
                 setInputData={handleNumberOfProducts}
-                defaultValue={numberOfProducts}
+                textValue={numberOfProducts}
               />
             </SafeAreaView>
 
