@@ -20,6 +20,7 @@ import {
 import {AddProductScreen, ProductsScreen, ProfileScreen} from '../screens';
 import CreateOrderScreen from '../screens/CreateOrderScreen';
 import HomeScreen from '../screens/Home';
+import ReportScreen from '../screens/ReportScreen';
 import useScroll from '../utils/useScroll';
 const Tab = createBottomTabNavigator();
 
@@ -77,7 +78,7 @@ export function BottomNavigationBar() {
       />
       <Tab.Screen
         name="Income"
-        component={AddProductScreen}
+        component={ReportScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <TabBarItem

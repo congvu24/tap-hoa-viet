@@ -10,6 +10,7 @@ export const fetchCategoryList = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const categoryList = await getCategoryFromFirestore();
+      console.log(categoryList);
       thunkApi.dispatch(getCategoryList(categoryList));
     } catch (err) {
       getCategoryList([]);
