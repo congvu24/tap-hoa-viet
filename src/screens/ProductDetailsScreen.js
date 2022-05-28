@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
+import CustomToolbar from '../components/CustomToolbar';
 import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import {SliderBox} from 'react-native-image-slider-box';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
@@ -28,6 +28,7 @@ const ProductDetailsScreen = ({route}) => {
 
   // const [images, setImages] = useState([]);
   const [productInfo, setProductInfo] = useState(null);
+  const [productGroupToShow, setProductGroupToShow] = useState('');
 
   useEffect(() => {
     let unsubscribe;
@@ -72,9 +73,42 @@ const ProductDetailsScreen = ({route}) => {
     deleteProductByProductCode(uid, productCode);
   };
 
+  // handle show group of products
+  const showProductGroup = group => {
+    let text = '';
+    switch (group) {
+      case 'thoiTrang':
+        text = 'Thời trang';
+        break;
+      case 'doAn':
+        text = 'Đồ ăn';
+        break;
+      case 'thucUong':
+        text = 'Thức uống';
+        break;
+      case 'chePham':
+        text = 'Chế phẩm';
+        break;
+      case 'phuongTien':
+        text = 'Phương tiện';
+        break;
+      case 'dungCu':
+        text = 'Dụng cụ';
+        break;
+      case 'thietBi':
+        text = 'Thiết bị';
+        break;
+      case 'khac':
+        text = 'Khác';
+        break;
+    }
+
+    return text;
+  };
+
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productInfo && productInfo.productCode}
         onBackPress={() => navigate.pop()}
         onEditPress={() => navigate.push('EditProduct', {productCode})}
@@ -114,7 +148,7 @@ const ProductDetailsScreen = ({route}) => {
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
               <Text style={styles.simpleText}>
-                {productInfo && productInfo.productGroup}
+                {productInfo && showProductGroup(productInfo.productGroup)}
               </Text>
             </View>
 

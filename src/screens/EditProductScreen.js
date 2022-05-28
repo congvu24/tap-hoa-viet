@@ -5,16 +5,59 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
-import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
+import {TEXT_COLOR, PRIMARY_COLOR, DARK_GREY} from '../constants/Colors';
+import CustomToolbar from '../components/CustomToolbar';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import EditProductImagesSlide from '../components/EditProductImagesSlide';
 import {getProductToEdit} from '../services/getProduct';
 import {editProduct} from '../services/editProduct';
-import {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {Picker} from '@react-native-picker/picker';
+
+const groupOfProducts = [
+  {
+    label: 'Thời trang',
+    value: 'thoiTrang',
+  },
+
+  {
+    label: 'Đồ ăn',
+    value: 'doAn',
+  },
+
+  {
+    label: 'Thức uống',
+    value: 'thucUong',
+  },
+
+  {
+    label: 'Chế phẩm',
+    value: 'chePham',
+  },
+
+  {
+    label: 'Phương tiện',
+    value: 'phuongTien',
+  },
+
+  {
+    label: 'Dụng cụ',
+    value: 'dungCu',
+  },
+
+  {
+    label: 'Thiết bị',
+    value: 'thietBi',
+  },
+
+  {
+    label: 'Khác',
+    value: 'khac',
+  },
+];
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -94,10 +137,6 @@ const EditProductScreen = ({navigation, route}) => {
     setBarCode(text);
   };
 
-  const handleProductGroup = text => {
-    setProductGroup(text);
-  };
-
   const handleBrand = text => {
     setBrand(text);
   };
@@ -116,11 +155,11 @@ const EditProductScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productCode}
         isEdit={true}
         onBackPress={() => navigation.pop()}
-        onSavePress={handleSavePress}
+        onButtonPress={handleSavePress}
       />
       <View style={styles.contentContainer}>
         <View style={styles.imageSliderContainer}>
@@ -154,11 +193,33 @@ const EditProductScreen = ({navigation, route}) => {
 
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
-              <TextInput
-                value={productGroup}
-                style={styles.simpleText}
-                onChangeText={text => handleProductGroup(text)}
-              />
+              <SafeAreaView
+                style={[
+                  styles.pickerContainer,
+                  {flexDirection: 'row', flex: 0.63},
+                ]}
+              >
+                <Picker
+                  style={styles.picker}
+                  selectedValue={productGroup}
+                  onValueChange={(value, index) => setProductGroup(value)}
+                >
+                  <Picker.Item
+                    label={'Nhóm hàng...'}
+                    value={''}
+                    enabled={false}
+                  />
+                  {groupOfProducts.map((item, index) => {
+                    return (
+                      <Picker.Item
+                        label={item.label}
+                        value={item.value}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Picker>
+              </SafeAreaView>
             </View>
 
             <View style={styles.singleInfoItem}>
@@ -284,5 +345,19 @@ const styles = StyleSheet.create({
   primaryColor: {
     color: PRIMARY_COLOR,
     fontWeight: '600',
+  },
+  pickerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  picker: {
+    flex: 1,
+    fontSize: 16,
+    color: DARK_GREY,
+    width: 30,
+    borderColor: 'black',
   },
 });

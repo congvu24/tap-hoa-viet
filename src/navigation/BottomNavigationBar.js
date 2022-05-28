@@ -1,8 +1,16 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {
+  Animated,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 import {
   PRIMARY_COLOR,
   RED_COLOR,
@@ -13,17 +21,42 @@ import {AddProductScreen, ProductsScreen, ProfileScreen} from '../screens';
 import CreateOrderScreen from '../screens/CreateOrderScreen';
 import HomeScreen from '../screens/Home';
 import ReportScreen from '../screens/ReportScreen';
+import useScroll from '../utils/useScroll';
 const Tab = createBottomTabNavigator();
 
 export function BottomNavigationBar() {
+  const scrollOffset = useSelector(state => state.app.offset);
+
+  const interpolate = scrollOffset?.interpolate({
+    inputRange: [0, 80],
+    outputRange: [0, 120],
+    extrapolate: 'clamp',
+  });
+
+  const interpolateOpacity = scrollOffset?.interpolate({
+    inputRange: [0, 80],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+
   return (
     <Tab.Navigator
       screenOptions={{
+        tabBarVisibilityAnimationConfig: {
+          hide: {
+            animation: 'timing',
+          },
+          show: {
+            animation: 'timing',
+          },
+        },
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         tabBarStyle: {
           ...styles.rootContainer,
           ...styles.shadow,
+          opacity: scrollOffset ? interpolateOpacity : 1,
+          transform: [{translateY: scrollOffset ? interpolate : 0}],
         },
         tabBarActiveTintColor: PRIMARY_COLOR,
         tabBarInactiveTintColor: TEXT_COLOR,
