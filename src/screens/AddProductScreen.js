@@ -61,7 +61,7 @@ export const AddProductScreen = ({route, navigation}) => {
   const [capitalPrice, setCapitalPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [numberOfProducts, setNumberOfProducts] = useState('25');
-  const [productGroup, setProductGroup] = useState('');
+  const [productGroup, setProductGroup] = useState('other');
   const [showBox, setShowBox] = useState(true);
   const {productID, ...otherParam} = route.params
     ? route.params
@@ -164,8 +164,8 @@ export const AddProductScreen = ({route, navigation}) => {
     reset();
   };
 
-  const uploadProduct = useCallback(() => {
-    addProduct(getValues())
+  const uploadProduct = () => {
+    addProduct({...getValues(), productGroup})
       .then(() => {
         console.log('product added!');
         Alert.alert('Status', 'Add product successfully!');
@@ -175,7 +175,7 @@ export const AddProductScreen = ({route, navigation}) => {
         console.log(err);
         Alert.alert('Status', 'Failed to add product!');
       });
-  }, []);
+  };
 
   const showConfirmDialog = () => {
     return Alert.alert('Clear Form', 'Do you want to clear this form?', [
