@@ -8,7 +8,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
 import {TEXT_COLOR, PRIMARY_COLOR, DARK_GREY} from '../constants/Colors';
 import CustomToolbar from '../components/CustomToolbar';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
