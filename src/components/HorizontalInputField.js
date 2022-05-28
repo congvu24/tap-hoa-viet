@@ -16,9 +16,10 @@ const HorizontalInputField = ({
   showBarcodeIcon = false,
   isNumberKeyBoard = false,
   isDisable = false,
-  setInputData,
+  setInputData = value => {},
   defaultValue = '',
   control,
+  ref,
 }) => {
   const navigation = useNavigation();
 
@@ -41,9 +42,12 @@ const HorizontalInputField = ({
                   placeholderTextColor={BLACK_COLOR}
                   multiline={false}
                   editable={true}
-                  onChangeText={onChange}
+                  onChangeText={value => {
+                    onChange(value);
+                    setInputData(value);
+                  }}
                   onBlur={onBlur}
-                  // ref={ref}
+                  ref={ref}
                 />
               ) : (
                 <TextInput
@@ -53,9 +57,12 @@ const HorizontalInputField = ({
                   placeholderTextColor={BLACK_COLOR}
                   multiline={false}
                   editable={true}
-                  onChangeText={onChange}
+                  onChangeText={value => {
+                    onChange(value);
+                    setInputData(value);
+                  }}
                   onBlur={onBlur}
-                  // ref={ref}
+                  ref={ref}
                 />
               )}
 
