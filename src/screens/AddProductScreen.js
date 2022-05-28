@@ -38,7 +38,6 @@ import {resetOffset, setOffset} from '../redux/reducer/app';
 import useScroll from '../utils/useScroll';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
-import {useSelector} from 'react-redux';
 
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
