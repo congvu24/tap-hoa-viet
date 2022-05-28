@@ -39,7 +39,6 @@ const HorizontalInputField = ({
         {!isNumberKeyBoard ? (
           <TextInput
             placeholder={hint}
-            value={propsValue}
             placeholderTextColor={BLACK_COLOR}
             multiline={false}
             editable={!isDisable}
@@ -50,7 +49,6 @@ const HorizontalInputField = ({
         ) : (
           <TextInput
             placeholder={hint}
-            value={propsValue}
             placeholderTextColor={BLACK_COLOR}
             multiline={false}
             editable={!isDisable}

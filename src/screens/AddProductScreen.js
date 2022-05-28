@@ -32,8 +32,19 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
+import {useSelector} from 'react-redux';
 
 export const AddProductScreen = ({route, navigation}) => {
+  const categoryList = useSelector(state => state.category.categoryList).map(
+    item => ({
+      label: item.name,
+      key: item.categoryId,
+    }),
+  );
+  categoryList.push({
+    label: 'Khác',
+    key: 'other',
+  });
   const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
   const [barCode, setBarCode] = useState('');
   const [productName, setProductName] = useState('');
@@ -285,7 +296,7 @@ export const AddProductScreen = ({route, navigation}) => {
             <PickerWithTitle
               title="Nhóm Hàng"
               hint="Nhóm hàng..."
-              items={groupOfProducts}
+              items={categoryList}
               selectedValue={productGroup}
               setGroup={setProductGroup}
             />
