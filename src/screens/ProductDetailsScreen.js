@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
+import CustomToolbar from '../components/CustomToolbar';
 import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import {SliderBox} from 'react-native-image-slider-box';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
@@ -108,7 +108,7 @@ const ProductDetailsScreen = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productInfo && productInfo.productCode}
         onBackPress={() => navigate.pop()}
         onEditPress={() => navigate.push('EditProduct', {productCode})}

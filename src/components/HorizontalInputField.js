@@ -11,6 +11,7 @@ const HorizontalInputField = ({
   name,
   title = '',
   hint = '',
+  propsValue = '',
   showBarcodeIcon = false,
   isNumberKeyBoard = false,
   isDisable = false,

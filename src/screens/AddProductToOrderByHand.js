@@ -5,6 +5,7 @@ import {
   Text,
   SafeAreaView,
   TextInput,
+  SegmentedControlIOSBase,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -22,6 +23,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {useDispatch, useSelector} from 'react-redux';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 import {addProduct} from '../redux/reducer/order';
+import {formatMoney} from '../utils';
 
 export default function AddProductToOrderByHand() {
   const navigation = useNavigation();
@@ -35,6 +37,7 @@ export default function AddProductToOrderByHand() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [visible, setVisible] = useState(false);
   const [number, setNumber] = useState(1);
+  const [note, setNote] = useState('');
 
   const goBack = () => {
     navigation.goBack();
@@ -50,9 +53,12 @@ export default function AddProductToOrderByHand() {
   });
 
   const onAdd = () => {
-    dispatch(addProduct({...selectedProduct, number: number}));
-    setNumber(1);
-    setSelectedProduct('');
+    if (selectedProduct) {
+      dispatch(addProduct({...selectedProduct, number: number}));
+      setNumber(1);
+      setSelectedProduct('');
+      setNote('');
+    }
   };
 
   return (
@@ -91,15 +97,24 @@ export default function AddProductToOrderByHand() {
             <HorizontalInputField
               name="priceIn"
               title="Giá nhập"
-              hint={selectedProduct ? selectedProduct?.capitalPrice + 'đ' : ''}
+              hint={
+                selectedProduct
+                  ? formatMoney(selectedProduct?.capitalPrice) + 'đ'
+                  : ''
+              }
               isDisable={true}
               setInputData={() => {}}
               defaultValue={''}
             />
             <HorizontalInputField
+              isDisable={true}
               name="priceOut"
               title="Giá bán"
-              hint={selectedProduct ? selectedProduct?.sellPrice + 'đ' : ''}
+              hint={
+                selectedProduct
+                  ? formatMoney(selectedProduct?.sellPrice) + 'đ'
+                  : ''
+              }
               setInputData={() => {}}
               defaultValue={''}
             />
@@ -107,17 +122,21 @@ export default function AddProductToOrderByHand() {
               name="number"
               isNumberKeyBoard={true}
               title="Số lượng"
-              hint={String(number)}
+              propsValue={String(number)}
               setInputData={value => {
+                if (!value) return setNumber(0);
                 setNumber(parseInt(value));
               }}
               defaultValue={''}
             />
             <HorizontalInputField
+              isDisable={true}
               name="sum"
               title="Thành tiền"
               hint={
-                selectedProduct ? selectedProduct?.sellPrice * number + 'đ' : ''
+                selectedProduct
+                  ? formatMoney(selectedProduct?.sellPrice * number) + 'đ'
+                  : ''
               }
               setInputData={() => {}}
               defaultValue={''}
@@ -126,7 +145,9 @@ export default function AddProductToOrderByHand() {
               name="note"
               title="Ghi chú"
               hint=""
-              setInputData={() => {}}
+              setInputData={value => {
+                setNote(value);
+              }}
               defaultValue={''}
             />
           </SafeAreaView>
@@ -211,6 +232,7 @@ const styles = StyleSheet.create({
   selectText: {
     flex: 1,
     textAlign: 'center',
+    color: BLACK_COLOR,
   },
   selectIcon: {
     // marginLeft: 'auto',

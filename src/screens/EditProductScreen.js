@@ -10,6 +10,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import ProductDetailsHeader from '../components/ProductDetailsHeader';
 import {TEXT_COLOR, PRIMARY_COLOR, DARK_GREY} from '../constants/Colors';
+import CustomToolbar from '../components/CustomToolbar';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import EditProductImagesSlide from '../components/EditProductImagesSlide';
 import {getProductToEdit} from '../services/getProduct';
@@ -155,11 +156,11 @@ const EditProductScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productCode}
         isEdit={true}
         onBackPress={() => navigation.pop()}
-        onSavePress={handleSavePress}
+        onButtonPress={handleSavePress}
       />
       <View style={styles.contentContainer}>
         <View style={styles.imageSliderContainer}>
