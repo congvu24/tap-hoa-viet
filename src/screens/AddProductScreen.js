@@ -68,7 +68,7 @@ export const AddProductScreen = ({route, navigation}) => {
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
   const schema = yup.object().shape({
-    id: yup.string().required('Id is required'),
+    id: yup.string(),
     name: yup.string().required().max(20),
     brand: yup.string().required().max(20),
     quantity: yup.number().required(),
@@ -145,6 +145,7 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const handleBrand = text => {
     setBrand(text);
+    console.log(brand);
   };
 
   const handleCapitalPrice = text => {
