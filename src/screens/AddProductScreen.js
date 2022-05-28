@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   SafeAreaView,
+  Animated,
 } from 'react-native';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
@@ -32,11 +33,15 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
+import {useDispatch, useSelector} from 'react-redux';
+import {resetOffset, setOffset} from '../redux/reducer/app';
+import useScroll from '../utils/useScroll';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
-import {useSelector} from 'react-redux';
 
 export const AddProductScreen = ({route, navigation}) => {
+  const {ref, onScroll} = useScroll();
+
   const categoryList = useSelector(state => state.category.categoryList).map(
     item => ({
       label: item.name,
@@ -206,7 +211,7 @@ export const AddProductScreen = ({route, navigation}) => {
           onButtonPress={() => uploadProduct()}
           onBackPress={() => navigation.pop()}
         />
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
           <TouchableOpacity
             style={styles.uploadButton}
             onPress={() => chooseFile('photo')}
