@@ -11,10 +11,11 @@ import ProductsHeader from '../components/ProductsHeader';
 import ProductItem from '../components/ProductItem';
 import {useNavigation} from '@react-navigation/native';
 import {getProduct} from '../services/getProduct';
+import auth from '@react-native-firebase/auth';
+import {useSelector} from 'react-redux';
 
 const sampleImg =
   'https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
-import {firebase} from '@react-native-firebase/firestore';
 
 export const ProductsScreen = () => {
   const navigation = useNavigation();
@@ -22,6 +23,9 @@ export const ProductsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
+
+  // search string
+  const [searchString, setSearchString] = useState('');
 
   useEffect(() => {
     handleData();
@@ -38,21 +42,28 @@ export const ProductsScreen = () => {
   const handleNumberOfProducts = data => setNumberOfProducts(data);
 
   const handleData = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    let uid = auth().currentUser?.uid;
+
+    if (uid) {
       getProduct(
-        user.uid,
+        uid,
         handleProducts,
         handleNumberOfProducts,
         handleInventories,
       );
-    });
+    }
   };
 
   const goToAddProduct = () => {
     navigation.push('AddProduct');
   };
 
-  
+  // search string method
+  const handleChangeSearchString = text => {
+    setSearchString(text);
+  };
+
+  console.log('search string: ', searchString);
 
   return (
     <View style={styles.screenContainer}>
@@ -61,6 +72,7 @@ export const ProductsScreen = () => {
         numberOfProducts={products && numberOfProducts}
         inventoryNumber={numberOfInventories && numberOfInventories}
         goToAddProduct={goToAddProduct}
+        changeSearchString={handleChangeSearchString}
       />
       <ScrollView
         style={styles.itemsContainer}
@@ -69,26 +81,36 @@ export const ProductsScreen = () => {
         }
       >
         {products &&
-          products.map((item, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.push('ProductDetails', {
-                    productCode: item._data.productCode,
-                  })
-                }
-                key={index}
-              >
-                <ProductItem
-                  imgSrc={sampleImg}
-                  productName={item._data.productName}
-                  productId={item._data.productCode}
-                  price={item._data.sellPrice}
-                  numberOfInventories={item._data.numberOfProducts}
-                />
-              </TouchableOpacity>
-            );
-          })}
+          products
+            .filter((item, index) => {
+              if (searchString === '') {
+                return true;
+              } else {
+                return item._data.productName
+                  .toLowerCase()
+                  .includes(searchString.toLowerCase());
+              }
+            })
+            .map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.push('ProductDetails', {
+                      productCode: item._data.productCode,
+                    })
+                  }
+                  key={index}
+                >
+                  <ProductItem
+                    imgSrc={sampleImg}
+                    productName={item._data.productName}
+                    productId={item._data.productCode}
+                    price={item._data.sellPrice}
+                    numberOfInventories={item._data.numberOfProducts}
+                  />
+                </TouchableOpacity>
+              );
+            })}
 
         <View style={{paddingBottom: 75}}></View>
       </ScrollView>

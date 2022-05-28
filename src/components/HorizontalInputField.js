@@ -1,12 +1,17 @@
 import {Text, StyleSheet, View, Image, SafeAreaView} from 'react-native';
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity} from 'react-native';
-import {BLACK_COLOR, GRAY_COLOR, MATERIAL_GREY_COLOR} from '../constants/Colors';
+import {
+  BLACK_COLOR,
+  GRAY_COLOR,
+  MATERIAL_GREY_COLOR,
+} from '../constants/Colors';
 import {useController} from 'react-hook-form';
 const HorizontalInputField = ({
   name,
   title = '',
   hint = '',
+  propsValue = '',
   showBarcodeIcon = false,
   isNumberKeyBoard = false,
   isDisable = false,
@@ -20,6 +25,12 @@ const HorizontalInputField = ({
     name,
     defaultValue,
   });
+
+  const onChangeText = value => {
+    onChange(value);
+    setInputData(value);
+  };
+
   return (
     <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>{title}</Text>
@@ -31,7 +42,7 @@ const HorizontalInputField = ({
             placeholderTextColor={BLACK_COLOR}
             multiline={false}
             editable={!isDisable}
-            onChangeText={onChange}
+            onChangeText={onChangeText}
             onBlur={onBlur}
             ref={ref}
           />
@@ -42,7 +53,7 @@ const HorizontalInputField = ({
             multiline={false}
             editable={!isDisable}
             keyboardType="numeric"
-            onChangeText={onChange}
+            onChangeText={onChangeText}
             onBlur={onBlur}
             ref={ref}
           />

@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
+import CustomToolbar from '../components/CustomToolbar';
 import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import {SliderBox} from 'react-native-image-slider-box';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getProductByProductCode} from '../services/getProduct';
 import {firebase} from '@react-native-firebase/auth';
 import {deleteProductByProductCode} from '../services/deleteProduct';
+import auth from '@react-native-firebase/auth';
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -27,17 +28,17 @@ const ProductDetailsScreen = ({route}) => {
 
   // const [images, setImages] = useState([]);
   const [productInfo, setProductInfo] = useState(null);
+  const [productGroupToShow, setProductGroupToShow] = useState('');
 
   useEffect(() => {
     let unsubscribe;
+    let uid = auth().currentUser?.uid;
 
-    firebase.auth().onAuthStateChanged(user => {
-      unsubscribe = fetchData(user.uid);
-      console.log(unsubscribe);
-    });
+    if (uid) {
+      unsubscribe = fetchData(uid);
+    }
 
     return () => {
-      console.log('UNMOUNT');
       unsubscribe();
     };
   }, []);
@@ -66,15 +67,48 @@ const ProductDetailsScreen = ({route}) => {
 
   // handle delete
   const handleDelete = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      navigate.pop();
-      deleteProductByProductCode(user.uid, productCode);
-    });
+    let uid = auth().currentUser?.uid;
+
+    navigate.pop();
+    deleteProductByProductCode(uid, productCode);
+  };
+
+  // handle show group of products
+  const showProductGroup = group => {
+    let text = '';
+    switch (group) {
+      case 'thoiTrang':
+        text = 'Thời trang';
+        break;
+      case 'doAn':
+        text = 'Đồ ăn';
+        break;
+      case 'thucUong':
+        text = 'Thức uống';
+        break;
+      case 'chePham':
+        text = 'Chế phẩm';
+        break;
+      case 'phuongTien':
+        text = 'Phương tiện';
+        break;
+      case 'dungCu':
+        text = 'Dụng cụ';
+        break;
+      case 'thietBi':
+        text = 'Thiết bị';
+        break;
+      case 'khac':
+        text = 'Khác';
+        break;
+    }
+
+    return text;
   };
 
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productInfo && productInfo.productCode}
         onBackPress={() => navigate.pop()}
         onEditPress={() => navigate.push('EditProduct', {productCode})}
@@ -114,7 +148,7 @@ const ProductDetailsScreen = ({route}) => {
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
               <Text style={styles.simpleText}>
-                {productInfo && productInfo.productGroup}
+                {productInfo && showProductGroup(productInfo.productGroup)}
               </Text>
             </View>
 

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   SafeAreaView,
+  Animated,
 } from 'react-native';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
@@ -32,21 +33,39 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import DefaultImage from '../images/ic_upload.png';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerWithTitle from '../components/DateTimePickerWithTitle';
+import {useDispatch, useSelector} from 'react-redux';
+import {resetOffset, setOffset} from '../redux/reducer/app';
+import useScroll from '../utils/useScroll';
+import uuid from 'react-native-uuid';
+import CustomToolbar from '../components/CustomToolbar';
 
 export const AddProductScreen = ({route, navigation}) => {
-  const [userId, setUserId] = useState('bh45z18i7BbgTaIQJDSH7CCvgSP2');
+  const {ref, onScroll} = useScroll();
+
+  const categoryList = useSelector(state => state.category.categoryList).map(
+    item => ({
+      label: item.name,
+      key: item.categoryId,
+    }),
+  );
+  categoryList.push({
+    label: 'Khác',
+    key: 'other',
+  });
+
+  const userId = useSelector(state => state.user.uid);
   const [barCode, setBarCode] = useState('');
   const [productName, setProductName] = useState('');
   const [brand, setBrand] = useState('');
   const [capitalPrice, setCapitalPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
-  const [numberOfProducts, setNumberOfProducts] = useState('');
-  const [productGroup, setProductGroup] = useState('thoiTrang');
+  const [numberOfProducts, setNumberOfProducts] = useState('25');
+  const [productGroup, setProductGroup] = useState('');
   const [showBox, setShowBox] = useState(true);
   const {productID, ...otherParam} = route.params
     ? route.params
     : {productID: 'null'};
-  const [productCode, setproductCode] = useState(nanoid(11));
+  const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
   const schema = yup.object().shape({
     id: yup.string().required('Id is required'),
     name: yup.string().required().max(20),
@@ -171,35 +190,13 @@ export const AddProductScreen = ({route, navigation}) => {
       });
   };
 
-  const deleteProduct = () => {
-    deleteProduct(
-      userId,
-      productCode,
-      barCode,
-      productName,
-      brand,
-      capitalPrice,
-      sellPrice,
-      numberOfProducts,
-      productGroup,
-    )
-      .then(() => {
-        console.log('product deleted!');
-        Alert.alert('Status', 'Delete product successfully!');
-      })
-      .catch(err => {
-        console.log(err);
-        Alert.alert('Status', 'Failed to delete product!');
-      });
-  };
-
   const showConfirmDialog = () => {
-    return Alert.alert('Delete Product', 'Do you want to delete this item?', [
+    return Alert.alert('Clear Form', 'Do you want to clear this form?', [
       {
         text: 'Yes',
         onPress: () => {
           setShowBox(false);
-          deleteProduct();
+          resetTextFields();
         },
       },
       {
@@ -211,7 +208,14 @@ export const AddProductScreen = ({route, navigation}) => {
   return (
     <FormProvider {...formMethod}>
       <KeyboardAvoidingView style={[styles.container]}>
-        <ScrollView style={styles.scrollView}>
+        <CustomToolbar
+          productCode={'Add Product'}
+          isEdit={true}
+          buttonText="Add"
+          onButtonPress={() => uploadProduct()}
+          onBackPress={() => navigation.pop()}
+        />
+        <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
           <TouchableOpacity
             style={styles.uploadButton}
             onPress={() => chooseFile('photo')}
@@ -223,8 +227,10 @@ export const AddProductScreen = ({route, navigation}) => {
               <HorizontalInputField
                 name="id"
                 title={'Mã Hàng'}
+                isDisable={true}
                 setInputData={handleProductCode}
                 defaultValue={productCode}
+                hint={productCode}
               />
 
               <HorizontalInputField
@@ -280,12 +286,11 @@ export const AddProductScreen = ({route, navigation}) => {
             </SafeAreaView>
 
             <DateTimePickerWithTitle title="Ngày nhập kho" />
-            <DateTimePickerWithTitle title="Ngày xuất kho" />
 
             <PickerWithTitle
               title="Nhóm Hàng"
               hint="Nhóm hàng..."
-              items={groupOfProducts}
+              items={categoryList}
               selectedValue={productGroup}
               setGroup={setProductGroup}
             />
@@ -297,7 +302,7 @@ export const AddProductScreen = ({route, navigation}) => {
                 onPress={onSubmitKey}
               />
               <Button
-                title={'Delete'}
+                title={'Clear'}
                 buttonStyle={styles.deleteBtn}
                 titleStyle={styles.btnTitle}
                 onPress={showConfirmDialog}
