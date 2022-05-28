@@ -112,7 +112,7 @@ export default function AddProductToOrder() {
               },
               style: 'cancel',
             },
-            {text: 'Thêm', onPress: () => console.log('OK Pressed')},
+            {text: 'Thêm', onPress: () => navigation.replace('AddProduct')},
           ],
         );
       }

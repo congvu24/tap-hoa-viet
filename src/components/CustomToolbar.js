@@ -2,12 +2,14 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const ProductDetailsHeader = ({
+//CustomToolbar
+const CustomToolbar = ({
   productCode = '',
+  buttonText = 'Save',
   isEdit = false,
   onBackPress,
   onEditPress,
-  onSavePress,
+  onButtonPress,
   onDeletePress,
 }) => {
   return (
@@ -38,8 +40,8 @@ const ProductDetailsHeader = ({
 
       {isEdit && (
         <View style={styles.rightSection}>
-          <Text onPress={onSavePress} style={styles.saveText}>
-            Save
+          <Text onPress={onButtonPress} style={styles.saveText}>
+            {buttonText}
           </Text>
         </View>
       )}
@@ -47,7 +49,7 @@ const ProductDetailsHeader = ({
   );
 };
 
-export default ProductDetailsHeader;
+export default CustomToolbar;
 
 const styles = StyleSheet.create({
   container: {

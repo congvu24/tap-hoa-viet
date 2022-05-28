@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import ProductDetailsHeader from '../components/ProductDetailsHeader';
+import CustomToolbar from '../components/CustomToolbar';
 import {TEXT_COLOR, PRIMARY_COLOR} from '../constants/Colors';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import EditProductImagesSlide from '../components/EditProductImagesSlide';
@@ -116,11 +116,11 @@ const EditProductScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ProductDetailsHeader
+      <CustomToolbar
         productCode={productCode}
         isEdit={true}
         onBackPress={() => navigation.pop()}
-        onSavePress={handleSavePress}
+        onButtonPress={handleSavePress}
       />
       <View style={styles.contentContainer}>
         <View style={styles.imageSliderContainer}>
