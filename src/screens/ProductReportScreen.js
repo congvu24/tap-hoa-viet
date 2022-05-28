@@ -27,17 +27,13 @@ import {getProduct} from '../services/getProduct';
 export default function ProductReportScree() {
   const dispatch = useDispatch();
 
+  const categoryList = useSelector(state => state.category.categoryList);
   const productList = useSelector(state => state.product.productList);
-  const numberOfProducts = useSelector(
-    state => Object.keys(state.order.products).length,
-  );
-  const [products, setProducts] = useState(null);
-  const [categoryList, setCategoryList] = useState(null);
+  const [test, setTest] = useState(null);
+  // const [categoryList, setCategoryList] = useState(null);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProduct, setNumberOfProduct] = useState(0);
-  const handleProducts = data => setProducts(data);
-  const handleInventories = data => setNumberOfInventories(data);
-  const handleNumberOfProducts = data => setNumberOfProduct(data);
+  
 
   const [filePath, setFilePath] = useState(
     Image.resolveAssetSource(DefaultImage).uri,
@@ -48,26 +44,25 @@ export default function ProductReportScree() {
   }, []);
 
   const handleData = () => {
-    // firebase.auth().onAuthStateChanged(user => {
-    //   getProduct(
-    //     user.uid,
-    //     handleProducts,
-    //     handleNumberOfProducts,
-    //     handleInventories,
-    //   );
-    // });
-    setCategoryList(
+    setTest(
       _.chain(productList)
-        .groupBy("productGroup")
-        .map((value, key) => {
-          console.log(value, key)
-          return ({ group: key, products: value })
-        })
+      // Group the elements of Array based on `color` property
+      .groupBy("productGroup")
+      // `key` is group's name (color), `value` is the array of objects
+      .map((value,key) => {
+        console.log("thu ",typeof(value));
+        return {group: key, products: value}
+      })
+      .value()
     );
     
   };
-
-  console.log(categoryList);
+  
+    test && console.log("test nef: ", test[0].products);
+    test && console.log("test chieu dai: ", test.length);
+  // console.log(categoryList);
+  // console.log("products nef: ",productList);
+  
   
 
   return (
@@ -86,11 +81,11 @@ export default function ProductReportScree() {
             paddingBottom: 50,
           }}
           numColumns={2}
-          data={products}
+          data={categoryList}
           renderItem={({item}) => {
             return <ProductsGroupItem
-              imgSrc = {filePath}
-              productGroup = "{item._data.productGroup}"
+              imgSrc = {item.image}
+              productGroup = {item.name}
               numberOfInventories = '13'
             />;
           }}

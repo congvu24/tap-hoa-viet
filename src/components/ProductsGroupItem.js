@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     
     card: {
       height: 205,
-      // backgroundColor: '#4fb1de',
       width,
       marginHorizontal: 10,
       borderRadius: 10,
@@ -61,7 +60,6 @@ const styles = StyleSheet.create({
     image: {
       width: 100,
       height: 100,
-      color: '#fff',
     },
 
     inventoryContainer: {
@@ -71,7 +69,7 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
       marginTop: 15,
       borderRadius: 30,
-      backgroundColor: '#2e6781',
+      backgroundColor: '#2e6991',
       height: 60,
       width: 60,
     },
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
       fontSize: 18, 
       marginTop: 10,
       color: '#fff',
-      autoCapitalize: false,
+      alignSelf: 'center',
     },
 
     textNumber: {
