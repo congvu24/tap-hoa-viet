@@ -15,3 +15,6 @@ export const formatK = value => {
   }
   return value;
 };
+export function getYesterdayDate(date = new Date()) {
+  return new Date(date.getTime() - 24 * 60 * 60 * 1000);
+}
