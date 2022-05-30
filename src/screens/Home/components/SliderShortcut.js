@@ -1,12 +1,8 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  BLACK_COLOR,
-  GRAY_COLOR,
-  TEXT_COLOR,
-  WHITE_COLOR,
-} from '../../../constants/Colors';
+import {BLACK_COLOR, TEXT_COLOR, WHITE_COLOR} from '../../../constants/Colors';
 
 const SLIDER_ITEMS = [
   {
@@ -24,6 +20,7 @@ const SLIDER_ITEMS = [
   {
     icon: 'history',
     text: 'History',
+    route: 'OrderHistory',
   },
 ];
 export function SliderShortcut() {
@@ -44,16 +41,21 @@ export function SliderShortcut() {
   );
 }
 
-const Shortcut = ({item, style, ...rest}) => (
-  <TouchableOpacity
-    key={item.text}
-    style={[styles.shortcut, {...style}]}
-    {...rest}
-  >
-    <Icon name={item.icon} size={30} style={styles.shortcutIcon} />
-    <Text style={styles.shortcutText}>{item.text}</Text>
-  </TouchableOpacity>
-);
+const Shortcut = ({item, style, ...rest}) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      key={item.text}
+      style={[styles.shortcut, {...style}]}
+      onPress={() => item.route && navigation.navigate(item.route)}
+      {...rest}
+    >
+      <Icon name={item.icon} size={30} style={styles.shortcutIcon} />
+      <Text style={styles.shortcutText}>{item.text}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   shortcutContainer: {

@@ -8,6 +8,7 @@ import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
 import {
   AddProductScreen,
   LoginScreen,
+  OrderHistoryScreen,
   ProductsScreen,
   RegisterScreen,
 } from '../screens';
@@ -44,6 +45,7 @@ export default function AppRoute() {
               animation: 'slide_from_left',
             }}
           />
+          <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Homepage" component={HomePageScreen} />
           <Stack.Screen name="Products" component={ProductsScreen} />
