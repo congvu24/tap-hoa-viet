@@ -2,39 +2,47 @@ import firestore from '@react-native-firebase/firestore';
 
 export const editProduct = (
   productName,
-  barCode,
   brand,
   productGroup,
   sellPrice,
   capitalPrice,
   numberOfProducts,
   userId,
-  productCode,
+  qrCode,
 ) => {
-  return firestore()
-    .collection('ProductCreators')
-    .doc(userId)
-    .collection('ProductsList')
-    .where('productCode', '==', productCode)
+  firestore()
+    .collection('Category')
+    .where('name', '==', productGroup)
     .get()
     .then(snapShot => {
       return snapShot.docs[0].id;
     })
-    .then(id => {
+    .then(productGroupId => {
       firestore()
         .collection('ProductCreators')
         .doc(userId)
         .collection('ProductsList')
-        .doc(id)
-        .update({
-          barCode,
-          brand,
-          capitalPrice: Number(capitalPrice),
-          numberOfProducts: Number(numberOfProducts),
-          productCode,
-          productGroup,
-          productName,
-          sellPrice: Number(sellPrice),
+        .where('qrCode', '==', qrCode)
+        .get()
+        .then(snapShot => {
+          return snapShot.docs[0].id;
+        })
+        .then(id => {
+          firestore()
+            .collection('ProductCreators')
+            .doc(userId)
+            .collection('ProductsList')
+            .doc(id)
+            .update({
+              brand,
+              capitalPrice: Number(capitalPrice),
+              numberOfProducts: Number(numberOfProducts),
+              qrCode,
+              productGroup: productGroupId,
+              productName,
+              sellPrice: Number(sellPrice),
+              quantity: numberOfProducts,
+            });
         });
     });
 };

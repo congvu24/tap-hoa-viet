@@ -23,12 +23,14 @@ export const deleteProduct = (
   });
 };
 
-export const deleteProductByProductCode = (userId, productCode) => {
+const deleteProductByQRCode = (userId, qrCode) => {
+  // console.log('call delete');
+
   return firestore()
     .collection('ProductCreators')
     .doc(userId)
     .collection('ProductsList')
-    .where('productCode', '==', productCode)
+    .where('qrCode', '==', qrCode)
     .get()
     .then(snapShot => {
       return snapShot.docs[0].id;
@@ -42,3 +44,5 @@ export const deleteProductByProductCode = (userId, productCode) => {
         .delete();
     });
 };
+
+export default {deleteProductByQRCode};

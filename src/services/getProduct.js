@@ -39,12 +39,12 @@ export const getProduct = (
     });
 };
 
-export const getProductByProductCode = (userId, productCode, setData) => {
+export const getProductByQRCode = (userId, qrCode, setData) => {
   return firestore()
     .collection('ProductCreators')
     .doc(userId)
     .collection('ProductsList')
-    .where('productCode', '==', productCode)
+    .where('qrCode', '==', qrCode)
     .onSnapshot(snapShot => {
       if (snapShot) {
         setData(snapShot.docs[0].data());
@@ -52,16 +52,24 @@ export const getProductByProductCode = (userId, productCode, setData) => {
     });
 };
 
-export const getProductToEdit = async (userId, productCode) => {
+export const getProductToEdit = async (userId, qrCode) => {
   const product = await firestore()
     .collection('ProductCreators')
     .doc(userId)
     .collection('ProductsList')
-    .where('productCode', '==', productCode)
+    .where('qrCode', '==', qrCode)
     .get()
     .then(snapShot => snapShot.docs[0].data());
 
   return product;
+};
+
+export const getProductGroup = groupCode => {
+  return firestore().collection('Category').doc(groupCode).get();
+};
+
+export const getAllProductGroups = () => {
+  return firestore().collection('Category').get();
 };
 
 export const getProductByBarCode = async barcode => {

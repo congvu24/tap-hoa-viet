@@ -63,7 +63,7 @@ export const ProductsScreen = () => {
     setSearchString(text);
   };
 
-  console.log('search string: ', searchString);
+  console.log('products: ', products);
 
   return (
     <View style={styles.screenContainer}>
@@ -96,7 +96,7 @@ export const ProductsScreen = () => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.push('ProductDetails', {
-                      productCode: item._data.productCode,
+                      qrCode: item._data.qrCode,
                     })
                   }
                   key={index}
