@@ -34,6 +34,7 @@ const ProductsHeader = ({
           <TextInput
             style={styles.findTextInput}
             onChangeText={text => changeSearchString(text)}
+            autoFocus={true}
           />
           <Icon
             name="search-outline"

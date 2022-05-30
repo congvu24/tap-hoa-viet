@@ -14,7 +14,7 @@ import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import {useNavigation} from '@react-navigation/native';
 import {getProductByQRCode, getProductGroup} from '../services/getProduct';
 import {firebase} from '@react-native-firebase/auth';
-import {deleteProductByQRcode} from '../services/deleteProduct';
+import deleteFunctions from '../services/deleteProduct';
 import auth from '@react-native-firebase/auth';
 
 const images = [
@@ -80,7 +80,8 @@ const ProductDetailsScreen = ({route}) => {
     let uid = auth().currentUser?.uid;
 
     navigate.pop();
-    deleteProductByQRcode(uid, qrCode);
+    // deleteFunctions.deleteProductByQRcode(uid, qrCode);
+    deleteFunctions.deleteProductByQRCode(uid, qrCode);
   };
 
   console.log(productInfo);

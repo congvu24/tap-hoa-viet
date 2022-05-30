@@ -23,24 +23,26 @@ export const deleteProduct = (
   });
 };
 
-export const deleteProductByQRCode = (userId, qrCode) => {
-  console.log('call delete');
+const deleteProductByQRCode = (userId, qrCode) => {
+  // console.log('call delete');
 
-  // return firestore()
-  //   .collection('ProductCreators')
-  //   .doc(userId)
-  //   .collection('ProductsList')
-  //   .where('qrCode', '==', qrCode)
-  //   .get()
-  //   .then(snapShot => {
-  //     return snapShot.docs[0].id;
-  //   })
-  //   .then(id => {
-  //     firestore()
-  //       .collection('ProductCreators')
-  //       .doc(userId)
-  //       .collection('ProductsList')
-  //       .doc(id)
-  //       .delete();
-  //   });
+  return firestore()
+    .collection('ProductCreators')
+    .doc(userId)
+    .collection('ProductsList')
+    .where('qrCode', '==', qrCode)
+    .get()
+    .then(snapShot => {
+      return snapShot.docs[0].id;
+    })
+    .then(id => {
+      firestore()
+        .collection('ProductCreators')
+        .doc(userId)
+        .collection('ProductsList')
+        .doc(id)
+        .delete();
+    });
 };
+
+export default {deleteProductByQRCode};
