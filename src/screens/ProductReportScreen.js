@@ -21,12 +21,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 import DefaultImage from '../images/ic_inventory.png';
 import {getProduct} from '../services/getProduct';
+import useScroll from '../utils/useScroll';
+
 
 
 
 export default function ProductReportScree() {
   const dispatch = useDispatch();
 
+  const {ref, onScroll} = useScroll();
   const categoryList = useSelector(state => state.category.categoryList);
   const productList = useSelector(state => state.product.productList);
   const [test, setTest] = useState(null);
@@ -74,6 +77,8 @@ export default function ProductReportScree() {
           </Text>
         </View>
         <FlatList
+          ref={ref}
+          onScroll={onScroll}
           columnWrapperStyle={{justifyContent: 'space-between'}}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
