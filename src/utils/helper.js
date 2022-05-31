@@ -15,3 +15,13 @@ export const formatK = value => {
   }
   return value;
 };
+export const parseDate = timeStamp => {
+  const date = new Date(timeStamp);
+  return (
+    date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+  );
+};
+export const parseMonth = timeStamp => {
+  const date = new Date(timeStamp);
+  return date.getMonth() + 1;
+};
