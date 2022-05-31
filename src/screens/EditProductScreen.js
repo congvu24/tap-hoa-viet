@@ -12,52 +12,14 @@ import {TEXT_COLOR, PRIMARY_COLOR, DARK_GREY} from '../constants/Colors';
 import CustomToolbar from '../components/CustomToolbar';
 import ExtendedProductInfoItem from '../components/ExtendedProductInfoItem';
 import EditProductImagesSlide from '../components/EditProductImagesSlide';
-import {getProductToEdit} from '../services/getProduct';
+import {
+  getAllProductGroups,
+  getProductGroup,
+  getProductToEdit,
+} from '../services/getProduct';
 import {editProduct} from '../services/editProduct';
 import auth from '@react-native-firebase/auth';
 import {Picker} from '@react-native-picker/picker';
-
-const groupOfProducts = [
-  {
-    label: 'Thời trang',
-    value: 'thoiTrang',
-  },
-
-  {
-    label: 'Đồ ăn',
-    value: 'doAn',
-  },
-
-  {
-    label: 'Thức uống',
-    value: 'thucUong',
-  },
-
-  {
-    label: 'Chế phẩm',
-    value: 'chePham',
-  },
-
-  {
-    label: 'Phương tiện',
-    value: 'phuongTien',
-  },
-
-  {
-    label: 'Dụng cụ',
-    value: 'dungCu',
-  },
-
-  {
-    label: 'Thiết bị',
-    value: 'thietBi',
-  },
-
-  {
-    label: 'Khác',
-    value: 'khac',
-  },
-];
 
 const images = [
   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
@@ -68,25 +30,28 @@ const images = [
 
 const EditProductScreen = ({navigation, route}) => {
   // passed parameters
-  const {productCode} = route.params;
+  const {qrCode} = route.params;
 
   // use state
   const [productName, setProductName] = useState('');
-  const [barCode, setBarCode] = useState('');
   const [productGroup, setProductGroup] = useState('');
   const [brand, setBrand] = useState('');
   const [capitalPrice, setCapitalPrice] = useState('');
   const [sellPrice, setSellPrice] = useState('');
   const [numberOfProducts, setNumberOfProducts] = useState('');
+  const [productGroupsInfo, setProductGroupsInfo] = useState(null);
 
   // use effect
   useEffect(() => {
+    getAllProductGroups().then(res => {
+      setProductGroupsInfo(res.docs);
+    });
+
     let uid = auth().currentUser?.uid;
 
     if (uid) {
-      getProductToEdit(uid, productCode).then(data => {
+      getProductToEdit(uid, qrCode).then(data => {
         setProductName(data.productName);
-        setBarCode(data.barCode);
         setProductGroup(data.productGroup);
         setBrand(data.brand);
         setCapitalPrice(data.capitalPrice.toString());
@@ -96,20 +61,31 @@ const EditProductScreen = ({navigation, route}) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (productGroup !== '') {
+      getProductGroup(productGroup)
+        .then(res => {
+          if (res) {
+            setProductGroup(res.data().name);
+          }
+        })
+        .catch(err => {});
+    }
+  }, [productGroup]);
+
   // method save
   const handleSave = () => {
     let uid = auth().currentUser?.uid;
 
     editProduct(
       productName,
-      barCode,
       brand,
       productGroup,
       sellPrice,
       capitalPrice,
       numberOfProducts,
       uid,
-      productCode,
+      qrCode,
     );
 
     navigation.pop();
@@ -133,10 +109,6 @@ const EditProductScreen = ({navigation, route}) => {
     setProductName(text);
   };
 
-  const handleBarCode = text => {
-    setBarCode(text);
-  };
-
   const handleBrand = text => {
     setBrand(text);
   };
@@ -153,10 +125,12 @@ const EditProductScreen = ({navigation, route}) => {
     setNumberOfProducts(text);
   };
 
+  console.log('current group: ', productGroup);
+
   return (
     <View style={styles.container}>
       <CustomToolbar
-        productCode={productCode}
+        productCode={qrCode}
         isEdit={true}
         onBackPress={() => navigation.pop()}
         onButtonPress={handleSavePress}
@@ -178,17 +152,8 @@ const EditProductScreen = ({navigation, route}) => {
             <View style={styles.singleInfoItem}>
               <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
               <TextInput editable={false} style={styles.simpleText}>
-                {productCode}
+                {qrCode}
               </TextInput>
-            </View>
-
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Mã vạch</Text>
-              <TextInput
-                value={barCode}
-                style={styles.simpleText}
-                onChangeText={text => handleBarCode(text)}
-              />
             </View>
 
             <View style={styles.singleInfoItem}>
@@ -209,7 +174,7 @@ const EditProductScreen = ({navigation, route}) => {
                     value={''}
                     enabled={false}
                   />
-                  {groupOfProducts.map((item, index) => {
+                  {/* {groupOfProducts.map((item, index) => {
                     return (
                       <Picker.Item
                         label={item.label}
@@ -217,7 +182,17 @@ const EditProductScreen = ({navigation, route}) => {
                         key={index}
                       />
                     );
-                  })}
+                  })} */}
+                  {productGroupsInfo &&
+                    productGroupsInfo.map((item, index) => {
+                      return (
+                        <Picker.Item
+                          label={item._data.name}
+                          value={item._data.name}
+                          key={index}
+                        />
+                      );
+                    })}
                 </Picker>
               </SafeAreaView>
             </View>

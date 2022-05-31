@@ -6,7 +6,8 @@ import {
   GRAY_COLOR,
   MATERIAL_GREY_COLOR,
 } from '../constants/Colors';
-import {useController} from 'react-hook-form';
+import {Controller, useController} from 'react-hook-form';
+import {useNavigation} from '@react-navigation/native';
 const HorizontalInputField = ({
   name,
   title = '',
@@ -17,51 +18,61 @@ const HorizontalInputField = ({
   isDisable = false,
   setInputData = value => {},
   defaultValue = '',
+  control,
+  ref,
 }) => {
-  const {
-    field: {onChange, onBlur, value, ref},
-    fieldState: {invalid, error},
-  } = useController({
-    name,
-    defaultValue,
-  });
-
-  const onChangeText = value => {
-    onChange(value);
-    setInputData(value);
-  };
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={[styles.container]}>
-      <Text style={styles.title}>{title}</Text>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
+          <>
+            <Text style={styles.title}>{title}</Text>
+            <View style={styles.textInput}>
+              {!isNumberKeyBoard ? (
+                <TextInput
+                  placeholder={hint}
+                  value={value}
+                  placeholderTextColor={BLACK_COLOR}
+                  multiline={false}
+                  editable={true}
+                  onChangeText={value => {
+                    onChange(value);
+                    setInputData(value);
+                  }}
+                  onBlur={onBlur}
+                  ref={ref}
+                />
+              ) : (
+                <TextInput
+                  placeholder={hint}
+                  value={value}
+                  keyboardType="numeric"
+                  placeholderTextColor={BLACK_COLOR}
+                  multiline={false}
+                  editable={true}
+                  onChangeText={value => {
+                    onChange(value);
+                    setInputData(value);
+                  }}
+                  onBlur={onBlur}
+                  ref={ref}
+                />
+              )}
 
-      <View style={styles.textInput}>
-        {!isNumberKeyBoard ? (
-          <TextInput
-            placeholder={hint}
-            placeholderTextColor={BLACK_COLOR}
-            multiline={false}
-            editable={!isDisable}
-            onChangeText={onChangeText}
-            onBlur={onBlur}
-            ref={ref}
-          />
-        ) : (
-          <TextInput
-            placeholder={hint}
-            placeholderTextColor={BLACK_COLOR}
-            multiline={false}
-            editable={!isDisable}
-            keyboardType="numeric"
-            onChangeText={onChangeText}
-            onBlur={onBlur}
-            ref={ref}
-          />
+              <Text style={error ? styles.error : styles.invisible}>
+                Vui lòng nhập đúng thông tin
+              </Text>
+            </View>
+          </>
         )}
-        <Text style={error ? styles.error : styles.invisible}>
-          Vui lòng nhập đúng thông tin
-        </Text>
-      </View>
+      />
     </SafeAreaView>
   );
 };
@@ -99,14 +110,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginEnd: 20,
   },
-  barcodeButton: {
-    width: 16,
-    height: 16,
-  },
+  barcodeIcon: {},
   error: {
     color: 'red',
   },
   invisible: {
     display: 'none',
+  },
+  inputField: {},
+  parent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

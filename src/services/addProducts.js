@@ -1,28 +1,18 @@
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
-export const addProduct = (
-  userId,
-  productCode,
-  barCode,
-  productName,
-  brand,
-  capitalPrice,
-  sellPrice,
-  numberOfProducts,
-  productGroup,
-) => {
+export const addProduct = data => {
+  console.log(data);
+  const uid = auth().currentUser.uid;
+
   return firestore()
     .collection('ProductCreators')
-    .doc(userId)
+    .doc(uid)
     .collection('ProductsList')
     .add({
-      productCode,
-      barCode,
-      productName,
-      brand,
-      capitalPrice: Number(capitalPrice),
-      sellPrice: Number(sellPrice),
-      numberOfProducts: Number(numberOfProducts),
-      productGroup,
+      ...data,
+      capitalPrice: Number(data.capitalPrice),
+      sellPrice: Number(data.sellPrice),
+      numberOfProducts: Number(data.quantity),
     });
 };

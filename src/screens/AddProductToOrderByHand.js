@@ -7,7 +7,7 @@ import {
   TextInput,
   SegmentedControlIOSBase,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   BACKGROUND_COLOR,
   BLACK_COLOR,
@@ -28,6 +28,8 @@ import {formatMoney} from '../utils';
 export default function AddProductToOrderByHand() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const numberRef = useRef();
 
   const productList = useSelector(state => state.product.productList);
   const numberOfProducts = useSelector(
@@ -58,6 +60,7 @@ export default function AddProductToOrderByHand() {
       setNumber(1);
       setSelectedProduct('');
       setNote('');
+      numberRef.current?.clear();
     }
   };
 
@@ -122,12 +125,12 @@ export default function AddProductToOrderByHand() {
               name="number"
               isNumberKeyBoard={true}
               title="Số lượng"
-              propsValue={String(number)}
+              ref={numberRef}
+              defaultValue={String(number)}
               setInputData={value => {
                 if (!value) return setNumber(0);
                 setNumber(parseInt(value));
               }}
-              defaultValue={''}
             />
             <HorizontalInputField
               isDisable={true}

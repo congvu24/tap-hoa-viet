@@ -27,7 +27,7 @@ const PickerWithTitle = ({
       >
         {items.map((item, index) => {
           return (
-            <Picker.Item label={item.label} value={item.value} key={index} />
+            <Picker.Item label={item.label} value={item.key} key={index} />
           );
         })}
       </Picker>
