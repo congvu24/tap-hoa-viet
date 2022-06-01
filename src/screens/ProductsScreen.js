@@ -23,6 +23,7 @@ export const ProductsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const [selectedProductGroupCode, setSelectedProductGroupCode] = useState('');
 
   // search string
   const [searchString, setSearchString] = useState('');
@@ -63,7 +64,7 @@ export const ProductsScreen = () => {
     setSearchString(text);
   };
 
-  console.log('products: ', products);
+  console.log(selectedProductGroupCode);
 
   return (
     <View style={styles.screenContainer}>
@@ -73,6 +74,8 @@ export const ProductsScreen = () => {
         inventoryNumber={numberOfInventories && numberOfInventories}
         goToAddProduct={goToAddProduct}
         changeSearchString={handleChangeSearchString}
+        selectedProductGroupCode={selectedProductGroupCode}
+        setProductGroupCode={setSelectedProductGroupCode}
       />
       <ScrollView
         style={styles.itemsContainer}
@@ -86,9 +89,12 @@ export const ProductsScreen = () => {
               if (searchString === '') {
                 return true;
               } else {
-                return item._data.productName
-                  .toLowerCase()
-                  .includes(searchString.toLowerCase());
+                return (
+                  item._data.productName
+                    .toLowerCase()
+                    .includes(searchString.toLowerCase()) &&
+                  item._data.productGroup.includes(selectedProductGroupCode)
+                );
               }
             })
             .map((item, index) => {
