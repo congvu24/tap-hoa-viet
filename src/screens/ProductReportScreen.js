@@ -61,8 +61,8 @@ export default function ProductReportScree() {
     
   };
   
-    test && console.log("test nef: ", test[0].products);
-    test && console.log("test chieu dai: ", test.length);
+    // test && console.log("test nef: ", test[0].products);
+    // test && console.log("test chieu dai: ", test.length);
   // console.log(categoryList);
   // console.log("products nef: ",productList);
   
