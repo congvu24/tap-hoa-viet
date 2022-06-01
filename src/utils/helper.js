@@ -15,7 +15,6 @@ export const formatK = value => {
   }
   return value;
 };
-<<<<<<< HEAD
 export const parseDate = timeStamp => {
   const date = new Date(timeStamp);
   return (
@@ -26,8 +25,6 @@ export const parseMonth = timeStamp => {
   const date = new Date(timeStamp);
   return date.getMonth() + 1;
 };
-=======
 export function getYesterdayDate(date = new Date()) {
   return new Date(date.getTime() - 24 * 60 * 60 * 1000);
 }
->>>>>>> master
