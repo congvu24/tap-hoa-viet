@@ -8,6 +8,7 @@ import {
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DARK_GREY} from '../constants/Colors';
+import {Picker} from '@react-native-picker/picker';
 
 const ProductsHeader = ({
   title = '',
@@ -15,6 +16,8 @@ const ProductsHeader = ({
   inventoryNumber = 0,
   goToAddProduct = () => {},
   changeSearchString,
+  setProductGroupCode = () => {},
+  selectedProductGroupCode = '',
 }) => {
   const [isShowFindInput, setIsShowFindInput] = useState(false);
 
@@ -62,8 +65,40 @@ const ProductsHeader = ({
             <TouchableOpacity onPress={goToAddProduct}>
               <Icon name="add-outline" size={25} style={styles.icon} />
             </TouchableOpacity>
-            <Icon name="funnel-outline" size={25} style={styles.icon} />
-            <Icon />
+            {/* <Icon name="funnel-outline" size={25} style={styles.icon} /> */}
+            <Picker
+              style={styles.picker}
+              selectedValue={selectedProductGroupCode}
+              onValueChange={(value, index) => {
+                setProductGroupCode(value);
+              }}
+            >
+              <Picker.Item label={'Tất cả'} value={''} />
+              <Picker.Item label={'Thực phẩm'} value={'1ytxC5a0OAISGEOWm6ij'} />
+              <Picker.Item
+                label={'Thức ăn nhanh'}
+                value={'77fjXztz5HKpKFT5GjNp'}
+              />
+              <Picker.Item
+                label={'Nguyên liệu'}
+                value={'9avGe3ZfFwqKlGw3W2zE'}
+              />
+              <Picker.Item
+                label={'Đồ cá nhân'}
+                value={'VylU500aj4jvhvxFrAwp'}
+              />
+              <Picker.Item label={'Thức uống'} value={'aPXySyQbWFFfPchPhtUU'} />
+              <Picker.Item
+                label={'Thời trang'}
+                value={'jMZAgpHd2FMiucpkjVGa'}
+              />
+              <Picker.Item label={'Mỹ phẩm'} value={'jOTYPcgKov325gK9m7nE'} />
+              <Picker.Item
+                label={'Thẻ điện thoại'}
+                value={'ulHPXKhJ04YmmCINhgjG'}
+              />
+              <Picker.Item label={'Khác'} value={'other'} />
+            </Picker>
           </View>
         </View>
       )}
@@ -91,8 +126,8 @@ const styles = StyleSheet.create({
   mainSection: {
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -116,6 +151,14 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  picker: {
+    flex: 0.7,
+    fontSize: 16,
+    color: DARK_GREY,
+    borderColor: 'black',
   },
   title: {
     fontSize: 24,
@@ -123,7 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   icon: {
-    marginLeft: 30,
+    marginLeft: 15,
     color: DARK_GREY,
   },
   floatingSearchIcon: {
