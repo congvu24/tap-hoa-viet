@@ -4,6 +4,7 @@ import orderSlice from './order';
 import userSlice from './userSlice';
 import productSlice from './productSlice';
 import categorySlice from './category';
+import orderListSlice from './orderList';
 
 //root reducer
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   order: orderSlice,
   product: productSlice,
   category: categorySlice,
+  orderList: orderListSlice,
 });
 
 export default rootReducer;

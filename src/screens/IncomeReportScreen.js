@@ -1,31 +1,42 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, {useState} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Dimensions} from 'react-native';
 import {BarChart, LineChart} from 'react-native-chart-kit';
+import {useSelector} from 'react-redux';
+import {
+  statisticIncomeByDay,
+  statisticIncomeByMonth,
+  statisticQuantityByDay,
+  statisticQuantityByMonth,
+} from '../services/statistic';
 
 const screenWidth = Dimensions.get('window').width;
 
-export default function IncomeReportScreen(){
+export default function IncomeReportScreen() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('Ngày');
   const [items, setItems] = useState([
     {label: 'Ngày', value: 'Ngày'},
-    {label: 'Tuần', value: 'Tuần'},
     {label: 'Tháng', value: 'Tháng'},
   ]);
-  //Data chart
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: [`Doanh thu cuối ${value}`], // optional
-  };
+  const list = useSelector(state => state.orderList.list);
+  console.log(list);
+  const [dataIncome, setDataIncome] = useState(statisticIncomeByDay(list));
+  const [dataQuantity, setDataQuantity] = useState(
+    statisticQuantityByDay(list),
+  );
+
+  useEffect(() => {
+    if (value == 'Ngày') {
+      setDataIncome(statisticIncomeByDay(list));
+      setDataQuantity(statisticQuantityByDay(list));
+    } else {
+      setDataIncome(statisticIncomeByMonth(list));
+      setDataQuantity(statisticQuantityByMonth(list));
+    }
+  }, [value]);
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -41,22 +52,26 @@ export default function IncomeReportScreen(){
           setItems={setItems}
         />
       </View>
-      <LineChart
-        style={styles.chart}
-        data={data}
-        width={screenWidth}
-        height={250}
-        chartConfig={chartConfig}
-      />
-      <BarChart
-        //style={graphStyle}
-        data={data}
-        width={screenWidth}
-        height={250}
-        yAxisLabel="$"
-        chartConfig={chartConfig}
-        verticalLabelRotation={30}
-      />
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.label}>DOANH THU BÁN HÀNG</Text>
+        <LineChart
+          data={dataIncome}
+          width={screenWidth}
+          height={250}
+          chartConfig={chartConfig.income}
+          yAxisSuffix="K"
+        />
+        <Text style={styles.label}>SỐ LƯỢNG ĐƠN HÀNG</Text>
+
+        <BarChart
+          data={dataQuantity}
+          width={screenWidth + 30}
+          height={250}
+          chartConfig={chartConfig.quantity}
+          style={{marginLeft: -30}}
+          //showValuesOnTopOfBars={true}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -70,21 +85,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 10,
+    marginBottom: 10,
   },
   dropdown: {
     width: 150,
     borderColor: '#bababa',
     zIndex: 5,
   },
-  chart: {
-    marginTop: 12,
+  label: {
+    color: 'black',
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
+  scrollView: {
+    marginBottom: 110,
   },
 });
 const chartConfig = {
-  backgroundColor: '#e26a00',
-  backgroundGradientFrom: '#e5e5e5',
-  backgroundGradientTo: '#e5e5e5',
-  decimalPlaces: 2, // optional, defaults to 2dp
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  income: {
+    backgroundColor: '#e26a00',
+    backgroundGradientFrom: '#e5e5e5',
+    backgroundGradientTo: '#e5e5e5',
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  },
+  quantity: {
+    backgroundColor: '#e26a00',
+    backgroundGradientFrom: '#e5e5e5',
+    backgroundGradientTo: '#e5e5e5',
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    barPercentage: 0.6,
+  },
 };
