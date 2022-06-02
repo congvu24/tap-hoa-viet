@@ -3,7 +3,13 @@ import React, {useEffect, useState} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Dimensions} from 'react-native';
 import {BarChart, LineChart} from 'react-native-chart-kit';
-import {dataMonth, getOrders} from '../services/getOrders';
+import {useSelector} from 'react-redux';
+import {
+  statisticIncomeByDay,
+  statisticIncomeByMonth,
+  statisticQuantityByDay,
+  statisticQuantityByMonth,
+} from '../services/statistic';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -12,41 +18,24 @@ export default function IncomeReportScreen() {
   const [value, setValue] = useState('Ngày');
   const [items, setItems] = useState([
     {label: 'Ngày', value: 'Ngày'},
-    {label: 'Tuần', value: 'Tuần'},
     {label: 'Tháng', value: 'Tháng'},
   ]);
-  //Data chart
-  const data = {
-    labels: [
-      'T1',
-      'T2',
-      'T3',
-      'T4',
-      'T5',
-      'T6',
-      'T7',
-      'T8',
-      'T9',
-      'T10',
-      'T11',
-      'T12',
-    ],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43, 71, 79, 33, 44, 10, 3],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: [`Doanh thu cuối ${value}`], // optional
-  };
-  async function getData() {
-    const datad = await dataMonth();
-    console.log('screen', datad);
-  }
+  const list = useSelector(state => state.orderList.list);
+  console.log(list);
+  const [dataIncome, setDataIncome] = useState(statisticIncomeByDay(list));
+  const [dataQuantity, setDataQuantity] = useState(
+    statisticQuantityByDay(list),
+  );
+
   useEffect(() => {
-    getData();
-  }, []);
+    if (value == 'Ngày') {
+      setDataIncome(statisticIncomeByDay(list));
+      setDataQuantity(statisticQuantityByDay(list));
+    } else {
+      setDataIncome(statisticIncomeByMonth(list));
+      setDataQuantity(statisticQuantityByMonth(list));
+    }
+  }, [value]);
 
   return (
     <View style={styles.container}>
@@ -66,17 +55,21 @@ export default function IncomeReportScreen() {
       <ScrollView style={styles.scrollView}>
         <Text style={styles.label}>DOANH THU BÁN HÀNG</Text>
         <LineChart
-          data={data}
+          data={dataIncome}
           width={screenWidth}
           height={250}
-          chartConfig={chartConfig}
+          chartConfig={chartConfig.income}
+          yAxisSuffix="K"
         />
         <Text style={styles.label}>SỐ LƯỢNG ĐƠN HÀNG</Text>
+
         <BarChart
-          data={data}
-          width={screenWidth}
+          data={dataQuantity}
+          width={screenWidth + 30}
           height={250}
-          chartConfig={chartConfig}
+          chartConfig={chartConfig.quantity}
+          style={{marginLeft: -30}}
+          //showValuesOnTopOfBars={true}
         />
       </ScrollView>
     </View>
@@ -110,10 +103,21 @@ const styles = StyleSheet.create({
   },
 });
 const chartConfig = {
-  backgroundColor: '#e26a00',
-  backgroundGradientFrom: '#e5e5e5',
-  backgroundGradientTo: '#e5e5e5',
-  decimalPlaces: 2, // optional, defaults to 2dp
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  income: {
+    backgroundColor: '#e26a00',
+    backgroundGradientFrom: '#e5e5e5',
+    backgroundGradientTo: '#e5e5e5',
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  },
+  quantity: {
+    backgroundColor: '#e26a00',
+    backgroundGradientFrom: '#e5e5e5',
+    backgroundGradientTo: '#e5e5e5',
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    barPercentage: 0.6,
+  },
 };

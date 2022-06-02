@@ -28,3 +28,15 @@ export const parseMonth = timeStamp => {
 export function getYesterdayDate(date = new Date()) {
   return new Date(date.getTime() - 24 * 60 * 60 * 1000);
 }
+export const checkIn10Days = (timeStamp) => {
+  const currentTime = new Date();
+  let newTime = new Date();
+  newTime.setDate(newTime.getDate() - 9);
+  newTime = new Date(
+    newTime.getFullYear(),
+    newTime.getMonth(),
+    newTime.getDate(),
+  );
+  if (newTime.getTime() <= timeStamp && timeStamp <= currentTime.getTime()) return true;
+  return false;
+}
