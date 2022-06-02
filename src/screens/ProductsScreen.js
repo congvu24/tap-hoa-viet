@@ -65,6 +65,9 @@ export const ProductsScreen = () => {
   };
 
   console.log(selectedProductGroupCode);
+  products.map((item, index) =>
+    console.log('item group: ', item._data.productGroup),
+  );
 
   return (
     <View style={styles.screenContainer}>
@@ -86,7 +89,7 @@ export const ProductsScreen = () => {
         {products &&
           products
             .filter((item, index) => {
-              if (searchString === '') {
+              if (searchString === '' && selectedProductGroupCode === '') {
                 return true;
               } else {
                 return (

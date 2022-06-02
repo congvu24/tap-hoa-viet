@@ -97,6 +97,7 @@ const ProductsHeader = ({
                 label={'Thẻ điện thoại'}
                 value={'ulHPXKhJ04YmmCINhgjG'}
               />
+              <Picker.Item label={'Khác'} value={'other'} />
             </Picker>
           </View>
         </View>
