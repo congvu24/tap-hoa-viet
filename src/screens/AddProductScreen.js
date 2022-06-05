@@ -66,7 +66,7 @@ export const AddProductScreen = ({route, navigation}) => {
   const {productID, ...otherParam} = route.params
     ? route.params
     : {productID: 'null'};
-  const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
+  const [productCode, setproductCode] = useState(nanoid(16));
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -145,7 +145,6 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const handleBrand = text => {
     setBrand(text);
-    console.log(brand);
   };
 
   const handleCapitalPrice = text => {
@@ -162,6 +161,12 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const resetTextFields = () => {
     reset();
+    resetUID();
+  };
+
+  const resetUID = () => {
+    setproductCode(nanoid(16));
+    console.log(productCode);
   };
 
   const uploadProduct = () => {
@@ -213,9 +218,10 @@ export const AddProductScreen = ({route, navigation}) => {
             <HorizontalInputField
               name="qrCode"
               title="Mã Vạch"
-              isDisable={true}
-              value={JSON.stringify(productID)}
-              hint={JSON.stringify(productID)}
+              editable={false}
+              selectTextOnFocus={false}
+              value={productCode}
+              hint={productCode}
               control={control}
             />
 
