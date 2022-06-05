@@ -5,8 +5,8 @@ import storage from '@react-native-firebase/storage';
 export const uploadMultipleImages = async images => {
   try {
     const promises = images.map(image => {
-      const ref = storage().ref(image.fileName);
-      return ref.putFile(image.uri);
+      const ref = storage().ref(image);
+      return ref.putFile(image);
     });
     const urls = await Promise.all(promises);
     const urlsArray = urls.map(url => url.ref.getDownloadURL());

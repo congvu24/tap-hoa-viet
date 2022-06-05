@@ -135,6 +135,46 @@ export const AddProductScreen = ({route, navigation}) => {
     });
   };
 
+  const uploadProduct = () => {
+    addProduct({...getValues(), productGroup, images})
+      .then(() => {
+        console.log('product added!');
+        Alert.alert('Status', 'Add product successfully!');
+        resetTextFields();
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert('Status', 'Failed to add product!');
+      });
+  };
+
+  const uploadImages = () => {
+    console.log(images);
+    setStorageURL(
+      uploadMultipleImages(images).then(() => {
+        console.log({storageURL});
+      }),
+    );
+  };
+
+  const showConfirmDialog = () => {
+    return Alert.alert('Clear Form', 'Do you want to clear this form?', [
+      {
+        text: 'Yes',
+        onPress: () => {
+          setShowBox(false);
+          resetTextFields();
+        },
+      },
+      {
+        text: 'No',
+      },
+    ]);
+  };
+
+  const log = message => {
+    console.log(message);
+  };
   const handleProductCode = text => {
     setproductCode(text);
   };
@@ -171,46 +211,6 @@ export const AddProductScreen = ({route, navigation}) => {
   const resetUID = () => {
     setproductCode(nanoid(16));
     console.log(productCode);
-  };
-
-  const uploadProduct = () => {
-    addProduct({...getValues(), productGroup, images})
-      .then(() => {
-        console.log('product added!');
-        Alert.alert('Status', 'Add product successfully!');
-        resetTextFields();
-      })
-      .catch(err => {
-        console.log(err);
-        Alert.alert('Status', 'Failed to add product!');
-      });
-  };
-
-  const uploadImages = () => {
-    setStorageURL(
-      uploadMultipleImages(images).then(() => {
-        console.log({storageURL});
-      }),
-    );
-  };
-
-  const showConfirmDialog = () => {
-    return Alert.alert('Clear Form', 'Do you want to clear this form?', [
-      {
-        text: 'Yes',
-        onPress: () => {
-          setShowBox(false);
-          resetTextFields();
-        },
-      },
-      {
-        text: 'No',
-      },
-    ]);
-  };
-
-  const log = message => {
-    console.log(message);
   };
 
   return (
