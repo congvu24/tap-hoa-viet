@@ -39,6 +39,7 @@ import {resetOffset, setOffset} from '../redux/reducer/app';
 import useScroll from '../utils/useScroll';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
+import CustomImagesSlider from '../components/CustomImagesSlider';
 
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
@@ -67,6 +68,7 @@ export const AddProductScreen = ({route, navigation}) => {
     ? route.params
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(nanoid(16));
+  const [images, setImages] = useState([]);
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -126,8 +128,8 @@ export const AddProductScreen = ({route, navigation}) => {
         alert('Fuck cậu Hoàn');
         return;
       }
-      console.log(response.assets.map(item => item.uri));
-      setFilePath(String(response.assets.map(item => item.uri)));
+      setImages([...images, String(response.assets.map(item => item.uri))]);
+      console.log(images);
     });
   };
 
@@ -197,6 +199,10 @@ export const AddProductScreen = ({route, navigation}) => {
     ]);
   };
 
+  const log = message => {
+    console.log(message);
+  };
+
   return (
     <KeyboardAvoidingView style={[styles.container]}>
       <CustomToolbar
@@ -207,12 +213,16 @@ export const AddProductScreen = ({route, navigation}) => {
         onBackPress={() => navigation.pop()}
       />
       <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
-        <TouchableOpacity
-          style={styles.uploadButton}
-          onPress={() => chooseFile('photo')}
-        >
-          <Image style={styles.uploadLogo} source={{uri: filePath}} />
-        </TouchableOpacity>
+        <View style={styles.topContainer}>
+          <CustomImagesSlider
+            images={images}
+            onClick={() => {
+              chooseFile('photo');
+            }}
+          />
+          {/* <Image style={styles.uploadLogo} source={{uri: filePath}} /> */}
+        </View>
+
         <View style={styles.bottomContainer}>
           <SafeAreaView>
             <HorizontalInputField
