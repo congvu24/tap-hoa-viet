@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const CustomImagesSlider = ({images = [], onClick}) => {
+const CustomImagesSlider = ({images = [], onClick, onDelete}) => {
   return (
     <ScrollView style={styles.container} horizontal>
       <TouchableOpacity style={styles.addMoreImage} onPress={onClick}>
@@ -24,7 +24,7 @@ const CustomImagesSlider = ({images = [], onClick}) => {
         return (
           <View style={styles.imageContainer} key={index}>
             <Image source={{uri: item}} style={styles.image} />
-            <TouchableOpacity style={styles.iconContainer}>
+            <TouchableOpacity style={styles.iconContainer} onPress={onDelete}>
               <Icon
                 style={styles.deleteIcon}
                 type="material"

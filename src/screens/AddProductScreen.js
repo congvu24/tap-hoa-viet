@@ -40,7 +40,8 @@ import useScroll from '../utils/useScroll';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
 import CustomImagesSlider from '../components/CustomImagesSlider';
-
+import {uploadFile} from '../services/upload';
+import {uploadMultipleImages} from '../services/uploadMultipleImages';
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
 
@@ -69,6 +70,7 @@ export const AddProductScreen = ({route, navigation}) => {
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(nanoid(16));
   const [images, setImages] = useState([]);
+  const [storageURL, setStorageURL] = useState([]);
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -172,7 +174,7 @@ export const AddProductScreen = ({route, navigation}) => {
   };
 
   const uploadProduct = () => {
-    addProduct({...getValues(), productGroup})
+    addProduct({...getValues(), productGroup, images})
       .then(() => {
         console.log('product added!');
         Alert.alert('Status', 'Add product successfully!');
@@ -182,6 +184,14 @@ export const AddProductScreen = ({route, navigation}) => {
         console.log(err);
         Alert.alert('Status', 'Failed to add product!');
       });
+  };
+
+  const uploadImages = () => {
+    setStorageURL(
+      uploadMultipleImages(images).then(() => {
+        console.log({storageURL});
+      }),
+    );
   };
 
   const showConfirmDialog = () => {
@@ -209,7 +219,7 @@ export const AddProductScreen = ({route, navigation}) => {
         productCode={'Add Product'}
         isEdit={true}
         buttonText="Add"
-        onButtonPress={() => uploadProduct()}
+        onButtonPress={() => uploadImages()}
         onBackPress={() => navigation.pop()}
       />
       <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
