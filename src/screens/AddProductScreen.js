@@ -70,7 +70,6 @@ export const AddProductScreen = ({route, navigation}) => {
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(nanoid(16));
   const [images, setImages] = useState([]);
-  const [storageURL, setStorageURL] = useState([]);
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -91,7 +90,6 @@ export const AddProductScreen = ({route, navigation}) => {
   });
 
   const onSubmit = data => {
-    uploadImages();
     console.log(uploadProduct());
   };
 
@@ -136,25 +134,40 @@ export const AddProductScreen = ({route, navigation}) => {
   };
 
   const uploadProduct = () => {
-    addProduct({...getValues(), productGroup, images})
-      .then(() => {
-        console.log('product added!');
-        Alert.alert('Status', 'Add product successfully!');
-        resetTextFields();
+    uploadMultipleImages(images)
+      .then(imagesURL => {
+        console.log(imagesURL);
+        addProduct({...getValues(), productGroup, imagesURL})
+          .then(() => {
+            console.log('product added with ' + imagesURL.length + ' images');
+            Alert.alert('Status', 'Add product successfully');
+            resetTextFields();
+          })
+          .catch(err => {
+            console.log(err);
+            Alert.alert('Status', 'Failed to add product!');
+          });
       })
       .catch(err => {
         console.log(err);
-        Alert.alert('Status', 'Failed to add product!');
       });
   };
 
-  const uploadImages = () => {
-    setStorageURL([]);
-    uploadMultipleImages(images, productCode).then(res => {
-      setStorageURL(res);
-      console.log(res);
-    });
-  };
+  // uploadMultipleImages(images, productCode).then(res => {
+  //   setImagesURL(res);
+  //   console.log('IMAGE_UPLOAD_RESULT ' + imagesURL.length);
+  //   addProduct({...getValues(), productGroup, imagesURL})
+  //     .then(() => {
+  //       console.log('product added!');
+  //       Alert.alert('Status', 'Add product successfully!');
+  //       resetTextFields();
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       Alert.alert('Status', 'Failed to add product!');
+  //     });
+  // });
+  // setImages([]);
 
   const showConfirmDialog = () => {
     return Alert.alert('Clear Form', 'Do you want to clear this form?', [
@@ -205,6 +218,7 @@ export const AddProductScreen = ({route, navigation}) => {
   const resetTextFields = () => {
     reset();
     resetUID();
+    setImages([]);
   };
 
   const resetUID = () => {
@@ -218,7 +232,7 @@ export const AddProductScreen = ({route, navigation}) => {
         productCode={'Add Product'}
         isEdit={true}
         buttonText="Add"
-        onButtonPress={() => uploadImages()}
+        onButtonPress={() => uploadProduct()}
         onBackPress={() => navigation.pop()}
       />
       <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
