@@ -91,6 +91,7 @@ export const AddProductScreen = ({route, navigation}) => {
   });
 
   const onSubmit = data => {
+    uploadImages();
     console.log(uploadProduct());
   };
 
@@ -131,7 +132,6 @@ export const AddProductScreen = ({route, navigation}) => {
         return;
       }
       setImages([...images, String(response.assets.map(item => item.uri))]);
-      console.log(images);
     });
   };
 
@@ -149,12 +149,14 @@ export const AddProductScreen = ({route, navigation}) => {
   };
 
   const uploadImages = () => {
-    console.log(images);
-    setStorageURL(
-      uploadMultipleImages(images).then(() => {
-        console.log({storageURL});
-      }),
-    );
+    setStorageURL([]);
+    setStorageURL({storageURL: [...storageURL, uploadMultipleImages(images)]});
+    console.log(storageURL);
+    // setStorageURL(
+    //   uploadMultipleImages(images).then(() => {
+    //     console.log({storageURL});
+    //   }),
+    // );
   };
 
   const showConfirmDialog = () => {
@@ -338,6 +340,7 @@ const styles = StyleSheet.create({
   topContainer: {
     backgroundColor: BACKGROUND_COLOR,
     flex: 1,
+    marginVertical: 10,
   },
 
   bottomContainer: {

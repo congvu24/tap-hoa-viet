@@ -1,18 +1,18 @@
 import storage from '@react-native-firebase/storage';
+import {useSelector} from 'react-redux';
+import {getProfileFromFirestore} from './user';
+import {nanoid} from '@reduxjs/toolkit';
 
-//create a function to upload multiple images to firebase storage
-
+// create a function to upload multiple images to firebase and then return url
 export const uploadMultipleImages = async images => {
-  try {
-    const promises = images.map(image => {
-      const ref = storage().ref(image);
-      return ref.putFile(image);
-    });
-    const urls = await Promise.all(promises);
-    const urlsArray = urls.map(url => url.ref.getDownloadURL());
-    return urlsArray;
-  } catch (err) {
-    console.log('Error while upload images');
-    throw err;
+  const urls = [];
+  for (let i = 0; i < images.length; i++) {
+    const image = images[i];
+    const ref = storage().ref('ProductImages/' + nanoid(8) + '.png');
+    await ref.putFile(image);
+    const url = await ref.getDownloadURL();
+    console.log(url);
+    urls.push(url);
   }
+  return urls;
 };
