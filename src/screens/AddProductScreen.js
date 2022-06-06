@@ -150,13 +150,10 @@ export const AddProductScreen = ({route, navigation}) => {
 
   const uploadImages = () => {
     setStorageURL([]);
-    setStorageURL({storageURL: [...storageURL, uploadMultipleImages(images)]});
-    console.log(storageURL);
-    // setStorageURL(
-    //   uploadMultipleImages(images).then(() => {
-    //     console.log({storageURL});
-    //   }),
-    // );
+    uploadMultipleImages(images, productCode).then(res => {
+      setStorageURL(res);
+      console.log(res);
+    });
   };
 
   const showConfirmDialog = () => {
