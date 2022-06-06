@@ -28,7 +28,7 @@ import useScroll from '../utils/useScroll';
 
 export default function ProductReportScree() {
   const dispatch = useDispatch();
-  const {ref, onScroll} = useScroll();
+  const {ref, onScroll, reset} = useScroll();
   const categoryList = useSelector(state => state.category.categoryList);
   const productList = useSelector(state => state.product.productList);
   const [test, setTest] = useState(null);
@@ -102,6 +102,7 @@ export default function ProductReportScree() {
           data={categoryList}
           renderItem={({item}) => {
             return <ProductsGroupItem
+              reset = {reset}
               imgSrc = {item.image}
               productGroup = {item.name}
               numberOfInventories = {getNumWithCategoryId(item.categoryId)}

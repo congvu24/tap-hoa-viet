@@ -7,6 +7,7 @@ const width= Dimensions.get('window').width/2 - 20;
 
 
 const ProductsGroupItem = ({
+    reset = '',
     imgSrc = '',
     productGroup = '',
     numberOfInventories,
@@ -15,6 +16,7 @@ const ProductsGroupItem = ({
   
   const navigation = useNavigation();
   const goToProductScreen = () => {
+    reset()
     navigation.navigate('Products',{categoryID})
   }
   return (
