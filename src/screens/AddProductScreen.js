@@ -42,6 +42,8 @@ import CustomToolbar from '../components/CustomToolbar';
 import CustomImagesSlider from '../components/CustomImagesSlider';
 import {uploadFile} from '../services/upload';
 import {uploadMultipleImages} from '../services/uploadMultipleImages';
+import AnimatedLoader from 'react-native-animated-loader';
+
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
 
@@ -70,6 +72,7 @@ export const AddProductScreen = ({route, navigation}) => {
     : {productID: 'null'};
   const [productCode, setproductCode] = useState(nanoid(16));
   const [images, setImages] = useState([]);
+  const [visible, setVisible] = useState(false);
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -134,12 +137,14 @@ export const AddProductScreen = ({route, navigation}) => {
   };
 
   const uploadProduct = () => {
+    setVisible(true);
     uploadMultipleImages(images)
       .then(imagesURL => {
         console.log(imagesURL);
         addProduct({...getValues(), productGroup, imagesURL})
           .then(() => {
             console.log('product added with ' + imagesURL.length + ' images');
+            setVisible(false);
             Alert.alert('Status', 'Add product successfully');
             resetTextFields();
           })
@@ -152,22 +157,6 @@ export const AddProductScreen = ({route, navigation}) => {
         console.log(err);
       });
   };
-
-  // uploadMultipleImages(images, productCode).then(res => {
-  //   setImagesURL(res);
-  //   console.log('IMAGE_UPLOAD_RESULT ' + imagesURL.length);
-  //   addProduct({...getValues(), productGroup, imagesURL})
-  //     .then(() => {
-  //       console.log('product added!');
-  //       Alert.alert('Status', 'Add product successfully!');
-  //       resetTextFields();
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       Alert.alert('Status', 'Failed to add product!');
-  //     });
-  // });
-  // setImages([]);
 
   const showConfirmDialog = () => {
     return Alert.alert('Clear Form', 'Do you want to clear this form?', [
@@ -228,6 +217,15 @@ export const AddProductScreen = ({route, navigation}) => {
 
   return (
     <KeyboardAvoidingView style={[styles.container]}>
+      <AnimatedLoader
+        visible={visible}
+        overlayColor="rgba(255,255,255,0.75)"
+        animationStyle={styles.lottie}
+        source={require('../images/loader.json')}
+        speed={1}
+      >
+        <Text>Doing something...</Text>
+      </AnimatedLoader>
       <CustomToolbar
         productCode={'Add Product'}
         isEdit={true}
