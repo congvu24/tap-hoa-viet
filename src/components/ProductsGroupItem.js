@@ -16,8 +16,8 @@ const ProductsGroupItem = ({
   
   const navigation = useNavigation();
   const goToProductScreen = () => {
-    reset()
     navigation.navigate('Products',{categoryID})
+    reset()
   }
   return (
     <TouchableOpacity
