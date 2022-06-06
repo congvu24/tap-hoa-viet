@@ -17,20 +17,25 @@ import {useSelector} from 'react-redux';
 const sampleImg =
   'https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
 
-export const ProductsScreen = () => {
+export const ProductsScreen = ({route}) => {
+  
   const navigation = useNavigation();
   const [products, setProducts] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
   const [selectedProductGroupCode, setSelectedProductGroupCode] = useState('');
-
+  var {categoryID} = route.params || '';
+  
   // search string
   const [searchString, setSearchString] = useState('');
-
   useEffect(() => {
     handleData();
   }, []);
+
+  useEffect(() => {
+    handleSelectedProduct();
+  }, [route.params]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -44,7 +49,7 @@ export const ProductsScreen = () => {
 
   const handleData = () => {
     let uid = auth().currentUser?.uid;
-
+    handleSelectedProduct();
     if (uid) {
       getProduct(
         uid,
@@ -64,10 +69,12 @@ export const ProductsScreen = () => {
     setSearchString(text);
   };
 
-  console.log(selectedProductGroupCode);
-  products.map((item, index) =>
-    console.log('item group: ', item._data.productGroup),
-  );
+  const handleSelectedProduct = () => {
+    if (categoryID ) {
+      setSelectedProductGroupCode(categoryID);
+    }
+  }
+
 
   return (
     <View style={styles.screenContainer}>

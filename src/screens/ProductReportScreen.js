@@ -28,19 +28,16 @@ import useScroll from '../utils/useScroll';
 
 export default function ProductReportScree() {
   const dispatch = useDispatch();
-
   const {ref, onScroll} = useScroll();
   const categoryList = useSelector(state => state.category.categoryList);
   const productList = useSelector(state => state.product.productList);
   const [test, setTest] = useState(null);
-  // const [categoryList, setCategoryList] = useState(null);
+  
   const [numberOfInventories, setNumberOfInventories] = useState(0);
   const [numberOfProduct, setNumberOfProduct] = useState(0);
   
 
-  const [filePath, setFilePath] = useState(
-    Image.resolveAssetSource(DefaultImage).uri,
-  );
+  
 
   useEffect(() => {
     handleData();
@@ -61,11 +58,27 @@ export default function ProductReportScree() {
     
   };
   
-    // test && console.log("test nef: ", test[0].products);
-    // test && console.log("test chieu dai: ", test.length);
-  // console.log(categoryList);
-  // console.log("products nef: ",productList);
+    // test && console.log("test nef: ", test[0].products[1].numberOfProducts);
+    test && console.log("test chieu dai: ", test.length);
+    test && console.log("test chieu dai product: ", test[1]);
+    // console.log(categoryList);
+    test && console.log("products nef: ",test[0]);
   
+  
+    const getNumWithCategoryId = (Id) => {
+      var total = 0;
+      const index = _.findIndex(test, function(o) {
+        return o.group == Id;
+      });
+    
+      if(test && index >= 0) {
+        for (var i = 0; i < test[index].products.length; i++) {
+          total = total + test[index].products[i].numberOfProducts
+        }
+      }
+    
+      return total;
+  }
   
 
   return (
@@ -91,7 +104,8 @@ export default function ProductReportScree() {
             return <ProductsGroupItem
               imgSrc = {item.image}
               productGroup = {item.name}
-              numberOfInventories = '13'
+              numberOfInventories = {getNumWithCategoryId(item.categoryId)}
+              categoryID = {item.categoryId}
             />;
           }}
         />

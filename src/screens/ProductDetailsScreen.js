@@ -37,6 +37,7 @@ const ProductDetailsScreen = ({route}) => {
     if (uid) {
       unsubscribe = fetchData(uid);
     }
+    
 
     return () => {
       unsubscribe();
