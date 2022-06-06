@@ -14,10 +14,14 @@ export default function useScroll() {
     offset.setValue(nativeEvent.contentOffset.y);
   };
 
+  const reset = () => {
+    resetOffset();
+  };
+
   useEffect(() => {
     dispatch(setOffset(offset));
     return () => dispatch(resetOffset());
   }, [offset]);
 
-  return {offset, ref, onScroll};
+  return {offset, ref, onScroll, reset};
 }
