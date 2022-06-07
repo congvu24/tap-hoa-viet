@@ -39,6 +39,10 @@ import {resetOffset, setOffset} from '../redux/reducer/app';
 import useScroll from '../utils/useScroll';
 import uuid from 'react-native-uuid';
 import CustomToolbar from '../components/CustomToolbar';
+import CustomImagesSlider from '../components/CustomImagesSlider';
+import {uploadFile} from '../services/upload';
+import {uploadMultipleImages} from '../services/uploadMultipleImages';
+import AnimatedLoader from 'react-native-animated-loader';
 
 export const AddProductScreen = ({route, navigation}) => {
   const {ref, onScroll} = useScroll();
@@ -66,7 +70,9 @@ export const AddProductScreen = ({route, navigation}) => {
   const {productID, ...otherParam} = route.params
     ? route.params
     : {productID: 'null'};
-  const [productCode, setproductCode] = useState(uuid.v4().substring(0, 16));
+  const [productCode, setproductCode] = useState(nanoid(16));
+  const [images, setImages] = useState([]);
+  const [visible, setVisible] = useState(false);
   const schema = yup.object().shape({
     id: yup.string(),
     productName: yup.string().required().max(20),
@@ -126,54 +132,29 @@ export const AddProductScreen = ({route, navigation}) => {
         alert('Fuck cậu Hoàn');
         return;
       }
-      console.log(response.assets.map(item => item.uri));
-      setFilePath(String(response.assets.map(item => item.uri)));
+      setImages([...images, String(response.assets.map(item => item.uri))]);
     });
   };
 
-  const handleProductCode = text => {
-    setproductCode(text);
-  };
-
-  const handleBarCode = text => {
-    setBarCode(text);
-  };
-
-  const handleProductName = text => {
-    setProductName(text);
-  };
-
-  const handleBrand = text => {
-    setBrand(text);
-    console.log(brand);
-  };
-
-  const handleCapitalPrice = text => {
-    setCapitalPrice(text);
-  };
-
-  const handleSellPrice = text => {
-    setSellPrice(text);
-  };
-
-  const handleNumberOfProducts = text => {
-    setNumberOfProducts(text);
-  };
-
-  const resetTextFields = () => {
-    reset();
-  };
-
   const uploadProduct = () => {
-    addProduct({...getValues(), productGroup})
-      .then(() => {
-        console.log('product added!');
-        Alert.alert('Status', 'Add product successfully!');
-        resetTextFields();
+    setVisible(true);
+    uploadMultipleImages(images)
+      .then(imagesURL => {
+        console.log(imagesURL);
+        addProduct({...getValues(), productGroup, imagesURL})
+          .then(() => {
+            console.log('product added with ' + imagesURL.length + ' images');
+            setVisible(false);
+            Alert.alert('Status', 'Add product successfully');
+            resetTextFields();
+          })
+          .catch(err => {
+            console.log(err);
+            Alert.alert('Status', 'Failed to add product!');
+          });
       })
       .catch(err => {
         console.log(err);
-        Alert.alert('Status', 'Failed to add product!');
       });
   };
 
@@ -192,8 +173,59 @@ export const AddProductScreen = ({route, navigation}) => {
     ]);
   };
 
+  const log = message => {
+    console.log(message);
+  };
+  const handleProductCode = text => {
+    setproductCode(text);
+  };
+
+  const handleBarCode = text => {
+    setBarCode(text);
+  };
+
+  const handleProductName = text => {
+    setProductName(text);
+  };
+
+  const handleBrand = text => {
+    setBrand(text);
+  };
+
+  const handleCapitalPrice = text => {
+    setCapitalPrice(text);
+  };
+
+  const handleSellPrice = text => {
+    setSellPrice(text);
+  };
+
+  const handleNumberOfProducts = text => {
+    setNumberOfProducts(text);
+  };
+
+  const resetTextFields = () => {
+    reset();
+    resetUID();
+    setImages([]);
+  };
+
+  const resetUID = () => {
+    setproductCode(nanoid(16));
+    console.log(productCode);
+  };
+
   return (
     <KeyboardAvoidingView style={[styles.container]}>
+      <AnimatedLoader
+        visible={visible}
+        overlayColor="rgba(255,255,255,0.75)"
+        animationStyle={styles.lottie}
+        source={require('../images/loader.json')}
+        speed={1}
+      >
+        <Text>Doing something...</Text>
+      </AnimatedLoader>
       <CustomToolbar
         productCode={'Add Product'}
         isEdit={true}
@@ -202,20 +234,25 @@ export const AddProductScreen = ({route, navigation}) => {
         onBackPress={() => navigation.pop()}
       />
       <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
-        <TouchableOpacity
-          style={styles.uploadButton}
-          onPress={() => chooseFile('photo')}
-        >
-          <Image style={styles.uploadLogo} source={{uri: filePath}} />
-        </TouchableOpacity>
+        <View style={styles.topContainer}>
+          <CustomImagesSlider
+            images={images}
+            onClick={() => {
+              chooseFile('photo');
+            }}
+          />
+          {/* <Image style={styles.uploadLogo} source={{uri: filePath}} /> */}
+        </View>
+
         <View style={styles.bottomContainer}>
           <SafeAreaView>
             <HorizontalInputField
               name="qrCode"
               title="Mã Vạch"
-              isDisable={true}
-              value={JSON.stringify(productID)}
-              hint={JSON.stringify(productID)}
+              editable={false}
+              selectTextOnFocus={false}
+              value={productCode}
+              hint={productCode}
               control={control}
             />
 
@@ -312,6 +349,7 @@ const styles = StyleSheet.create({
   topContainer: {
     backgroundColor: BACKGROUND_COLOR,
     flex: 1,
+    marginVertical: 10,
   },
 
   bottomContainer: {

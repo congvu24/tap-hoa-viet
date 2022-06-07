@@ -11,7 +11,8 @@ const SLIDER_ITEMS = [
   },
   {
     icon: 'basket-plus-outline',
-    text: 'Product',
+    text: ' Add Product',
+    route: 'AddProduct',
   },
   {
     icon: 'currency-usd',
