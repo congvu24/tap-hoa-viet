@@ -12,6 +12,14 @@ import {Icon} from 'react-native-elements';
 const EditProductImagesSlide = ({images = []}) => {
   return (
     <ScrollView style={styles.container} horizontal>
+      <TouchableOpacity style={styles.addMoreImage}>
+        <Icon
+          name="photo-camera"
+          type="material"
+          style={styles.addMoreImageIcon}
+          size={40}
+        />
+      </TouchableOpacity>
       {images.map((item, index) => {
         return (
           <View style={styles.imageContainer} key={index}>
@@ -27,14 +35,6 @@ const EditProductImagesSlide = ({images = []}) => {
           </View>
         );
       })}
-      <TouchableOpacity style={styles.addMoreImage}>
-        <Icon
-          name="photo-camera"
-          type="material"
-          style={styles.addMoreImageIcon}
-          size={40}
-        />
-      </TouchableOpacity>
     </ScrollView>
   );
 };
