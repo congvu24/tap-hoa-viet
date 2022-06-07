@@ -10,6 +10,7 @@ import {
   statisticQuantityByDay,
   statisticQuantityByMonth,
 } from '../services/statistic';
+import ExportButton from '../components/ExportButton';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -51,6 +52,11 @@ export default function IncomeReportScreen() {
           setValue={setValue}
           setItems={setItems}
         />
+        <ExportButton
+          dataType={value}
+          passedIncomeData={dataIncome}
+          passedQuantityData={dataQuantity}
+        />
       </View>
       <ScrollView style={styles.scrollView}>
         <Text style={styles.label}>DOANH THU BÁN HÀNG</Text>
@@ -91,6 +97,8 @@ const styles = StyleSheet.create({
     width: 150,
     borderColor: '#bababa',
     zIndex: 5,
+    marginRight: 15,
+    marginLeft: 3,
   },
   label: {
     color: 'black',
