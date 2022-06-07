@@ -64,11 +64,6 @@ export const ProductsScreen = () => {
     setSearchString(text);
   };
 
-  console.log(selectedProductGroupCode);
-  products.map((item, index) =>
-    console.log('item group: ', item._data.productGroup),
-  );
-
   return (
     <View style={styles.screenContainer}>
       <ProductsHeader
