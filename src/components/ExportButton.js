@@ -10,6 +10,7 @@ import React from 'react';
 import {GREEN_COLOR} from '../constants/Colors';
 var RNFS = require('react-native-fs');
 import XLSX from 'xlsx';
+import {formatMoney} from '../utils/helper';
 
 const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
   console.log('income excel: ', passedQuantityData.labels);
@@ -21,7 +22,9 @@ const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
       for (let i = 0; i < 12; i++) {
         monthData.push({
           tháng: i + 1,
-          'Doanh thu cuối tháng': passedIncomeData.datasets[0].data[i] + 'K',
+          'Doanh thu cuối tháng': formatMoney(
+            passedIncomeData.datasets[0].data[i] * 1000,
+          ),
           'Số lượng đơn hàng': passedQuantityData.datasets[0].data[i],
         });
       }
@@ -33,7 +36,9 @@ const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
       for (let i = 0; i < 10; i++) {
         dayData.push({
           Ngày: passedQuantityData.labels[i],
-          'Doanh thu trong ngày': passedIncomeData.datasets[0].data[i] + 'K',
+          'Doanh thu trong ngày': formatMoney(
+            passedIncomeData.datasets[0].data[i] * 1000,
+          ),
           'Số lượng đơn hàng': passedQuantityData.datasets[0].data[i],
         });
       }
@@ -92,11 +97,15 @@ const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
         ? 'Doanh_số_năm_nay.xlsx'
         : 'Doanh_số_10_ngày_qua.xlsx';
 
-    RNFS.writeFile(RNFS.DownloadDirectoryPath + `/${fileName}`, wbout, 'ascii')
+    RNFS.writeFile(
+      RNFS.ExternalStorageDirectoryPath + `/${fileName}`,
+      wbout,
+      'ascii',
+    )
       .then(r => {
         Alert.alert(
           'Thông báo',
-          'Đã xuất thành công, vui lòng kiểm tra thư mục "tải về"!',
+          'Đã xuất thành công, vui lòng kiểm tra thư mục của bạn!',
         );
       })
       .catch(e => {

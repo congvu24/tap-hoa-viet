@@ -5,7 +5,7 @@ import {Icon} from 'react-native-elements';
 //CustomToolbar
 const CustomToolbar = ({
   productCode = '',
-  buttonText = 'Save',
+  buttonText = 'Lưu',
   isEdit = false,
   onBackPress,
   onEditPress,

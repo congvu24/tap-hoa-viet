@@ -28,7 +28,6 @@ export const statisticIncomeByMonth = list => {
     ],
     legend: ['Doanh thu cuối tháng'], // optional
   };
-  console.log('data: ', data.datasets[0].data);
   return data;
 };
 export const statisticIncomeByDay = list => {
