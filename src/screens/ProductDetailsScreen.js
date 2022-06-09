@@ -16,11 +16,7 @@ import {getProductByQRCode, getProductGroup} from '../services/getProduct';
 import {firebase} from '@react-native-firebase/auth';
 import deleteFunctions from '../services/deleteProduct';
 import auth from '@react-native-firebase/auth';
-
-const images = [
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-  'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1121&q=80',
-];
+import {formatMoney} from '../utils/helper';
 
 const ProductDetailsScreen = ({route}) => {
   const {qrCode} = route.params;
@@ -54,7 +50,9 @@ const ProductDetailsScreen = ({route}) => {
   }, [productInfo]);
 
   // handle set products
-  const handleSetProducts = data => setProductInfo(data);
+  const handleSetProducts = data => {
+    setProductInfo(data);
+  };
 
   // fetch data
   const fetchData = userId => {
@@ -81,7 +79,7 @@ const ProductDetailsScreen = ({route}) => {
 
     navigate.pop();
     // deleteFunctions.deleteProductByQRcode(uid, qrCode);
-    deleteFunctions.deleteProductByQRCode(uid, qrCode);
+    deleteFunctions.deleteProductByQRCode(uid, qrCode).then(() => {});
   };
 
   console.log(productInfo);
@@ -94,67 +92,71 @@ const ProductDetailsScreen = ({route}) => {
         onEditPress={() => navigate.push('EditProduct', {qrCode})}
         onDeletePress={handleDeletePress}
       />
-      {/* <ActivityIndicator /> */}
-      <ScrollView style={styles.scrolledContainer}>
-        <View style={styles.imageSliderContainer}>
-          <SliderBox
-            images={images}
-            sliderBoxHeight={250}
-            dotColor={PRIMARY_COLOR}
-          />
-        </View>
 
-        <View style={styles.productInfoContainer}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.mainText}>
-              {productInfo && productInfo.productName}
-            </Text>
+      {productInfo ? (
+        <ScrollView style={styles.scrolledContainer}>
+          <View style={styles.imageSliderContainer}>
+            <SliderBox
+              images={productInfo.imagesURL}
+              sliderBoxHeight={250}
+              dotColor={PRIMARY_COLOR}
+              imageLoadingColor={PRIMARY_COLOR}
+            />
           </View>
-          <View style={styles.detailsContainer}>
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
-              <Text style={styles.simpleText}>
-                {productInfo && productInfo.qrCode}
+
+          <View style={styles.productInfoContainer}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.mainText}>
+                {productInfo && productInfo.productName}
               </Text>
             </View>
+            <View style={styles.detailsContainer}>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
+                <Text style={styles.simpleText}>
+                  {productInfo && productInfo.qrCode}
+                </Text>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
-              <Text style={styles.simpleText}>
-                {/* {productInfo && showProductGroup(productInfo.productGroup)} */}
-                {productInfo && productGroupToShow}
-              </Text>
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
+                <Text style={styles.simpleText}>
+                  {/* {productInfo && showProductGroup(productInfo.productGroup)} */}
+                  {productInfo.productGroup !== 'other'
+                    ? productGroupToShow
+                    : 'Khác'}
+                </Text>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Thương hiệu</Text>
-              <Text style={styles.simpleText}>
-                {productInfo && productInfo.brand}
-              </Text>
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Thương hiệu</Text>
+                <Text style={styles.simpleText}>
+                  {productInfo && productInfo.brand}
+                </Text>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Giá vốn</Text>
-              <Text style={[styles.simpleText, styles.primaryColor]}>
-                {productInfo && productInfo.capitalPrice}
-              </Text>
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Giá vốn</Text>
+                <Text style={[styles.simpleText, styles.primaryColor]}>
+                  {productInfo && formatMoney(productInfo.capitalPrice)} đ
+                </Text>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Giá bán</Text>
-              <Text style={[styles.simpleText, styles.primaryColor]}>
-                {productInfo && productInfo.sellPrice}
-              </Text>
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Giá bán</Text>
+                <Text style={[styles.simpleText, styles.primaryColor]}>
+                  {productInfo && formatMoney(productInfo.sellPrice)} đ
+                </Text>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Tồn kho</Text>
-              <Text style={[styles.simpleText, styles.primaryColor]}>
-                {productInfo && productInfo.numberOfProducts}
-              </Text>
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Tồn kho</Text>
+                <Text style={[styles.simpleText, styles.primaryColor]}>
+                  {productInfo && productInfo.numberOfProducts}
+                </Text>
+              </View>
 
-            {/* <ExtendedProductInfoItem
+              {/* <ExtendedProductInfoItem
               title={'Mô tả'}
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
             />
@@ -162,9 +164,14 @@ const ProductDetailsScreen = ({route}) => {
               title={'Ghi chú'}
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
             /> */}
+            </View>
           </View>
+        </ScrollView>
+      ) : (
+        <View style={styles.indicatorContainer}>
+          <ActivityIndicator size={'large'} color={PRIMARY_COLOR} />
         </View>
-      </ScrollView>
+      )}
     </View>
   );
 };
@@ -228,5 +235,10 @@ const styles = StyleSheet.create({
   primaryColor: {
     color: PRIMARY_COLOR,
     fontWeight: '600',
+  },
+  indicatorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

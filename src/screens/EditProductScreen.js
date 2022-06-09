@@ -5,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
@@ -20,17 +21,15 @@ import {
 import {editProduct} from '../services/editProduct';
 import auth from '@react-native-firebase/auth';
 import {Picker} from '@react-native-picker/picker';
-
-const images = [
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-  'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1121&q=80',
-  'https://images.unsplash.com/photo-1581017316471-1f6ef7ce6fd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
-  'https://images.unsplash.com/photo-1552066344-2464c1135c32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-];
+import {launchImageLibrary} from 'react-native-image-picker';
+import AnimatedLoader from 'react-native-animated-loader';
 
 const EditProductScreen = ({navigation, route}) => {
   // passed parameters
   const {qrCode} = route.params;
+
+  // loader
+  const [visible, setVisible] = useState(false);
 
   // use state
   const [productName, setProductName] = useState('');
@@ -40,6 +39,10 @@ const EditProductScreen = ({navigation, route}) => {
   const [sellPrice, setSellPrice] = useState('');
   const [numberOfProducts, setNumberOfProducts] = useState('');
   const [productGroupsInfo, setProductGroupsInfo] = useState(null);
+
+  // images
+  const [existingImages, setExistingImages] = useState(null);
+  const [imagesToAdd, setImagesToAdd] = useState([]);
 
   // use effect
   useEffect(() => {
@@ -57,6 +60,7 @@ const EditProductScreen = ({navigation, route}) => {
         setCapitalPrice(data.capitalPrice.toString());
         setSellPrice(data.sellPrice.toString());
         setNumberOfProducts(data.numberOfProducts.toString());
+        setExistingImages(data.imagesURL);
       });
     }
   }, []);
@@ -73,9 +77,44 @@ const EditProductScreen = ({navigation, route}) => {
     }
   }, [productGroup]);
 
+  // images methods
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 400,
+      maxHeight: 400,
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        Alert.alert('Thông báo', 'Đã huỷ thao tác');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        Alert.alert('Thông báo', 'Camera không khả dụng');
+        return;
+      } else if (response.errorCode == 'permission') {
+        Alert.alert('Thông báo', 'Không có quyền truy cập');
+        return;
+      } else if (response.errorCode == 'others') {
+        return;
+      }
+
+      setImagesToAdd([
+        ...imagesToAdd,
+        String(response.assets.map(item => item.uri)),
+      ]);
+    });
+  };
+
+  console.log('existing images: ', existingImages);
+  console.log('images to add: ', imagesToAdd);
+
   // method save
   const handleSave = () => {
     let uid = auth().currentUser?.uid;
+
+    setVisible(true);
 
     editProduct(
       productName,
@@ -86,22 +125,33 @@ const EditProductScreen = ({navigation, route}) => {
       numberOfProducts,
       uid,
       qrCode,
-    );
-
-    navigation.pop();
+      imagesToAdd,
+      existingImages,
+    ).then(() => {
+      setVisible(false);
+      navigation.pop();
+    });
   };
 
   const handleSavePress = () => {
-    Alert.alert('Notification', 'Do you want to save your editing?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Save',
-        onPress: () => handleSave(),
-      },
-    ]);
+    if (
+      existingImages &&
+      imagesToAdd.length === 0 &&
+      existingImages.length === 0
+    ) {
+      Alert.alert('Thông báo', 'Sản phẩm phải có ít nhất một hình ảnh');
+    } else {
+      Alert.alert('Thông báo', 'Bạn có chắc muốn lưu những thay đổi?', [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'Lưu',
+          onPress: () => handleSave(),
+        },
+      ]);
+    }
   };
 
   // methods on change text
@@ -125,118 +175,120 @@ const EditProductScreen = ({navigation, route}) => {
     setNumberOfProducts(text);
   };
 
-  console.log('current group: ', productGroup);
-
   return (
     <View style={styles.container}>
+      <AnimatedLoader
+        visible={visible}
+        overlayColor="rgba(255,255,255,0.75)"
+        animationStyle={styles.lottie}
+        source={require('../images/loader.json')}
+        speed={1}
+      >
+        <Text>Doing something...</Text>
+      </AnimatedLoader>
       <CustomToolbar
         productCode={qrCode}
         isEdit={true}
         onBackPress={() => navigation.pop()}
         onButtonPress={handleSavePress}
       />
-      <View style={styles.contentContainer}>
-        <View style={styles.imageSliderContainer}>
-          <EditProductImagesSlide images={images} />
-        </View>
-
-        <View style={styles.productInfoContainer}>
-          <View style={styles.nameContainer}>
-            <TextInput
-              value={productName}
-              style={styles.mainText}
-              onChangeText={text => handleProductName(text)}
+      {existingImages && productGroupsInfo ? (
+        <View style={styles.contentContainer}>
+          <View style={styles.imageSliderContainer}>
+            <EditProductImagesSlide
+              existingImages={existingImages}
+              imagesToAdd={imagesToAdd}
+              setExistingImages={setExistingImages}
+              setImagesToAdd={setImagesToAdd}
+              onChooseImagePress={() => chooseFile('photo')}
             />
           </View>
-          <View style={styles.detailsContainer}>
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
-              <TextInput editable={false} style={styles.simpleText}>
-                {qrCode}
-              </TextInput>
-            </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
-              <SafeAreaView
-                style={[
-                  styles.pickerContainer,
-                  {flexDirection: 'row', flex: 0.63},
-                ]}
-              >
-                <Picker
-                  style={styles.picker}
-                  selectedValue={productGroup}
-                  onValueChange={(value, index) => setProductGroup(value)}
+          <View style={styles.productInfoContainer}>
+            <View style={styles.nameContainer}>
+              <TextInput
+                value={productName}
+                style={styles.mainText}
+                onChangeText={text => handleProductName(text)}
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Mã hàng</Text>
+                <TextInput editable={false} style={styles.simpleText}>
+                  {qrCode}
+                </TextInput>
+              </View>
+
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Nhóm hàng</Text>
+                <SafeAreaView
+                  style={[
+                    styles.pickerContainer,
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    {flexDirection: 'row', flex: 0.63},
+                  ]}
                 >
-                  <Picker.Item
-                    label={'Nhóm hàng...'}
-                    value={''}
-                    enabled={false}
-                  />
-                  {/* {groupOfProducts.map((item, index) => {
-                    return (
-                      <Picker.Item
-                        label={item.label}
-                        value={item.value}
-                        key={index}
-                      />
-                    );
-                  })} */}
-                  {productGroupsInfo &&
-                    productGroupsInfo.map((item, index) => {
-                      return (
-                        <Picker.Item
-                          label={item._data.name}
-                          value={item._data.name}
-                          key={index}
-                        />
-                      );
-                    })}
-                </Picker>
-              </SafeAreaView>
-            </View>
+                  <Picker
+                    style={styles.picker}
+                    selectedValue={productGroup}
+                    onValueChange={(value, index) => setProductGroup(value)}
+                  >
+                    {productGroupsInfo &&
+                      productGroupsInfo.map((item, index) => {
+                        return (
+                          <Picker.Item
+                            label={item._data.name}
+                            value={item._data.name}
+                            key={index}
+                          />
+                        );
+                      })}
+                    <Picker.Item label={'Khác'} value={'other'} />
+                  </Picker>
+                </SafeAreaView>
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Thương hiệu</Text>
-              <TextInput
-                value={brand}
-                style={styles.simpleText}
-                onChangeText={text => handleBrand(text)}
-              />
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Thương hiệu</Text>
+                <TextInput
+                  value={brand}
+                  style={styles.simpleText}
+                  onChangeText={text => handleBrand(text)}
+                />
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Giá vốn</Text>
-              <TextInput
-                value={capitalPrice}
-                style={[styles.simpleText, styles.primaryColor]}
-                onChangeText={text => handleCapitalPrice(text)}
-                keyboardType="numeric"
-              />
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Giá vốn</Text>
+                <TextInput
+                  value={capitalPrice}
+                  style={[styles.simpleText, styles.primaryColor]}
+                  onChangeText={text => handleCapitalPrice(text)}
+                  keyboardType="numeric"
+                />
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Giá bán</Text>
-              <TextInput
-                value={sellPrice}
-                style={[styles.simpleText, styles.primaryColor]}
-                onChangeText={text => handleSellPrice(text)}
-                keyboardType="numeric"
-              />
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Giá bán</Text>
+                <TextInput
+                  value={sellPrice}
+                  style={[styles.simpleText, styles.primaryColor]}
+                  onChangeText={text => handleSellPrice(text)}
+                  keyboardType="numeric"
+                />
+              </View>
 
-            <View style={styles.singleInfoItem}>
-              <Text style={styles.simpleInfoHeader}>Tồn kho</Text>
-              <TextInput
-                value={numberOfProducts}
-                style={[styles.simpleText, styles.primaryColor]}
-                onChangeText={text => handleNumberOfProducts(text)}
-                keyboardType="numeric"
-              />
-            </View>
+              <View style={styles.singleInfoItem}>
+                <Text style={styles.simpleInfoHeader}>Tồn kho</Text>
+                <TextInput
+                  value={numberOfProducts}
+                  style={[styles.simpleText, styles.primaryColor]}
+                  onChangeText={text => handleNumberOfProducts(text)}
+                  keyboardType="numeric"
+                />
+              </View>
 
-            {/* <ExtendedProductInfoItem
+              {/* <ExtendedProductInfoItem
               title={'Mô tả'}
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
               isEdit={true}
@@ -246,9 +298,14 @@ const EditProductScreen = ({navigation, route}) => {
               description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
               isEdit={true}
             /> */}
+            </View>
           </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.indicatorContainer}>
+          <ActivityIndicator size={'large'} color={PRIMARY_COLOR} />
+        </View>
+      )}
     </View>
   );
 };
@@ -334,5 +391,10 @@ const styles = StyleSheet.create({
     color: DARK_GREY,
     width: 30,
     borderColor: 'black',
+  },
+  indicatorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

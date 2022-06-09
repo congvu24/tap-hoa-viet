@@ -106,7 +106,7 @@ export const ProductsScreen = () => {
                   key={index}
                 >
                   <ProductItem
-                    imgSrc={sampleImg}
+                    imgSrc={item._data.imagesURL[0]}
                     productName={item._data.productName}
                     productId={item._data.productCode}
                     price={item._data.sellPrice}
