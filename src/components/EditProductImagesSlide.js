@@ -9,10 +9,55 @@ import {
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const EditProductImagesSlide = ({images = []}) => {
+const EditProductImagesSlide = ({
+  existingImages = [],
+  setExistingImages = () => {},
+  imagesToAdd = [],
+  setImagesToAdd = () => {},
+  onChooseImagePress,
+}) => {
+  const popOutImage = indexToDelete => {
+    let maxExistingImageIndex = existingImages.length - 1;
+    let beginningImageToAddIndex = maxExistingImageIndex + 1;
+
+    console.log('max existing image: ', maxExistingImageIndex);
+    console.log('clicked index: ', indexToDelete);
+
+    if (indexToDelete <= maxExistingImageIndex) {
+      if (existingImages.length === 1) {
+        setExistingImages(existingImages.pop());
+      }
+
+      setExistingImages(existingImages.splice(indexToDelete - 1, 1));
+    } else {
+      if (imagesToAdd.length === 1) {
+        setImagesToAdd(imagesToAdd.pop());
+      }
+
+      setImagesToAdd(
+        imagesToAdd.splice(indexToDelete - beginningImageToAddIndex - 1, 1),
+      );
+    }
+  };
+
   return (
-    <ScrollView style={styles.container} horizontal>
-      {images.map((item, index) => {
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{justifyContent: 'flex-start'}}
+      horizontal
+    >
+      <TouchableOpacity
+        style={styles.addMoreImage}
+        onPress={onChooseImagePress}
+      >
+        <Icon
+          name="photo-camera"
+          type="material"
+          style={styles.addMoreImageIcon}
+          size={40}
+        />
+      </TouchableOpacity>
+      {[...existingImages, ...imagesToAdd].map((item, index) => {
         return (
           <View style={styles.imageContainer} key={index}>
             <Image source={{uri: item}} style={styles.image} />
@@ -22,19 +67,12 @@ const EditProductImagesSlide = ({images = []}) => {
                 type="material"
                 name="close"
                 color={'white'}
+                onPress={() => popOutImage(index)}
               />
             </TouchableOpacity>
           </View>
         );
       })}
-      <TouchableOpacity style={styles.addMoreImage}>
-        <Icon
-          name="photo-camera"
-          type="material"
-          style={styles.addMoreImageIcon}
-          size={40}
-        />
-      </TouchableOpacity>
     </ScrollView>
   );
 };

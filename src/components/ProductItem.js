@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import {DARK_GREY} from '../constants/Colors';
+import {formatMoney} from '../utils/helper';
 
 const ProductItem = ({
   imgSrc = '',
@@ -22,9 +23,9 @@ const ProductItem = ({
         </View>
 
         <View style={styles.trailingNumberContainer}>
-          <Text style={styles.mainText}>{price}</Text>
+          <Text style={styles.mainText}>{formatMoney(price)} đ</Text>
           <Text style={[styles.mainText, styles.number]}>
-            {numberOfInventories}
+            số lượng: {numberOfInventories}
           </Text>
         </View>
       </View>
