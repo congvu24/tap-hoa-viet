@@ -24,7 +24,7 @@ const ProductsGroupItem = ({
       onPress={goToProductScreen}
       activeOpacity={0.8}
       >
-        <LinerGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors = {['#60cde5','#5dbeea','#1a90d0']} style={styles.card}>
+        <LinerGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors = {['#33d2f2','#5dc9ea','#13aaeb']} style={styles.card}>
           <View
             style={styles.imgContainer}>
             <Image
