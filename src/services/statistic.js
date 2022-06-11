@@ -1,4 +1,10 @@
-import {parseMonth, checkIn10Days} from '../utils/helper';
+import {
+  parseMonth,
+  checkIn10Days,
+  getDaysInCurrentMonth,
+  checkInDays,
+} from '../utils';
+
 export const statisticIncomeByMonth = list => {
   let monthList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   list.forEach(element => {
@@ -60,6 +66,41 @@ export const statisticIncomeByDay = list => {
   };
   return data;
 };
+export const statisticIncomeByDayCurrentMonth = list => {
+  const numberOfDays = new Date().getDate();
+
+  let dayList = Array.from({length: numberOfDays}, () => 0);
+
+  let labelDay = Array.from({length: numberOfDays}, (_, k) => k + 1);
+
+  list.forEach(element => {
+    if (checkInDays(element.createAt, numberOfDays)) {
+      for (let i = 0; i < numberOfDays; i++) {
+        if (labelDay[i] == new Date(element.createAt).getDate()) {
+          dayList[i] += element.amount / 1000;
+        }
+      }
+    }
+  });
+  // const data = {
+  //   labels: labelDay,
+  //   datasets: [
+  //     {
+  //       data: dayList,
+  //       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+  //       strokeWidth: 2, // optional
+  //     },
+  //   ],
+  //   legend: ['Doanh thu tháng này'], // optional
+  // };
+  // return data;
+
+  return labelDay.map((day, idx) => ({
+    day,
+    earnings: dayList[idx],
+  }));
+};
+
 export const statisticQuantityByMonth = list => {
   let monthList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   list.forEach(element => {

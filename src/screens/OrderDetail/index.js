@@ -1,95 +1,103 @@
-
-import React, {useState, useEffect, useCallback} from 'react';
-import { Text, View, StyleSheet,TouchableOpacity,TextInput,ScrollView } from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {useDispatch, useSelector} from 'react-redux';
-import {createOrder, updateInfo} from '../redux/reducer/order';
-import {useNavigation} from '@react-navigation/native';
-import ProductItem from './ProductOrderItem';
-import moment from 'moment';
-import {formatMoney} from '../utils';
-import {getProduct} from '../services/getProduct';
-import auth from '@react-native-firebase/auth';
-import {ProductOrderItem} from './components/ProductOrderItem';
+import {useDispatch} from 'react-redux';
 import {
   BACKGROUND_COLOR,
   BLACK_COLOR,
-  BORDER_GREY_COLOR,
   GRAY_COLOR,
-  GREEN_COLOR,
-  PRIMARY_COLOR,
   WHITE_COLOR,
-}   from '../../../constants/Colors';
- export default function OrderDetailScreen(order) {
+} from '../../constants/Colors';
+import {offLoading, onLoading} from '../../redux/reducer/app';
+import {getOrderDetailsById} from '../../services';
+import {formatMoney} from '../../utils';
+import {ProductOrderItem} from './components/ProductOrderItem';
+import CustomToolbar from '../../components/CustomToolbar';
 
- const navigation = useNavigation();
- const dispatch = useDispatch();
+export default function OrderDetailScreen({route}) {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const {orderId} = route.params;
+  const [order, setOrder] = useState();
 
+  if (!orderId) {
+    navigation.dispatch(CommonActions.goBack());
+  }
 
-   const numberOfProducts = Object.keys(order.products).reduce(
-    (sum, key) => sum + order.products[key].number,
-    0,
-  );
+  const numberOfProducts = order =>
+    Object.keys(order.products).reduce(
+      (sum, key) => sum + order.products[key].number,
+      0,
+    );
 
-   const [productInfo,setProductInfo] = useState(null)
+  useEffect(() => {
+    (async () => {
+      dispatch(onLoading());
+      try {
+        const result = await getOrderDetailsById(orderId);
+        console.log('🚀 ~ file: index.js ~ line 45 ~ result', result);
+        setOrder(result);
+      } catch (error) {
+        console.log('error at OrderDetailsScreen -> getOrderDetails', error);
+      }
+      dispatch(offLoading());
+    })();
+  }, []);
 
+  const amount = order =>
+    Object.keys(order.products).reduce(
+      (sum, key) =>
+        sum + order.products[key].sellPrice * order.products[key].number,
+      0,
+    );
 
-    useEffect(() => {
-    getProductsOrder({order.products[]});
-  })
-
-    const getProductsOrder = async filters => {
-    dispatch(onLoading());
-    try {
-      const res = await getProductList( order.products);
-      setProductInfo(res);
-      console.log('res', res);
-    } catch (error) {
-      console.log('error at OrderDetailScreen -> getProducts', error);
-    }
-    dispatch(offLoading());
-  };
-
-  const amount = Object.keys(order.products).reduce(
-    (sum, key) =>
-      sum + order.products[key].sellPrice * order.products[key].number,
-    0,
-  );
-  return ( <View style={styles.wrap}>
-      <TouchableOpacity
-        style={{
-          padding: 4,
-        }}
-      >
-        <Icon name="left" size={20} color={BLACK_COLOR} />
-      </TouchableOpacity>
+  if (!order) {
+    return null;
+  }
+  return (
+    <View style={styles.wrap}>
+      <CustomToolbar
+        productCode="Order Details"
+        isEdit={true}
+        buttonText=""
+        onBackPress={() => navigation.pop()}
+      />
       <View style={styles.summaryWrap}>
         {/* <View style={styles.pageImage}>
           <Image source={require('../images/checkout.png')} />
         </View> */}
-           <View style={styles.sectionWrap}>
-            <View style={styles.rowWrap}>
+        <View style={styles.sectionWrap}>
+          <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Người Mua </Text>
             <Text style={styles.rowValue}> {order.buyerName}</Text>
           </View>
           <View style={styles.rowWrap}>
-          <Text style={styles.rowTitle}>SĐT </Text>
+            <Text style={styles.rowTitle}>SĐT </Text>
             <Text style={styles.rowValue}> 09090909 </Text>
           </View>
         </View>
         <View style={styles.sectionWrap}>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Số lượng sản phẩm: </Text>
-            <Text style={styles.rowValue}> {numberOfProducts}sp</Text>
+            <Text style={styles.rowValue}> {numberOfProducts(order)}</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Tạm tính: </Text>
-            <Text style={styles.rowValue}>{formatMoney(amount)}đ</Text>
+            <Text style={styles.rowValue}>{formatMoney(amount(order))}đ</Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thời gian: </Text>
-            <Text style={styles.rowValue}> 23:35 20/11/2022 </Text>
-            //order ko luu ngay thi xoa gium luon
+            <Text style={styles.rowValue}>
+              {new Date(order.createAt).toLocaleString('VN')}
+            </Text>
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Khuyến mãi: </Text>
@@ -97,59 +105,31 @@ import {
           </View>
           <View style={styles.rowWrap}>
             <Text style={styles.rowTitle}>Thành tiền: </Text>
-            <Text style={styles.rowValue}>{formatMoney(amount - order.discount)}đ
-
+            <Text style={styles.rowValue}>
+              {formatMoney(amount(order) - order.discount)}đ
             </Text>
           </View>
         </View>
 
- <View style={styles.sectionWrap}>
-         <Text style={styles.rowTitle}>Danh sách hàng </Text>
+        <View style={styles.sectionWrap}>
+          <Text style={styles.rowTitle}>Danh sách hàng </Text>
 
-            <ScrollView style={styles.itemsContainer}>
-
-             {products &&
-          products
-            .filter((item, index) => {
-                return (
-                  item._data.productName
-                    .toLowerCase()
-                    .includes(searchString.toLowerCase()) &&
-                  item._data.productGroup.includes(selectedProductGroupCode)
-                );
-              }
-            )
-            .map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                >
-                  <ProductItem
-                    imgSrc={productInfo.imagesUR}
-                    productName={productInfo.productName}
-                    price={productInfo.productPrice}
-                    quantity= 'so luong'
-                    //Hinh nhu deo luu so luong moi san pham, ko co thi xoa cai cho nay
-                  />
+          <ScrollView style={styles.itemsContainer}>
+            {order &&
+              order.products.map((item, index) => (
+                <TouchableOpacity key={index}>
+                  <ProductOrderItem product={item} />
                 </TouchableOpacity>
-              );
-            })}
-
-
-
-
-      </ScrollView>
+              ))}
+          </ScrollView>
         </View>
 
         <View style={styles.sectionWrap}>
-         <Text style={styles.rowTitle}>Ghi chú </Text>
-         <Text style={styles.rowValue}> {order.note}
-         </Text>
+          <Text style={styles.rowTitle}>Ghi chú </Text>
+          <Text style={styles.rowValue}> {order.note}</Text>
         </View>
       </View>
-
     </View>
-
   );
 }
 
@@ -158,7 +138,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BACKGROUND_COLOR,
   },
-
 
   summaryWrap: {
     marginTop: 10,
@@ -191,7 +170,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: BLACK_COLOR,
   },
-
 
   itemsContainer: {
     marginTop: 15,

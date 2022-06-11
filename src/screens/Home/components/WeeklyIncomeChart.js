@@ -1,5 +1,6 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   VictoryChart,
   VictoryLine,
@@ -9,7 +10,11 @@ import {
   VictoryScatter,
 } from 'victory-native';
 import {BLACK_COLOR, PRIMARY_COLOR} from '../../../constants/Colors';
-import {formatMoney} from '../../../utils';
+import {
+  statisticIncomeByDayCurrentMonth,
+  statisticIncomeByDay,
+} from '../../../services/statistic';
+import {formatK} from '../../../utils';
 
 const data = [
   {startDate: 1, earnings: 13000},
@@ -36,7 +41,10 @@ const getDateRangeOfMonth = () => {
 const {width: screenWidth} = Dimensions.get('screen');
 
 export function WeeklyIncomeChart() {
-  const {lastDate} = getDateRangeOfMonth();
+  const list = useSelector(state => state.orderList.list);
+
+  const chartData = statisticIncomeByDayCurrentMonth(list);
+
   return (
     <View style={[styles.rootContainer]}>
       <VictoryChart
@@ -47,12 +55,12 @@ export function WeeklyIncomeChart() {
         padding={{top: 30, bottom: 50, left: 60, right: 10}}
       >
         <VictoryLine
-          data={data}
-          x={datum =>
-            datum.startDate === 29
-              ? `29-${lastDate}`
-              : `${datum.startDate}-${datum.startDate + 7}`
-          }
+          data={chartData}
+          // x={datum =>
+          //   datum.startDate === 29
+          //     ? `29-${lastDate}`
+          //     : `${datum.startDate}-${datum.startDate + 7}`
+          // }
           y="earnings"
           interpolation="cardinal"
           // animate={{duration: 2000, onLoad: 500}}
@@ -63,7 +71,9 @@ export function WeeklyIncomeChart() {
               strokeWidth: 2,
             },
           }}
-          labels={({datum}) => formatMoney(datum.earnings)}
+          labels={({datum}) =>
+            datum.earnings > 0 ? formatK(datum.earnings) : null
+          }
           labelComponent={
             <VictoryLabel
               fixLabelOverlap
@@ -76,12 +86,12 @@ export function WeeklyIncomeChart() {
         <VictoryScatter
           style={{data: {fill: PRIMARY_COLOR}}}
           size={4}
-          data={data}
-          x={datum =>
-            datum.startDate === 29
-              ? `29-${lastDate}`
-              : `${datum.startDate}-${datum.startDate + 7}`
-          }
+          data={chartData}
+          // x={datum =>
+          //   datum.startDate === 29
+          //     ? `29-${lastDate}`
+          //     : `${datum.startDate}-${datum.startDate + 7}`
+          // }
           y="earnings"
         />
         <VictoryAxis
@@ -101,10 +111,10 @@ export function WeeklyIncomeChart() {
             },
             grid: {stroke: 'transparent'},
           }}
-          tickFormat={value => formatMoney(value)}
+          tickFormat={value => formatK(value)}
         />
         <VictoryAxis
-          label="Tuần"
+          label="Ngày"
           style={{
             axisLabel: {textAnchor: 'middle', padding: 25},
             ticks: {

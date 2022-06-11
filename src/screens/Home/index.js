@@ -1,17 +1,14 @@
-import React, {useEffect, useRef} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
+import React from 'react';
+import {Animated, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   BACKGROUND_COLOR,
   PRIMARY_COLOR,
   TEXT_COLOR,
-  WHITE_COLOR,
 } from '../../constants/Colors';
-import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
-import auth from '@react-native-firebase/auth';
-import {setOffset} from '../../redux/reducer/app';
 import useScroll from '../../utils/useScroll';
+import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);

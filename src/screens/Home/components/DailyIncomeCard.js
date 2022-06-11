@@ -1,17 +1,31 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {
-  TEXT_COLOR,
-  TEXT_SECONDARY_COLOR,
-  WHITE_COLOR,
-} from '../../../constants/Colors';
+import {useSelector} from 'react-redux';
+import {WHITE_COLOR} from '../../../constants/Colors';
+import {statisticIncomeByDay} from '../../../services/statistic';
 import {formatMoney} from '../../../utils';
 
 export function DailyIncomeCard() {
-  const income = 5000000;
-  const compareLastDay = 0.24;
+  const orders = useSelector(state => state.orderList.list);
+  const dataIncome = statisticIncomeByDay(orders).datasets[0].data;
+
+  const compareIncomeWithYesterday = () => {
+    const dataLength = dataIncome.length;
+    const todayIncome = dataIncome[dataLength - 1];
+    const yesterdayIncome = dataIncome[dataLength - 2];
+
+    return {
+      todayIncome,
+      compareLastDay:
+        todayIncome > yesterdayIncome
+          ? todayIncome / yesterdayIncome
+          : 1 - todayIncome / yesterdayIncome,
+    };
+  };
 
   const renderPercent = number => {
+    if (isNaN(number)) return '+0%';
+
     const sign = number < 0 ? '-' : '+';
 
     return `${sign}${(number * 100).toFixed(2)}%`;
@@ -20,10 +34,11 @@ export function DailyIncomeCard() {
     <View style={styles.cardContainer}>
       <Text style={[styles.text, styles.cardTitle]}>Doanh thu</Text>
       <Text style={[styles.text, styles.cardNumber]}>
-        ₫ {formatMoney(income)}
+        ₫ {formatMoney(compareIncomeWithYesterday().todayIncome)}
       </Text>
       <Text style={[styles.text, styles.increasePercent]}>
-        {renderPercent(compareLastDay)} so với hôm qua
+        {renderPercent(compareIncomeWithYesterday().compareLastDay)} so với hôm
+        qua
       </Text>
     </View>
   );

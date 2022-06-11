@@ -1,36 +1,38 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import {DARK_GREY} from '../../../constants/Colors';
+import {formatMoney} from '../../../utils';
 
-export function ProductOrderCard({}) {
-const ProductOrderItem = ({
-  imgSrc = '',
-  productName = '',
-  price = '',
-  quantity,
-}) => {
+// export function ProductOrderCard({}) {
+export const ProductOrderItem = ({product}) => {
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.leftSection}>
-          <Image source={{uri: imgSrc}} style={styles.img} />
+          {product.imagesURL ? (
+            <Image source={{uri: product.imagesURL[0]}} style={styles.img} />
+          ) : (
+            <Image
+              source={require('../../../images/shop.png')}
+              style={styles.img}
+            />
+          )}
 
           <View style={styles.idNameContainer}>
-            <Text style={styles.mainText}>{productName}</Text>
+            <Text style={styles.mainText}>{product.productName}</Text>
           </View>
         </View>
 
         <View style={styles.trailingNumberContainer}>
-          <Text style={styles.mainText}> đ</Text>
+          <Text style={styles.mainText}>{formatMoney(product.sellPrice)}đ</Text>
           <Text style={[styles.mainText, styles.number]}>
-            số lượng: {quantity}
+            số lượng: {product.quantity}
           </Text>
         </View>
       </View>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
