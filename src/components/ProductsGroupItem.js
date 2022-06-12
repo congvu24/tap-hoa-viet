@@ -1,20 +1,30 @@
 import { StyleSheet, Text, View, Dimensions,SafeAreaView,TouchableOpacity,Image } from 'react-native'
 import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import LinerGradient from 'react-native-linear-gradient'
 
 const width= Dimensions.get('window').width/2 - 20;
 
+
 const ProductsGroupItem = ({
+    reset = '',
     imgSrc = '',
     productGroup = '',
     numberOfInventories,
+    categoryID = '',
   }) => {
+  
+  const navigation = useNavigation();
+  const goToProductScreen = () => {
+    reset()
+    navigation.navigate('Products',{categoryID})
+  }
   return (
     <TouchableOpacity
-        activeOpacity={0.8}>
-        
-        
-        <LinerGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors = {['#60cde5','#5dbeea','#1a90d0']} style={styles.card}>
+      onPress={goToProductScreen}
+      activeOpacity={0.8}
+      >
+        <LinerGradient start={{x: 0, y: 0}} end={{x: 1, y: 1}} colors = {['#33d2f2','#5dc9ea','#13aaeb']} style={styles.card}>
           <View
             style={styles.imgContainer}>
             <Image
