@@ -8,7 +8,6 @@ import {BottomNavigationBar} from '../navigation/BottomNavigationBar';
 import {
   AddProductScreen,
   LoginScreen,
-  OrderHistoryScreen,
   ProductsScreen,
   RegisterScreen,
 } from '../screens';
@@ -23,6 +22,7 @@ import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
 import OrderSummary from '../screens/OrderSummary';
 import ScanBarcodeScreen from '../screens/ScanBarcodeScreen';
 import OrderDetailScreen from '../screens/OrderDetail';
+import { OrderHistoryScreen } from '../screens/OrderHistory/OrderHistory';
 
 const Stack = createNativeStackNavigator();
 

@@ -53,7 +53,7 @@ export function OrderHistoryScreen() {
     <View style={styles.screenContainer}>
       <View style={styles.itemsContainer}>
         <CustomToolbar
-          productCode="Order History"
+          productCode="Lịch sử đơn hàng"
           isEdit={true}
           buttonText=""
           onBackPress={() => navigation.pop()}
@@ -64,7 +64,7 @@ export function OrderHistoryScreen() {
             style={styles.dropdown}
           >
             <Text style={styles.title}>
-              Từ: {fromDate.toLocaleDateString('VN')}
+              Từ: {fromDate.toLocaleDateString('vi-VN')}
             </Text>
             <Icon
               name="chevron-down-outline"
@@ -86,7 +86,7 @@ export function OrderHistoryScreen() {
             style={styles.dropdown}
           >
             <Text style={styles.title}>
-              Đến: {toDate.toLocaleDateString('VN')}
+              Đến: {toDate.toLocaleDateString('vi-VN')}
             </Text>
             <Icon
               name="chevron-down-outline"

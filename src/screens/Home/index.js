@@ -12,7 +12,7 @@ import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);
-  const {ref, onScroll} = useScroll();
+  // const {ref, onScroll, reset} = useScroll();
 
   const currentUser = user.name;
 
@@ -24,14 +24,14 @@ const HomeScreen = ({navigation}) => {
       }}
     >
       <ScrollView
-        ref={ref}
-        onScroll={onScroll}
+        // ref={ref}
+        // onScroll={onScroll}
         showsVerticalScrollIndicator={false}
         style={styles.scrollViewContainer}
       >
         <View style={styles.header}>
           <Text style={[styles.text]}>
-            Welcome back{currentUser && `, ${currentUser}`}
+            Chào mừng trở lại{currentUser && `, ${currentUser}`}
           </Text>
           {/* <TouchableOpacity onPress={() => signOut()}>
             <Text>Signout</Text>

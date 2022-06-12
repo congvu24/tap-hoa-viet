@@ -7,8 +7,8 @@ export function EmptyOrder() {
   return (
     <View style={styles.cardContainer}>
       <Icon name="receipt-outline" type="ionicon" size={69} />
-      <Text style={styles.title}>No Orders Yet</Text>
-      <Text style={styles.desc}>Try again with another date range.</Text>
+      <Text style={styles.title}>Không có đơn hàng nào</Text>
+      <Text style={styles.desc}>Tạo đơn hàng hoặc chọn khoảng ngày khác.</Text>
     </View>
   );
 }

@@ -65,7 +65,7 @@ export default function OrderDetailScreen({route}) {
   return (
     <View style={styles.wrap}>
       <CustomToolbar
-        productCode="Order Details"
+        productCode="Chi tiết đơn hàng"
         isEdit={true}
         buttonText=""
         onBackPress={() => navigation.pop()}

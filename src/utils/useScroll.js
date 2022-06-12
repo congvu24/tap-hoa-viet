@@ -15,7 +15,7 @@ export default function useScroll() {
   };
 
   const reset = () => {
-    resetOffset();
+    offset.setValue(0);
   };
 
   useEffect(() => {

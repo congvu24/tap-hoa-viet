@@ -7,21 +7,22 @@ import {BLACK_COLOR, TEXT_COLOR, WHITE_COLOR} from '../../../constants/Colors';
 const SLIDER_ITEMS = [
   {
     icon: 'warehouse',
-    text: 'Warehouse',
+    text: 'Kho hàng',
+    route: 'Products'
   },
   {
     icon: 'basket-plus-outline',
-    text: ' Add Product',
+    text: ' Thêm sản phẩm',
     route: 'AddProduct',
   },
   {
-    icon: 'currency-usd',
-    text: 'Sales',
+    icon: 'history',
+    text: 'Lịch sử',
+    route: 'OrderHistory',
   },
   {
-    icon: 'history',
-    text: 'History',
-    route: 'OrderHistory',
+    icon: 'currency-usd',
+    text: 'Khuyến mãi',
   },
 ];
 export function SliderShortcut() {
@@ -42,14 +43,19 @@ export function SliderShortcut() {
   );
 }
 
-const Shortcut = ({item, style, ...rest}) => {
+const Shortcut = ({item, style, resetTabbar, ...rest}) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       key={item.text}
       style={[styles.shortcut, {...style}]}
-      onPress={() => item.route && navigation.navigate(item.route)}
+      onPress={() => {
+        if (item.route) {
+          navigation.navigate(item.route);
+          // resetTabbar();
+        }
+      }}
       {...rest}
     >
       <Icon name={item.icon} size={30} style={styles.shortcutIcon} />
