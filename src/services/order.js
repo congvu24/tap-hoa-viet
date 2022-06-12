@@ -40,3 +40,10 @@ export const getOrderList = async filters => {
     throw err;
   }
 };
+
+export const getOrderDetailsById = async id => {
+  const queryRef = myOrderRef.doc(id);
+
+  const res = await queryRef.get();
+  return {id, ...res.data()};
+};

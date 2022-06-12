@@ -22,6 +22,7 @@ import ReportScreen from '../screens/ReportScreen';
 import AddProductToOrderByHand from '../screens/AddProductToOrderByHand';
 import OrderSummary from '../screens/OrderSummary';
 import ScanBarcodeScreen from '../screens/ScanBarcodeScreen';
+import OrderDetailScreen from '../screens/OrderDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +47,7 @@ export default function AppRoute() {
             }}
           />
           <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+          <Stack.Screen name="OrderDetails" component={OrderDetailScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Homepage" component={HomePageScreen} />
           <Stack.Screen name="Products" component={ProductsScreen} />

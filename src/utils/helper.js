@@ -28,7 +28,7 @@ export const parseMonth = timeStamp => {
 export function getYesterdayDate(date = new Date()) {
   return new Date(date.getTime() - 24 * 60 * 60 * 1000);
 }
-export const checkIn10Days = (timeStamp) => {
+export const checkIn10Days = timeStamp => {
   const currentTime = new Date();
   let newTime = new Date();
   newTime.setDate(newTime.getDate() - 9);
@@ -37,6 +37,27 @@ export const checkIn10Days = (timeStamp) => {
     newTime.getMonth(),
     newTime.getDate(),
   );
-  if (newTime.getTime() <= timeStamp && timeStamp <= currentTime.getTime()) return true;
+  if (newTime.getTime() <= timeStamp && timeStamp <= currentTime.getTime())
+    return true;
   return false;
+};
+export const checkInDays = (timeStamp, numberOfDays) => {
+  const currentTime = new Date();
+  let newTime = new Date();
+  newTime.setDate(newTime.getDate() - (numberOfDays - 1));
+  newTime = new Date(
+    newTime.getFullYear(),
+    newTime.getMonth(),
+    newTime.getDate(),
+  );
+  if (newTime.getTime() <= timeStamp && timeStamp <= currentTime.getTime())
+    return true;
+  return false;
+};
+
+function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
 }
+
+export const getDaysInCurrentMonth = () =>
+  getDaysInMonth(new Date().getFullYear(), new Date().getMonth() + 1);

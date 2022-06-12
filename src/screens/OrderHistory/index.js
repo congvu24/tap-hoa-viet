@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Icon} from 'react-native-elements';
@@ -11,6 +13,7 @@ import {EmptyOrder} from './components/EmptyOrder';
 import {OrderCard} from './components/OrderCard';
 
 export function OrderHistoryScreen() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
 
@@ -49,13 +52,19 @@ export function OrderHistoryScreen() {
   return (
     <View style={styles.screenContainer}>
       <View style={styles.itemsContainer}>
+        <CustomToolbar
+          productCode="Order History"
+          isEdit={true}
+          buttonText=""
+          onBackPress={() => navigation.pop()}
+        />
         <View style={styles.extraSection}>
           <TouchableOpacity
             onPress={() => setFromDateOpen(true)}
             style={styles.dropdown}
           >
             <Text style={styles.title}>
-              From: {fromDate.toLocaleDateString('VN')}
+              Từ: {fromDate.toLocaleDateString('VN')}
             </Text>
             <Icon
               name="chevron-down-outline"
@@ -77,7 +86,7 @@ export function OrderHistoryScreen() {
             style={styles.dropdown}
           >
             <Text style={styles.title}>
-              To: {toDate.toLocaleDateString('VN')}
+              Đến: {toDate.toLocaleDateString('VN')}
             </Text>
             <Icon
               name="chevron-down-outline"
@@ -116,11 +125,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   itemsContainer: {
-    marginTop: 8,
+    // marginTop: 8,
   },
   dropdown: {
-    flex: 1,
     flexDirection: 'row',
   },
   title: {
@@ -129,15 +141,19 @@ const styles = StyleSheet.create({
   },
 
   extraSection: {
-    paddingLeft: 10,
-    paddingRight: 20,
+    paddingHorizontal: 30,
     paddingTop: 12,
     paddingBottom: 12,
+    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   ordersContainer: {
-    marginTop: 10,
-    paddingBottom: 50,
+    // paddingHorizontal: 20,
+    marginTop: 0,
+    paddingBottom: 120,
+    // flex: 1,
+    // height: '100%',
   },
 });
