@@ -67,6 +67,8 @@ export default function CreateOrderScreen() {
     dispatch(removeProduct({...product, number: 1}));
   };
 
+  console.log(order);
+
   return (
     <View style={styles.wrap}>
       <TouchableOpacity
@@ -99,7 +101,7 @@ export default function CreateOrderScreen() {
                   <View style={styles.item} key={key}>
                     <View style={styles.itemNameWrap}>
                       <Image
-                        source={require('../images/shop.png')}
+                        source={{uri: item.imagesURL[0] ?? ''}}
                         style={styles.itemImage}
                       />
                       <View>

@@ -3,12 +3,12 @@ import auth from '@react-native-firebase/auth';
 import {ORDERS} from '../constants/Collections';
 
 const orderColl = firestore().collection(ORDERS);
-const myOrderRef = orderColl
-  .doc(auth().currentUser?.uid)
-  .collection('OrderList');
 
 export const createOrderToFirestore = async data => {
   try {
+    const myOrderRef = orderColl
+      .doc(auth().currentUser?.uid)
+      .collection('OrderList');
     await myOrderRef.add(data);
   } catch (err) {
     console.log(err);
@@ -18,6 +18,9 @@ export const createOrderToFirestore = async data => {
 
 export const getOrderList = async filters => {
   try {
+    const myOrderRef = orderColl
+      .doc(auth().currentUser?.uid)
+      .collection('OrderList');
     const {fromDate, toDate} = filters;
 
     let query = myOrderRef;
@@ -42,6 +45,9 @@ export const getOrderList = async filters => {
 };
 
 export const getOrderDetailsById = async id => {
+  const myOrderRef = orderColl
+    .doc(auth().currentUser?.uid)
+    .collection('OrderList');
   const queryRef = myOrderRef.doc(id);
 
   const res = await queryRef.get();

@@ -108,7 +108,9 @@ export default function AddProductToOrder() {
             {
               text: 'Để sau',
               onPress: () => {
-                setLoading(false);
+                setTimeout(() => {
+                  setLoading(false);
+                }, 500);
               },
               style: 'cancel',
             },

@@ -36,7 +36,7 @@ export default function IncomeReportScreen() {
       setDataIncome(statisticIncomeByMonth(list));
       setDataQuantity(statisticQuantityByMonth(list));
     }
-  }, [value]);
+  }, [value, list.length]);
 
   return (
     <View style={styles.container}>
