@@ -8,7 +8,7 @@ const SLIDER_ITEMS = [
   {
     icon: 'warehouse',
     text: 'Kho hàng',
-    route: 'Products'
+    route: 'Products',
   },
   {
     icon: 'basket-plus-outline',

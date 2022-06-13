@@ -33,7 +33,6 @@ const ProductDetailsScreen = ({route}) => {
     if (uid) {
       unsubscribe = fetchData(uid);
     }
-    
 
     return () => {
       unsubscribe();
@@ -62,13 +61,13 @@ const ProductDetailsScreen = ({route}) => {
 
   // on press delete button
   const handleDeletePress = () => {
-    Alert.alert('Notification', 'Are you sure to delete this product?', [
+    Alert.alert('Thông báo', 'Bạn có chắc muốn xoá sản phẩm này?', [
       {
-        text: 'cancel',
+        text: 'Huỷ',
         style: 'cancel',
       },
       {
-        text: 'delete',
+        text: 'Xoá',
         onPress: () => handleDelete(),
       },
     ]);
@@ -88,7 +87,7 @@ const ProductDetailsScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <CustomToolbar
-        productCode={productInfo && productInfo.qrCode}
+        productCode={productInfo && productInfo.productName.slice(0, 20)}
         onBackPress={() => navigate.pop()}
         onEditPress={() => navigate.push('EditProduct', {qrCode})}
         onDeletePress={handleDeletePress}

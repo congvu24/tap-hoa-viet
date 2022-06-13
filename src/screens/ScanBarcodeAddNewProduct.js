@@ -16,7 +16,7 @@ import {
   RED_COLOR,
   WHITE_COLOR,
 } from '../constants/Colors';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {CameraScreen} from 'react-native-camera-kit';
 import Sound from 'react-native-sound';
@@ -30,8 +30,9 @@ import Dialog from 'react-native-dialog';
 
 Sound.setCategory('Playback');
 
-export default function AddProductToOrder() {
+export default function ScanBarCodeAddNewProduct() {
   const navigation = useNavigation();
+  const route = useRoute();
   const dispatch = useDispatch();
 
   const numberOfProducts = useSelector(
@@ -65,19 +66,7 @@ export default function AddProductToOrder() {
     }
 
     setLoading(true);
-    findAndAddProductToCart(event.nativeEvent.codeStringValue);
-  };
-
-  const goAddByHand = () => {
-    navigation.navigate('AddProductToOrderByHand');
-  };
-
-  const goCheckout = () => {
-    navigation.goBack();
-  };
-
-  const handleCheckInputProductNumber = () => {
-    dispatch(setInputProductNumber(!isCheckInputProduct));
+    findAndReturnProduct(event.nativeEvent.codeStringValue);
   };
 
   const resetScan = () => {
@@ -87,34 +76,19 @@ export default function AddProductToOrder() {
     setLoading(false);
   };
 
-  const findAndAddProductToCart = async barCode => {
+  const findAndReturnProduct = async barCode => {
     whoosh.play();
 
     try {
       const resProduct = await getProductByBarCode(barCode);
       if (resProduct) {
-        if (isCheckInputProduct) {
-          setProduct(resProduct);
-          setShowModal(true);
-        } else {
-          setProduct(resProduct);
-          handleAddProduct(resProduct);
-        }
+        setProduct(resProduct);
+        navigation.goBack();
+        route.params.onScan({isFound: true, product: resProduct, barCode});
       } else {
-        Alert.alert(
-          'Lỗi',
-          'Không tìm thấy sản phẩm, bạn có muốn thêm sản phẩm ngay?',
-          [
-            {
-              text: 'Để sau',
-              onPress: () => {
-                setLoading(false);
-              },
-              style: 'cancel',
-            },
-            {text: 'Thêm', onPress: () => navigation.replace('AddProduct')},
-          ],
-        );
+        // pop with code
+        navigation.goBack();
+        route.params.onScan({isFound: false, barCode});
       }
     } catch (err) {
       console.log(err);
@@ -164,9 +138,6 @@ export default function AddProductToOrder() {
       <TouchableOpacity onPress={goBack} style={styles.backBtn}>
         <Icon name="left" size={20} color={WHITE_COLOR} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={goAddByHand} style={styles.addByHandBtn}>
-        <Icon name="solution1" size={20} color={WHITE_COLOR} />
-      </TouchableOpacity>
       {granted && (
         <CameraScreen
           hideControls={false}
@@ -182,39 +153,7 @@ export default function AddProductToOrder() {
       <View style={styles.popup}>
         <Image source={require('../images/qr-scan.png')} />
         <Text style={styles.text}>Hãy quét mã Bar Code trên sản phẩm</Text>
-        <TouchableOpacity style={styles.addbtn} onPress={goCheckout}>
-          <Text style={styles.addbtnText}>Đơn hàng</Text>
-          <Icon name="shoppingcart" color={WHITE_COLOR} size={16} />
-          {numberOfProducts > 0 && (
-            <Text style={styles.countPopup}>{numberOfProducts}</Text>
-          )}
-        </TouchableOpacity>
-        <View style={styles.checkNumberBtn}>
-          <CheckBox
-            containerStyle={{padding: 0}}
-            checked={isCheckInputProduct}
-            onPress={handleCheckInputProductNumber}
-          />
-          <Text style={styles.checkNumberText}>Nhập số lượng sản phẩm</Text>
-        </View>
       </View>
-
-      <Dialog.Container visible={showModal}>
-        <Dialog.Title>Số lượng</Dialog.Title>
-        <Dialog.Description>Nhập số lượng cho sản phẩm:</Dialog.Description>
-        <Dialog.Input
-          keyboardType="numeric"
-          autoFocus={true}
-          onChangeText={value => setProductNumber(parseInt(value))}
-          textInputRef={numberInputRef}
-          placeholder={'1'}
-        />
-        <Dialog.Button label="Huỷ" onPress={resetScan} />
-        <Dialog.Button
-          label="Tiếp tục"
-          onPress={() => handleAddProduct(product)}
-        />
-      </Dialog.Container>
     </View>
   );
 }

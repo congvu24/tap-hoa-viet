@@ -11,6 +11,7 @@ import {GREEN_COLOR} from '../constants/Colors';
 var RNFS = require('react-native-fs');
 import XLSX from 'xlsx';
 import {formatMoney} from '../utils/helper';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
   console.log('income excel: ', passedQuantityData.labels);
@@ -103,12 +104,14 @@ const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
       'ascii',
     )
       .then(r => {
+        console.log(RNFS.DownloadDirectoryPath + `/${fileName}`);
         Alert.alert(
           'Thông báo',
           'Đã xuất thành công, vui lòng kiểm tra thư mục của bạn!',
         );
       })
       .catch(e => {
+        console.log(e);
         Alert.alert('Thông báo', 'Có lỗi xảy ra!');
       });
   };
@@ -153,7 +156,8 @@ const ExportButton = ({dataType, passedIncomeData, passedQuantityData}) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleClick}>
-      <Text style={styles.btnText}>Xuất theo {dataType}</Text>
+      {/* <Text style={styles.btnText}>Xuất theo {dataType}</Text> */}
+      <Icon name="download" size={20} />
     </TouchableOpacity>
   );
 };
@@ -162,14 +166,14 @@ export default ExportButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: GREEN_COLOR,
+    // backgroundColor: GREEN_COLOR,
     paddingTop: 15,
     paddingBottom: 15,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    // borderWidth: 1,
+    // borderColor: '#ccc',
   },
   btnText: {
     textTransform: 'capitalize',

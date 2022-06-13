@@ -79,7 +79,7 @@ export const getProductByBarCode = async barcode => {
     .collection('ProductCreators')
     .doc(userId)
     .collection('ProductsList')
-    .where('barCode', '==', barcode)
+    .where('qrCode', '==', barcode)
     .get();
 
   if (result.docs.length === 0) {

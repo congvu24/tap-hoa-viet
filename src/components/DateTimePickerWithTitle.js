@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   calendarPicker: {
     color: MATERIAL_GREY_COLOR,
     borderRadius: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'black',
     paddingHorizontal: 20,
     marginTop: 10,

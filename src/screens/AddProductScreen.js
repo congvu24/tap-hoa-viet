@@ -45,8 +45,6 @@ import {uploadMultipleImages} from '../services/uploadMultipleImages';
 import AnimatedLoader from 'react-native-animated-loader';
 
 export const AddProductScreen = ({route, navigation}) => {
-  const {ref, onScroll} = useScroll();
-
   const categoryList = useSelector(state => state.category.categoryList).map(
     item => ({
       label: item.name,
@@ -85,7 +83,7 @@ export const AddProductScreen = ({route, navigation}) => {
     // exportDate: yup.string(),
   });
 
-  const {handleSubmit, reset, control, getValues} = useForm({
+  const {handleSubmit, reset, control, getValues, setValue} = useForm({
     defaultValues: {
       qrCode: productCode,
     },
@@ -120,7 +118,7 @@ export const AddProductScreen = ({route, navigation}) => {
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
       if (response.didCancel) {
-        alert('Đã huỷ thao tác');
+        // alert('Đã huỷ thao tác');
         return;
       } else if (response.errorCode == 'camera_unavailable') {
         alert('Camera không khả dụng');
@@ -129,7 +127,7 @@ export const AddProductScreen = ({route, navigation}) => {
         alert('Không có quyền truy cập');
         return;
       } else if (response.errorCode == 'others') {
-        alert('Fuck cậu Hoàn');
+        alert('Lỗi');
         return;
       }
       setImages([...images, String(response.assets.map(item => item.uri))]);
@@ -145,12 +143,12 @@ export const AddProductScreen = ({route, navigation}) => {
           .then(() => {
             console.log('product added with ' + imagesURL.length + ' images');
             setVisible(false);
-            Alert.alert('Status', 'Add product successfully');
+            Alert.alert('Thông báo', 'Thêm sản phẩm thành công');
             resetTextFields();
           })
           .catch(err => {
             console.log(err);
-            Alert.alert('Status', 'Failed to add product!');
+            Alert.alert('Lỗi', 'Thêm sản phẩm thất bại!');
           });
       })
       .catch(err => {
@@ -227,13 +225,13 @@ export const AddProductScreen = ({route, navigation}) => {
         <Text>Doing something...</Text>
       </AnimatedLoader>
       <CustomToolbar
-        productCode={'Add Product'}
+        productCode={'Thêm sản phẩm'}
         isEdit={true}
-        buttonText="Add"
+        buttonText="Lưu"
         onButtonPress={() => uploadProduct()}
         onBackPress={() => navigation.pop()}
       />
-      <ScrollView style={styles.scrollView} ref={ref} onScroll={onScroll}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.topContainer}>
           <CustomImagesSlider
             images={images}
@@ -249,11 +247,13 @@ export const AddProductScreen = ({route, navigation}) => {
             <HorizontalInputField
               name="qrCode"
               title="Mã Vạch"
-              editable={false}
+              editable={true}
               selectTextOnFocus={false}
-              value={productCode}
-              hint={productCode}
+              setValue={setValue}
+              // value={productCode}
+              // hint={productCode}
               control={control}
+              showBarcodeIcon={true}
             />
 
             <HorizontalInputField
@@ -314,7 +314,7 @@ export const AddProductScreen = ({route, navigation}) => {
             selectedValue={productGroup}
             setGroup={setProductGroup}
           />
-          <View style={styles.buttonContainer}>
+          {/* <View style={styles.buttonContainer}>
             <Button
               title={'Add'}
               buttonStyle={styles.addBtn}
@@ -327,7 +327,7 @@ export const AddProductScreen = ({route, navigation}) => {
               titleStyle={styles.btnTitle}
               onPress={showConfirmDialog}
             />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

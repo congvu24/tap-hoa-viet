@@ -1,5 +1,5 @@
 import {Text, StyleSheet, View, Image, SafeAreaView} from 'react-native';
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
 import {TextInput, TouchableOpacity} from 'react-native';
 import {
   BLACK_COLOR,
@@ -8,6 +8,7 @@ import {
 } from '../constants/Colors';
 import {Controller, useController} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
 const HorizontalInputField = ({
   name,
   title = '',
@@ -19,9 +20,31 @@ const HorizontalInputField = ({
   setInputData = value => {},
   defaultValue = '',
   control,
-  ref,
+  setValue = () => {},
+  // ref,
 }) => {
   const navigation = useNavigation();
+  const ref = useRef();
+
+  const onScan = ({isFound, barCode, product}) => {
+    console.log(isFound, barCode, product);
+    if (isFound) {
+      setInputData(barCode);
+      console.log('tim thay ne');
+      // setValue('qrCode', barCode);
+      // setValue('productName', product.productName);
+      // setValue('quantity', product.quantity);
+      // setValue('brand', product.brand);
+      // setValue('capitalPrice', String(product.capitalPrice));
+      // setValue('sellPrice', String(product.sellPrice));
+      // setValue('productGroup', product.productGroup);
+      // setValue('numberOfProducts', parseInt(product.numberOfProducts, 10));
+      navigation.navigate('EditProduct', {qrCode: barCode});
+    } else {
+      setInputData(barCode);
+      setValue('qrCode', barCode);
+    }
+  };
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -37,6 +60,7 @@ const HorizontalInputField = ({
             <View style={styles.textInput}>
               {!isNumberKeyBoard ? (
                 <TextInput
+                  style={{color: BLACK_COLOR}}
                   placeholder={hint}
                   value={value}
                   placeholderTextColor={BLACK_COLOR}
@@ -51,6 +75,7 @@ const HorizontalInputField = ({
                 />
               ) : (
                 <TextInput
+                  style={{color: BLACK_COLOR}}
                   placeholder={hint}
                   value={value}
                   keyboardType="numeric"
@@ -65,7 +90,18 @@ const HorizontalInputField = ({
                   ref={ref}
                 />
               )}
-
+              {showBarcodeIcon && (
+                <TouchableOpacity style={styles.barcodeIcon}>
+                  <Icon
+                    name="camera"
+                    size={20}
+                    color={BLACK_COLOR}
+                    onPress={() => {
+                      navigation.navigate('ScanBarCodeAddNewProduct', {onScan});
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
               <Text style={error ? styles.error : styles.invisible}>
                 Vui lòng nhập đúng thông tin
               </Text>
@@ -110,7 +146,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginEnd: 20,
   },
-  barcodeIcon: {},
+  barcodeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
+  },
   error: {
     color: 'red',
   },

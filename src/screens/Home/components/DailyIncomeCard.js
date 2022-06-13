@@ -9,6 +9,8 @@ export function DailyIncomeCard() {
   const orders = useSelector(state => state.orderList.list);
   const dataIncome = statisticIncomeByDay(orders).datasets[0].data;
 
+  console.log(dataIncome)
+
   const compareIncomeWithYesterday = () => {
     const dataLength = dataIncome.length;
     const todayIncome = dataIncome[dataLength - 1];
@@ -22,6 +24,7 @@ export function DailyIncomeCard() {
           : 1 - todayIncome / yesterdayIncome,
     };
   };
+  console.log(compareIncomeWithYesterday());
 
   const renderPercent = number => {
     if (isNaN(number)) return '+0%';

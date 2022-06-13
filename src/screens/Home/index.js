@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Animated, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
@@ -12,9 +12,13 @@ import {DailyIncomeCard, SliderShortcut, WeeklyIncomeChart} from './components';
 
 const HomeScreen = ({navigation}) => {
   const user = useSelector(state => state.user);
-  // const {ref, onScroll, reset} = useScroll();
+  const {ref, onScroll, reset} = useScroll();
 
   const currentUser = user.name;
+
+  useEffect(() => {
+    reset();
+  });
 
   return (
     <Animated.View
