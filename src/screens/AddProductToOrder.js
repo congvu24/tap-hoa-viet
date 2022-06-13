@@ -136,7 +136,7 @@ export default function AddProductToOrder() {
     });
     setTimeout(() => {
       resetScan();
-    }, 300);
+    }, 500);
   };
 
   useEffect(() => {

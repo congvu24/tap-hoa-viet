@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   dropdown: {
-    width: 150,
+    width: 200,
     borderColor: '#bababa',
     zIndex: 5,
     marginRight: 15,

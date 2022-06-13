@@ -9,7 +9,24 @@ export function DailyIncomeCard() {
   const orders = useSelector(state => state.orderList.list);
   const dataIncome = statisticIncomeByDay(orders).datasets[0].data;
 
-  console.log(dataIncome)
+  // console.log(orders)
+
+  const sumToday = orders
+    .filter(item => {
+      const date = new Date(item.createAt);
+      const today = new Date();
+      if (
+        date.getDate() == today.getDate() &&
+        date.getMonth() == today.getMonth() &&
+        date.getFullYear() == today.getFullYear()
+      ) {
+        return true;
+      }
+      return false;
+    })
+    .reduce((current, item) => current + item.amount, 0);
+
+  console.log(sumToday);
 
   const compareIncomeWithYesterday = () => {
     const dataLength = dataIncome.length;
@@ -27,7 +44,9 @@ export function DailyIncomeCard() {
   console.log(compareIncomeWithYesterday());
 
   const renderPercent = number => {
-    if (isNaN(number)) return '+0%';
+    if (isNaN(number)) {
+      return '+0%';
+    }
 
     const sign = number < 0 ? '-' : '+';
 
@@ -37,7 +56,7 @@ export function DailyIncomeCard() {
     <View style={styles.cardContainer}>
       <Text style={[styles.text, styles.cardTitle]}>Doanh thu</Text>
       <Text style={[styles.text, styles.cardNumber]}>
-        ₫ {formatMoney(compareIncomeWithYesterday().todayIncome)}
+        {formatMoney(sumToday)}đ
       </Text>
       <Text style={[styles.text, styles.increasePercent]}>
         {renderPercent(compareIncomeWithYesterday().compareLastDay)} so với hôm

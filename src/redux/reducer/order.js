@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {createOrderToFirestore} from '../../services/order';
+import {fetchOrderList} from './orderList';
 
 const initialState = {
   products: {},
@@ -34,6 +35,7 @@ export const createOrder = createAsyncThunk(
 
       await createOrderToFirestore(order);
       thunkApi.dispatch(clearOrder());
+      thunkApi.dispatch(fetchOrderList());
       payload.onSuccess?.();
     } catch (err) {
       console.log(err);

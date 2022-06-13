@@ -10,6 +10,7 @@ export const fetchOrderList = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const orderList = await getOrdersFromFirestore();
+      console.log('-------data-----', orderList);
       thunkApi.dispatch(getOrderList(orderList));
     } catch (err) {
       getOrderList([]);
@@ -24,9 +25,12 @@ const orderListSlice = createSlice({
     getOrderList: (state, action) => {
       state.list = action.payload;
     },
+    clearOrderList: (state, action) => {
+      return initialState;
+    },
   },
 });
 
-export const {getOrderList} = orderListSlice.actions;
+export const {getOrderList, clearOrderList} = orderListSlice.actions;
 
 export default orderListSlice.reducer;

@@ -20,6 +20,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {signOut} from '../redux/reducer/userSlice';
+import {clearOrderList} from '../redux/reducer/orderList';
 const data = [{Name: 'Pham Hoai Bao bao'}];
 
 export const ProfileScreen = ({navigation}) => {
@@ -42,6 +43,7 @@ export const ProfileScreen = ({navigation}) => {
         .then(() => {
           console.log('User signed out!');
           dispatch(signOut());
+          dispatch(clearOrderList());
           navigation.replace('Login');
         });
     } catch (err) {
