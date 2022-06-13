@@ -1,5 +1,8 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getProductFromFirestore} from '../../services/getProduct';
+import {
+  getProductFromFirestore,
+  updateProduct as updateProductOnFirestore,
+} from '../../services/getProduct';
 
 const initialState = {
   productList: [],
@@ -12,6 +15,18 @@ export const fetchProductList = createAsyncThunk(
       const productList = await getProductFromFirestore();
       console.log(productList);
       thunkApi.dispatch(getProductsList(productList));
+    } catch (err) {
+      getProductsList([]);
+    }
+  },
+);
+
+export const updateProduct = createAsyncThunk(
+  'product/updateProduct',
+  async (payload, thunkApi) => {
+    try {
+      await updateProductOnFirestore(payload.id, payload.data);
+      // thunkApi.dispatch(getProductsList(productList));
     } catch (err) {
       getProductsList([]);
     }

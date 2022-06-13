@@ -23,11 +23,13 @@ import auth from '@react-native-firebase/auth';
 import {Picker} from '@react-native-picker/picker';
 import {launchImageLibrary} from 'react-native-image-picker';
 import AnimatedLoader from 'react-native-animated-loader';
+import {useDispatch} from 'react-redux';
+import {fetchProductList} from '../redux/reducer/productSlice';
 
 const EditProductScreen = ({navigation, route}) => {
   // passed parameters
   const {qrCode} = route.params;
-
+  const dispatch = useDispatch();
   // loader
   const [visible, setVisible] = useState(false);
 
@@ -129,6 +131,7 @@ const EditProductScreen = ({navigation, route}) => {
       existingImages,
     ).then(() => {
       setVisible(false);
+      dispatch(fetchProductList());
       navigation.pop();
     });
   };

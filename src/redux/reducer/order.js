@@ -1,6 +1,8 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {Alert} from 'react-native';
 import {createOrderToFirestore} from '../../services/order';
 import {fetchOrderList} from './orderList';
+import {updateProduct} from './productSlice';
 
 const initialState = {
   products: {},
@@ -17,6 +19,7 @@ export const createOrder = createAsyncThunk(
     try {
       const state = thunkApi.getState();
       const order = {...state.order, createAt: Date.now()};
+      const order2 = {...order};
 
       const listProduct = Object.keys(order.products).map(key => {
         order.amount =
@@ -34,8 +37,28 @@ export const createOrder = createAsyncThunk(
       // check with current productList
 
       await createOrderToFirestore(order);
+
+      Object.keys(order2.products).map(key => {
+        thunkApi.dispatch(
+          updateProduct({
+            id: key,
+            data: {
+              numberOfProducts:
+                order2.products[key].numberOfProducts -
+                  order2.products[key].number >
+                0
+                  ? order2.products[key].numberOfProducts -
+                    order2.products[key].number
+                  : 0,
+            },
+          }),
+        );
+      });
+
       thunkApi.dispatch(clearOrder());
-      thunkApi.dispatch(fetchOrderList());
+      setTimeout(() => {
+        thunkApi.dispatch(fetchOrderList());
+      }, 500);
       payload.onSuccess?.();
     } catch (err) {
       console.log(err);
@@ -51,6 +74,22 @@ const orderSlice = createSlice({
     addProduct(state, {payload}) {
       const productCode = payload.productId;
       const number = payload.number;
+      const currentNumber = state.products[productCode]?.number ?? 0;
+
+      if (currentNumber + number > payload.numberOfProducts) {
+        Alert.alert(
+          'Thông báo',
+          'Số lượng sản phẩm thêm lớn hơn số lượng trong kho. số lượng trong kho sẽ giảm về 0.',
+          [
+            {
+              text: 'Tiếp tục',
+              onPress: () => {
+                console.log('hehe');
+              },
+            },
+          ],
+        );
+      }
       state.products = {
         ...state.products,
         [productCode]: {

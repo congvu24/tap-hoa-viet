@@ -103,3 +103,15 @@ export const getProductFromFirestore = async () => {
 
   return res.docs.map(item => ({...item.data(), productId: item.id}));
 };
+
+export const updateProduct = async (id, data) => {
+  const uid = auth().currentUser?.uid;
+
+  const ref = firestore()
+    .collection('ProductCreators')
+    .doc(uid)
+    .collection('ProductsList')
+    .doc(id);
+
+  await ref.update({...data});
+};
