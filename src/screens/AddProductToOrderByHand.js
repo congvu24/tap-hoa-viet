@@ -32,6 +32,7 @@ export default function AddProductToOrderByHand() {
   const numberRef = useRef();
 
   const productList = useSelector(state => state.product.productList);
+  console.log(productList);
   const numberOfProducts = useSelector(
     state => Object.keys(state.order.products).length,
   );

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useLayoutEffect} from 'react';
 import ProductsHeader from '../components/ProductsHeader';
 import ProductItem from '../components/ProductItem';
 import {useNavigation} from '@react-navigation/native';
